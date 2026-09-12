@@ -1,0 +1,367 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K5chan - Profile</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      padding: 2rem 1rem;
+    }
+    .wrapper { max-width: 600px; margin: 0 auto; }
+    .top-nav { margin-bottom: 1.5rem; display: flex; justify-content: space-between; }
+    .top-nav a { text-decoration: none; color: #2563eb; font-weight: 600; font-size: 0.95rem; }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.75rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .avatar-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #eff6ff;
+      border: 3px solid #3b82f6;
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .field-label { font-weight: 700; font-size: 0.8rem; color: #64748b; text-transform: uppercase; margin-top: 1rem; }
+    .field-value { font-size: 1.05rem; margin-top: 0.25rem; }
+    
+    .game-link-box {
+      margin-top: 0.4rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+    .game-link-box a {
+      color: #2563eb;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .game-link-box a:hover { text-decoration: underline; }
+
+    .avatar-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0.5rem 0 1rem 0;
+    }
+    .avatar-opt {
+      width: 44px;
+      height: 44px;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .avatar-opt:hover { background: #e2e8f0; }
+    .avatar-opt.selected { border-color: #2563eb; background: #dbeafe; transform: scale(1.08); }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      margin-top: 0.25rem;
+      background: #fff;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: #3b82f6; }
+
+    button {
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    button:hover { background: #1d4ed8; }
+    .btn-green { background: #16a34a; }
+    .btn-green:hover { background: #15803d; }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="top-nav">
+    <a href="index.html">&larr; Back to Hub</a>
+    <a href="chat.html">Go to K5chat &rarr;</a>
+  </div>
+
+  <div class="card">
+    <div class="profile-header">
+      <div class="avatar-circle" id="avatar-display">🦊</div>
+      <div>
+        <h2 id="prof-user" style="margin: 0;">Loading...</h2>
+        <div id="prof-badges" style="font-size: 0.85rem; color: #64748b; margin-top: 4px;"></div>
+      </div>
+    </div>
+
+    <!-- VIEW MODE -->
+    <div id="view-mode">
+      <div class="field-label">Status</div>
+      <div class="field-value" id="prof-status" style="color: #16a34a; font-weight: 600;">Active</div>
+
+      <div class="field-label">About Me</div>
+      <div class="field-value" id="prof-bio">...</div>
+
+      <div class="field-label">Favorite Game</div>
+      <div class="field-value" id="prof-game-container">...</div>
+
+      <div id="friend-action-area"></div>
+    </div>
+
+    <!-- EDIT MODE (Owner Only) -->
+    <div id="edit-mode" style="display: none; border-top: 1px solid #e2e8f0; margin-top: 1.5rem; padding-top: 1rem;">
+      <h3>Edit Profile</h3>
+      
+      <div class="field-label">Choose Avatar</div>
+      <div class="avatar-grid" id="avatar-picker"></div>
+
+      <div class="field-label">Status Message</div>
+      <input type="text" id="edit-status" maxlength="40" placeholder="What are you doing?">
+
+      <div class="field-label">About Me</div>
+      <textarea id="edit-bio" rows="3" maxlength="200" placeholder="Tell us what you like!"></textarea>
+
+      <div class="field-label">Favorite Game</div>
+      <select id="edit-game"></select>
+
+      <button onclick="saveProfile()">Save Changes</button>
+      <div id="edit-msg" style="margin-top: 0.5rem; font-size: 0.9rem; font-weight: 500;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  const currentUser = localStorage.getItem("k5_user");
+  const params = new URLSearchParams(window.location.search);
+  const targetUser = params.get('u') || currentUser;
+
+  const AVATARS = {
+    'fox': '🦊', 'cat': '🐱', 'dog': '🐶', 'frog': '🐸',
+    'robot': '🤖', 'alien': '👾', 'gamer': '🎮', 'rocket': '🚀',
+    'pizza': '🍕', 'bolt': '⚡'
+  };
+
+  // Safe E, E10+, and PG-13 games database with official links
+  const GAMES_LIST = [
+    { name: "Roblox", rating: "E10+", url: "https://www.roblox.com" },
+    { name: "Minecraft", rating: "E10+", url: "https://www.minecraft.net" },
+    { name: "Geometry Dash", rating: "E", url: "https://store.steampowered.com/app/322170/Geometry_Dash/" },
+    { name: "Mario Kart 8 Deluxe", rating: "E", url: "https://www.nintendo.com/us/store/products/mario-kart-8-deluxe-switch/" },
+    { name: "Super Smash Bros. Ultimate", rating: "E10+", url: "https://www.nintendo.com/us/store/products/super-smash-bros-ultimate-switch/" },
+    { name: "Animal Crossing: New Horizons", rating: "E", url: "https://www.nintendo.com/us/store/products/animal-crossing-new-horizons-switch/" },
+    { name: "Rocket League", rating: "E", url: "https://store.epicgames.com/p/rocket-league" },
+    { name: "Lego Fortnite", rating: "E10+", url: "https://www.epicgames.com/fortnite" },
+    { name: "Fall Guys", rating: "E", url: "https://store.epicgames.com/p/fall-guys" },
+    { name: "Pokemon Scarlet & Violet", rating: "E", url: "https://scarletviolet.pokemon.com" },
+    { name: "The Legend of Zelda: Tears of the Kingdom", rating: "E10+", url: "https://www.nintendo.com/us/store/products/the-legend-of-zelda-tears-of-the-kingdom-switch/" },
+    { name: "Kirby and the Forgotten Land", rating: "E10+", url: "https://www.nintendo.com/us/store/products/kirby-and-the-forgotten-land-switch/" },
+    { name: "Sonic Superstars", rating: "E", url: "https://sonicsuperstars.com" },
+    { name: "Splatoon 3", rating: "E10+", url: "https://splatoon.nintendo.com" },
+    { name: "Incredibox", rating: "E", url: "https://www.incredibox.com" },
+    { name: "Bring You Home", rating: "E", url: "https://store.steampowered.com/app/1110050/Bring_You_Home/" },
+    { name: "Terraria", rating: "PG-13 (Teen)", url: "https://store.steampowered.com/app/105600/Terraria/" },
+    { name: "Fortnite (Battle Royale)", rating: "PG-13 (Teen)", url: "https://www.epicgames.com/fortnite" }
+  ];
+
+  let selectedAvatarKey = 'fox';
+
+  function buildAvatarPicker(activeKey) {
+    const container = document.getElementById('avatar-picker');
+    container.innerHTML = Object.entries(AVATARS).map(([key, emoji]) => `
+      <div class="avatar-opt ${key === activeKey ? 'selected' : ''}" onclick="pickAvatar('${key}')">
+        ${emoji}
+      </div>
+    `).join('');
+  }
+
+  function pickAvatar(key) {
+    selectedAvatarKey = key;
+    document.getElementById('avatar-display').innerText = AVATARS[key] || '🦊';
+    buildAvatarPicker(key);
+  }
+
+  function populateGameDropdown(currentSelected) {
+    const select = document.getElementById('edit-game');
+    select.innerHTML = GAMES_LIST.map(g => `
+      <option value="${escapeHtml(g.name)}" ${g.name === currentSelected ? 'selected' : ''}>
+        ${escapeHtml(g.name)} [${g.rating}]
+      </option>
+    `).join('');
+  }
+
+  async function loadProfile() {
+    if (!targetUser) {
+      alert("No user specified!");
+      window.location.href = "index.html";
+      return;
+    }
+
+    const { data: user, error } = await client.from('accounts').select('*').eq('username', targetUser).single();
+    if (error || !user) {
+      document.getElementById('prof-user').innerText = "User not found";
+      return;
+    }
+
+    selectedAvatarKey = user.avatar || 'fox';
+    document.getElementById('prof-user').innerText = user.username;
+    document.getElementById('avatar-display').innerText = AVATARS[selectedAvatarKey] || '🦊';
+    document.getElementById('prof-badges').innerText = `${user.grade || '3rd'} Grade • ${user.mascot || 'Falcon'} Club`;
+    document.getElementById('prof-status').innerText = `● ${user.status || 'Active'}`;
+    document.getElementById('prof-bio').innerText = user.bio || 'No bio written yet.';
+
+    // Render Game with official link
+    const gameInfo = GAMES_LIST.find(g => g.name === user.favorite_game) || { name: user.favorite_game || 'Roblox', rating: 'E', url: 'https://www.roblox.com' };
+    document.getElementById('prof-game-container').innerHTML = `
+      <div class="game-link-box">
+        🎮 <span>${escapeHtml(gameInfo.name)} [${gameInfo.rating}]</span>
+        <a href="${gameInfo.url}" target="_blank" rel="noopener noreferrer">Get / Try Game &rarr;</a>
+      </div>
+    `;
+
+    if (currentUser && currentUser === targetUser) {
+      document.getElementById('edit-mode').style.display = 'block';
+      document.getElementById('edit-status').value = user.status || '';
+      document.getElementById('edit-bio').value = user.bio || '';
+      populateGameDropdown(user.favorite_game || 'Roblox');
+      buildAvatarPicker(selectedAvatarKey);
+    } else if (currentUser) {
+      checkFriendStatus();
+    }
+  }
+
+  async function checkFriendStatus() {
+    const area = document.getElementById('friend-action-area');
+    const { data: friends } = await client
+      .from('friends')
+      .select('*')
+      .or(`and(user_from.eq."${currentUser}",user_to.eq."${targetUser}"),and(user_from.eq."${targetUser}",user_to.eq."${currentUser}")`);
+
+    if (friends && friends.length > 0) {
+      const f = friends[0];
+      if (f.status === 'accepted') {
+        area.innerHTML = `<p style="color:#16a34a; font-weight:bold; margin-top:1rem;">✓ Friends</p>`;
+      } else if (f.user_from === currentUser) {
+        area.innerHTML = `<p style="color:#ca8a04; font-weight:bold; margin-top:1rem;">Friend request sent (Pending)</p>`;
+      } else {
+        area.innerHTML = `<button class="btn-green" onclick="acceptFriend(${f.id})">Accept Friend Request</button>`;
+      }
+    } else {
+      area.innerHTML = `<button onclick="sendFriendRequest()">Add Friend</button>`;
+    }
+  }
+
+  async function sendFriendRequest() {
+    await client.from('friends').insert([{ user_from: currentUser, user_to: targetUser, status: 'pending' }]);
+    checkFriendStatus();
+  }
+
+  async function acceptFriend(id) {
+    await client.from('friends').update({ status: 'accepted' }).eq('id', id);
+    checkFriendStatus();
+  }
+
+  // Automated Filter Check (Swear words, Phone numbers, Physical addresses)
+  function validateSafeContent(text) {
+    const badWordsRegex = /\b(fuck|shit|bitch|asshole|bastard|cunt|dick|pussy|whore|slut|cock|fag|nigger|nigga)\b/i;
+    const phoneRegex = /\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b|\b\d{10}\b/;
+    const addressRegex = /\b\d+\s+[A-Za-z0-9\s]+(street|st|avenue|ave|road|rd|drive|dr|court|ct|lane|ln|blvd)\b/i;
+
+    if (badWordsRegex.test(text)) {
+      return { ok: false, msg: "Keep it friendly! Inappropriate language is not allowed." };
+    }
+    if (phoneRegex.test(text) || addressRegex.test(text)) {
+      return { ok: false, msg: "Safety rule: Never share phone numbers or real-world addresses." };
+    }
+    return { ok: true };
+  }
+
+  async function saveProfile() {
+    const status = document.getElementById('edit-status').value.trim();
+    const bio = document.getElementById('edit-bio').value.trim();
+    const game = document.getElementById('edit-game').value;
+    const msg = document.getElementById('edit-msg');
+
+    // Run filters on bio and status
+    const statusCheck = validateSafeContent(status);
+    if (!statusCheck.ok) {
+      msg.style.color = '#dc2626';
+      msg.innerText = statusCheck.msg;
+      return;
+    }
+
+    const bioCheck = validateSafeContent(bio);
+    if (!bioCheck.ok) {
+      msg.style.color = '#dc2626';
+      msg.innerText = bioCheck.msg;
+      return;
+    }
+
+    const { error } = await client.from('accounts').update({
+      avatar: selectedAvatarKey,
+      status: status,
+      bio: bio,
+      favorite_game: game
+    }).eq('username', currentUser);
+
+    if (error) {
+      msg.style.color = '#dc2626';
+      msg.innerText = error.message;
+    } else {
+      msg.style.color = '#16a34a';
+      msg.innerText = "Profile saved successfully!";
+      loadProfile();
+    }
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  loadProfile();
+</script>
+</body>
+</html></pre>
+        </body>
+    </html>

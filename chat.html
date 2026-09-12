@@ -1,0 +1,777 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KidChat</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.85rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header strong { font-size: 1.15rem; color: #1e3a8a; }
+    header a { text-decoration: none; color: #2563eb; font-weight: 600; font-size: 0.9rem; }
+
+    .chat-app {
+      flex: 1;
+      display: flex;
+      max-width: 1000px;
+      width: 100%;
+      margin: 1.5rem auto;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      height: calc(100vh - 120px);
+    }
+
+    .sidebar {
+      width: 310px;
+      border-right: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      background: #f8fafc;
+    }
+    .sidebar-header {
+      padding: 1rem 1.1rem;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+    }
+    .btn-new {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .scroll-list { flex: 1; overflow-y: auto; padding: 0.6rem; }
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      padding: 0.6rem 0.5rem 0.3rem;
+    }
+
+    .request-box {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      padding: 0.6rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-acc {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .btn-dec {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.65rem 0.75rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 3px;
+    }
+    .contact-item:hover { background: #e2e8f0; }
+    .contact-item.active { background: #e0e7ff; color: #3730a3; }
+
+    .chat-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      position: relative;
+    }
+    .chat-topbar {
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+    .call-bar {
+      display: none;
+      background: #ecfdf5;
+      border-bottom: 1px solid #a7f3d0;
+      padding: 9px 16px;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #065f46;
+      font-weight: 600;
+    }
+    .btn-call {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-call:hover { background: #059669; }
+    .btn-hangup {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .message-stream {
+      flex: 1;
+      padding: 1.25rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .bubble {
+      max-width: 68%;
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      word-wrap: break-word;
+      position: relative;
+    }
+    .bubble.sent {
+      align-self: flex-end;
+      background: #2563eb;
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+    .bubble.received {
+      align-self: flex-start;
+      background: #f1f5f9;
+      color: #0f172a;
+      border-bottom-left-radius: 4px;
+    }
+    .bubble img {
+      max-width: 100%;
+      border-radius: 8px;
+      display: block;
+      margin-top: 4px;
+      max-height: 250px;
+      object-fit: cover;
+    }
+    .bubble-meta {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+    .edit-btn {
+      color: #ffffff;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+      background: none;
+      border: none;
+      font-size: 0.7rem;
+      padding: 0;
+    }
+
+    .composer {
+      padding: 0.85rem 1rem;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .composer input[type="text"] {
+      flex: 1;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      outline: none;
+      font-size: 0.95rem;
+    }
+    .composer button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.3rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .img-upload-btn {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.15rem;
+      border: 1px solid #cbd5e1;
+    }
+
+    .call-dialog {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .call-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.75rem;
+      text-align: center;
+      max-width: 320px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .call-card h3 { margin-bottom: 6px; font-size: 1.15rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <strong>KidChat</strong>
+  <div>
+    <a href="index.html" style="margin-right: 1.25rem;">&larr; Back to KidCha Hub</a>
+    <a href="profile.html">My Profile</a>
+  </div>
+</header>
+
+<div class="chat-app">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <span>Messages</span>
+      <button class="btn-new" onclick="startNewChat()">+ New Chat</button>
+    </div>
+    <div class="scroll-list">
+      <div id="requests-container"></div>
+      <div class="section-title">Friends</div>
+      <div id="friends-container"><p style="padding:0.5rem; color:#94a3b8; font-size:0.85rem;">Loading...</p></div>
+    </div>
+  </div>
+
+  <div class="chat-main">
+    <div class="chat-topbar">
+      <div>
+        <strong id="active-title">Select a friend</strong>
+        <span id="active-sub" style="font-size: 0.8rem; color: #16a34a; margin-left: 6px;"></span>
+      </div>
+      <div class="topbar-actions">
+        <button id="call-btn" class="btn-call" style="display: none;" onclick="startVoiceCall()">📞 Start Call</button>
+      </div>
+    </div>
+
+    <!-- Active Call Header Strip -->
+    <div class="call-bar" id="call-bar">
+      <span id="call-status-label">Voice Call in Progress...</span>
+      <button class="btn-hangup" onclick="endVoiceCall()">End Call</button>
+    </div>
+
+    <div class="message-stream" id="stream">
+      <div style="text-align: center; color: #94a3b8; margin-top: 130px; font-size: 0.95rem;">
+        Select a friend or start a new chat!
+      </div>
+    </div>
+
+    <div class="composer">
+      <!-- Image Upload Handler -->
+      <label class="img-upload-btn" title="Add Image">
+        🖼️
+        <input type="file" id="img-input" accept="image/*" style="display:none;" onchange="handleImageAttach(this)">
+      </label>
+      <input type="text" id="msg-input" placeholder="Type a message..." maxlength="300" disabled onkeydown="if(event.key==='Enter') sendDM()">
+      <button id="send-btn" disabled onclick="sendDM()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Incoming Call Dialog -->
+<div class="call-dialog" id="incoming-modal">
+  <div class="call-card">
+    <div style="font-size: 2.5rem; margin-bottom: 8px;">📞</div>
+    <h3 id="incoming-caller">Incoming Voice Call</h3>
+    <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 20px;">wants to talk on voice.</p>
+    <div style="display: flex; gap: 10px; justify-content: center;">
+      <button class="btn-call" style="padding: 8px 18px;" onclick="acceptIncomingCall()">Accept</button>
+      <button class="btn-hangup" style="padding: 8px 18px;" onclick="rejectIncomingCall()">Decline</button>
+    </div>
+  </div>
+</div>
+
+<audio id="remote-audio" autoplay></audio>
+
+<script>
+  const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  const currentUser = localStorage.getItem("k5_user");
+  if (!currentUser) {
+    alert("Please log in on KidCha first!");
+    window.location.href = "index.html";
+  }
+
+  const AVATARS = {
+    'fox': '🦊', 'cat': '🐱', 'dog': '🐶', 'frog': '🐸',
+    'robot': '🤖', 'alien': '👾', 'gamer': '🎮', 'rocket': '🚀',
+    'pizza': '🍕', 'bolt': '⚡'
+  };
+
+  let activeFriend = null;
+
+  // WebRTC Setup
+  let peerConnection = null;
+  let localStream = null;
+  let pendingOffer = null;
+  let signalingChannel = null;
+
+  const rtcConfig = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+  };
+
+  // 1. Load Sidebar: Incoming Friend Requests & Active Friends
+  async function loadSidebar() {
+    // Check incoming requests
+    const { data: incoming } = await client
+      .from('friends')
+      .select('*')
+      .eq('user_to', currentUser)
+      .eq('status', 'pending');
+
+    const reqContainer = document.getElementById('requests-container');
+    if (incoming && incoming.length > 0) {
+      reqContainer.innerHTML = `
+        <div class="section-title">Friend Requests (${incoming.length})</div>
+        ${incoming.map(r => `
+          <div class="request-box">
+            <span><b>${escapeHtml(r.user_from)}</b></span>
+            <div>
+              <button class="btn-acc" onclick="acceptFriend(${r.id})">Accept</button>
+              <button class="btn-dec" onclick="declineFriend(${r.id})">✕</button>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    } else {
+      reqContainer.innerHTML = '';
+    }
+
+    // Get Accepted Friends
+    const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
+    const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
+
+    const names = [
+      ...(sentFriends || []).map(f => f.user_to),
+      ...(recvFriends || []).map(f => f.user_from)
+    ];
+
+    const container = document.getElementById('friends-container');
+    if (names.length === 0) {
+      container.innerHTML = '<p style="padding:0.5rem; color:#94a3b8; font-size:0.85rem;">No friends yet. Click "+ New Chat" to add one!</p>';
+      return;
+    }
+
+    const { data: accounts } = await client.from('accounts').select('username, avatar, status').in('username', names);
+    const accMap = {};
+    (accounts || []).forEach(a => { accMap[a.username] = a; });
+
+    container.innerHTML = names.map(name => {
+      const acc = accMap[name] || { avatar: 'fox', status: 'Online' };
+      return `
+        <div class="contact-item ${activeFriend === name ? 'active' : ''}" id="item-${name}" onclick="openChat('${name}')">
+          <span style="font-size: 1.3rem;">${AVATARS[acc.avatar] || '🦊'}</span>
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem;">${escapeHtml(name)}</div>
+            <div style="font-size: 0.75rem; color: #16a34a;">● ${escapeHtml(acc.status || 'Active')}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function acceptFriend(id) {
+    await client.from('friends').update({ status: 'accepted' }).eq('id', id);
+    loadSidebar();
+  }
+
+  async function declineFriend(id) {
+    await client.from('friends').delete().eq('id', id);
+    loadSidebar();
+  }
+
+  // 2. Strict Check: Only message real people, and send Friend Request if needed
+  async function startNewChat() {
+    const target = prompt("Enter screen name to chat with:");
+    if (!target) return;
+    const cleanTarget = target.trim();
+
+    if (cleanTarget.toLowerCase() === currentUser.toLowerCase()) {
+      alert("You cannot message yourself!");
+      return;
+    }
+
+    // Verify user actually exists in the database
+    const { data: existingUser } = await client
+      .from('accounts')
+      .select('username')
+      .eq('username', cleanTarget)
+      .maybeSingle();
+
+    if (!existingUser) {
+      alert(`User "${cleanTarget}" does not exist! Check the spelling and try again.`);
+      return;
+    }
+
+    // Check if a friend connection exists
+    const { data: sent } = await client.from('friends').select('*').eq('user_from', currentUser).eq('user_to', cleanTarget).maybeSingle();
+    const { data: recv } = await client.from('friends').select('*').eq('user_from', cleanTarget).eq('user_to', currentUser).maybeSingle();
+
+    if (!sent && !recv) {
+      // Create pending friend request automatically
+      await client.from('friends').insert([{
+        user_from: currentUser,
+        user_to: cleanTarget,
+        status: 'pending'
+      }]);
+      alert(`Sent a friend request to ${cleanTarget}! You can chat now while the request is pending.`);
+    }
+
+    openChat(cleanTarget);
+    loadSidebar();
+  }
+
+  function openChat(username) {
+    activeFriend = username;
+    document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
+    const item = document.getElementById(`item-${username}`);
+    if (item) item.classList.add('active');
+
+    document.getElementById('active-title').innerText = username;
+    document.getElementById('active-sub').innerText = '● Connected';
+    document.getElementById('msg-input').disabled = false;
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('call-btn').style.display = 'flex';
+    document.getElementById('msg-input').focus();
+
+    loadMessages();
+  }
+
+  async function loadMessages() {
+    if (!activeFriend) return;
+    const stream = document.getElementById('stream');
+    stream.innerHTML = '<p style="text-align: center; color: #94a3b8;">Loading conversation...</p>';
+
+    const { data: msgs } = await client
+      .from('messages')
+      .select('*')
+      .or(`and(sender.eq."${currentUser}",recipient.eq."${activeFriend}"),and(sender.eq."${activeFriend}",recipient.eq."${currentUser}")`)
+      .order('created_at', { ascending: true })
+      .limit(60);
+
+    if (!msgs || msgs.length === 0) {
+      stream.innerHTML = `<div style="text-align: center; color: #94a3b8; margin-top: 100px;">Start your chat with <b>${escapeHtml(activeFriend)}</b>!</div>`;
+      return;
+    }
+
+    stream.innerHTML = msgs.map(renderBubble).join('');
+    stream.scrollTop = stream.scrollHeight;
+  }
+
+  function renderBubble(m) {
+    const isSent = m.sender === currentUser;
+    const time = new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const editedTag = m.is_edited ? '<span style="font-size:0.65rem; opacity:0.7;">(edited)</span>' : '';
+
+    // Allow editing own messages, NO deleting
+    const editAction = isSent && !m.body.startsWith('[IMG]') 
+      ? `<button class="edit-btn" onclick="editDM(${m.id}, '${escapeQuotes(m.body)}')">Edit</button>` 
+      : '';
+
+    let contentHtml;
+    if (m.body.startsWith('[IMG]')) {
+      const src = m.body.replace('[IMG]', '');
+      contentHtml = `<img src="${src}" alt="Attached Image" />`;
+    } else {
+      contentHtml = `<div id="msg-text-${m.id}">${escapeHtml(m.body)}</div>`;
+    }
+
+    return `
+      <div class="bubble ${isSent ? 'sent' : 'received'}" id="bubble-${m.id}">
+        ${contentHtml}
+        <div class="bubble-meta">
+          ${editedTag}
+          <span>${time}</span>
+          ${editAction}
+        </div>
+      </div>
+    `;
+  }
+
+  // 3. Edit DM Logic
+  async function editDM(id, currentText) {
+    const newText = prompt("Edit your message:", currentText);
+    if (!newText || newText.trim() === "" || newText.trim() === currentText) return;
+
+    const { error } = await client.from('messages').update({
+      body: newText.trim(),
+      is_edited: true
+    }).eq('id', id);
+
+    if (error) {
+      alert("Could not update message: " + error.message);
+    } else {
+      loadMessages();
+    }
+  }
+
+  // 4. Image Upload & Attachment (Base64 compression or direct image URL)
+  function handleImageAttach(input) {
+    const file = input.files[0];
+    if (!file || !activeFriend) return;
+
+    if (file.size > 2.5 * 1024 * 1024) {
+      alert("Image is too large! Please select an image under 2.5MB.");
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const base64Data = e.target.result;
+      await client.from('messages').insert([{
+        sender: currentUser,
+        recipient: activeFriend,
+        body: `[IMG]${base64Data}`
+      }]);
+      input.value = '';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function sendDM() {
+    if (!activeFriend) return;
+    const input = document.getElementById('msg-input');
+    const body = input.value.trim();
+    if (!body) return;
+
+    input.value = '';
+
+    await client.from('messages').insert([{
+      sender: currentUser,
+      recipient: activeFriend,
+      body: body
+    }]);
+  }
+
+  function escapeHtml(str) {
+    return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function escapeQuotes(str) {
+    return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+  // Realtime Messages & Edits Listener
+  client
+    .channel('public:messages')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
+      const m = payload.new;
+      if (!m) return;
+      if ((m.sender === activeFriend && m.recipient === currentUser) || (m.sender === currentUser && m.recipient === activeFriend)) {
+        loadMessages();
+      }
+    })
+    .subscribe();
+
+  // 5. WebRTC Voice Calls
+  signalingChannel = client.channel('voice-signaling', {
+    config: { broadcast: { self: false } }
+  });
+
+  signalingChannel
+    .on('broadcast', { event: 'signal' }, async ({ payload }) => {
+      if (payload.to !== currentUser) return;
+
+      if (payload.type === 'offer') {
+        pendingOffer = payload;
+        document.getElementById('incoming-caller').innerText = `${payload.from} Calling...`;
+        document.getElementById('incoming-modal').style.display = 'flex';
+      } else if (payload.type === 'answer') {
+        if (peerConnection) {
+          await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.sdp));
+          document.getElementById('call-status-label').innerText = `🎙️ In call with ${activeFriend}`;
+        }
+      } else if (payload.type === 'candidate') {
+        if (peerConnection && peerConnection.remoteDescription) {
+          await peerConnection.addIceCandidate(new RTCIceCandidate(payload.candidate));
+        }
+      } else if (payload.type === 'hangup') {
+        cleanupVoiceCall();
+      }
+    })
+    .subscribe();
+
+  function sendSignal(type, extra = {}) {
+    signalingChannel.send({
+      type: 'broadcast',
+      event: 'signal',
+      payload: { to: activeFriend, from: currentUser, type, ...extra }
+    });
+  }
+
+  async function startVoiceCall() {
+    if (!activeFriend) return;
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    } catch (e) {
+      alert("Microphone permission required.");
+      return;
+    }
+
+    setupPeerConnection();
+    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+
+    sendSignal('offer', { sdp: offer });
+    document.getElementById('call-bar').style.display = 'flex';
+    document.getElementById('call-status-label').innerText = `Calling ${activeFriend}...`;
+  }
+
+  async function acceptIncomingCall() {
+    document.getElementById('incoming-modal').style.display = 'none';
+    if (!pendingOffer) return;
+
+    activeFriend = pendingOffer.from;
+    openChat(activeFriend);
+
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    } catch (e) {
+      alert("Microphone permission required.");
+      sendSignal('hangup');
+      return;
+    }
+
+    setupPeerConnection();
+    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(pendingOffer.sdp));
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
+
+    sendSignal('answer', { sdp: answer });
+
+    document.getElementById('call-bar').style.display = 'flex';
+    document.getElementById('call-status-label').innerText = `🎙️ In call with ${activeFriend}`;
+    pendingOffer = null;
+  }
+
+  function rejectIncomingCall() {
+    document.getElementById('incoming-modal').style.display = 'none';
+    if (pendingOffer) {
+      sendSignal('hangup');
+      pendingOffer = null;
+    }
+  }
+
+  function setupPeerConnection() {
+    peerConnection = new RTCPeerConnection(rtcConfig);
+
+    peerConnection.onicecandidate = (event) => {
+      if (event.candidate) {
+        sendSignal('candidate', { candidate: event.candidate });
+      }
+    };
+
+    peerConnection.ontrack = (event) => {
+      const audio = document.getElementById('remote-audio');
+      audio.srcObject = event.streams[0];
+    };
+  }
+
+  function endVoiceCall() {
+    sendSignal('hangup');
+    cleanupVoiceCall();
+  }
+
+  function cleanupVoiceCall() {
+    if (peerConnection) {
+      peerConnection.close();
+      peerConnection = null;
+    }
+    if (localStream) {
+      localStream.getTracks().forEach(t => t.stop());
+      localStream = null;
+    }
+    document.getElementById('call-bar').style.display = 'none';
+  }
+
+  loadSidebar();
+</script>
+</body>
+</html></pre>
+        </body>
+    </html>
