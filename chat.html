@@ -17,6 +17,7 @@
       padding-left: 215px !important;
     }
 
+    /* LEFT SIDEBAR */
     .k5-sidebar {
       position: fixed;
       top: 0;
@@ -77,6 +78,7 @@
       font-weight: 600;
     }
 
+    /* FRIEND REQUESTS */
     .sb-requests-box {
       margin-bottom: 6px;
       display: flex;
@@ -122,6 +124,7 @@
       cursor: pointer;
     }
 
+    /* POLYGON FRIENDS BOX */
     .sb-polygon-box {
       background-color: #c4d600;
       clip-path: polygon(50% 0%, 100% 12%, 92% 100%, 8% 100%, 0% 12%);
@@ -174,6 +177,7 @@
     .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
     .sb-status-dot.offline { background-color: #94a3b8; }
 
+    /* CHAT LAYOUT */
     .wrapper { max-width: 760px; margin: 0 auto; height: calc(100vh - 3rem); display: flex; flex-direction: column; }
 
     .top-nav {
@@ -254,6 +258,7 @@
       text-align: right;
     }
 
+    /* CONTROLS */
     .chat-controls-container {
       display: flex;
       flex-direction: column;
@@ -380,7 +385,10 @@
 <div class="wrapper">
   <div class="top-nav">
     <a href="index.html">← Back to Hub</a>
-    <div class="chat-target-badge" id="chat-target-header">Select a friend to chat</div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="chat-target-badge" id="chat-target-header">Select a friend to chat</div>
+      <button id="call-btn" onclick="startCall()" style="display: none; background: #16a34a; color: white; border: none; padding: 5px 12px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; cursor: pointer;">📞 Call</button>
+    </div>
   </div>
 
   <div class="chat-container">
@@ -416,6 +424,19 @@
         <input type="text" id="msg-input" placeholder="Type a message..." maxlength="400" onkeydown="if(event.key==='Enter') sendMessage()" disabled>
         <button id="send-btn" onclick="sendMessage()" disabled>Send</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- WebRTC Voice Call Modal -->
+<div id="call-modal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.85); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:18px; padding:24px; width:340px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+    <div style="font-size:3rem; margin-bottom:8px;">📞</div>
+    <h3 id="call-status" style="font-size:1.2rem; color:#1e293b; margin-bottom:14px;">Calling...</h3>
+    <audio id="remote-audio" autoplay></audio>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button id="btn-accept-call" onclick="acceptIncomingCall()" style="background:#16a34a; color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer; display:none;">Answer</button>
+      <button onclick="endCall()" style="background:#ef4444; color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer;">End Call</button>
     </div>
   </div>
 </div>
@@ -459,6 +480,18 @@
   let selectedChatImageBase64 = null;
   let selectedChatGifUrl = null;
 
+  // WebRTC State
+  let peerConnection = null;
+  let localStream = null;
+  let incomingOffer = null;
+
+  const rtcConfig = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+  };
+
   function updateClock() {
     const now = new Date();
     document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -490,6 +523,7 @@
   function lockChatUI(noticeText) {
     document.getElementById('msg-input').disabled = true;
     document.getElementById('send-btn').disabled = true;
+    document.getElementById('call-btn').style.display = 'none';
     document.getElementById('chat-target-header').innerText = "🚫 KidChat Suspended";
     document.getElementById('messages-box').innerHTML = `
       <div style="text-align:center; color:#ef4444; font-weight:700; padding:2rem; margin:auto;">
@@ -655,6 +689,7 @@
     if (isChatSuspended) return;
     activeChatFriend = friendUsername;
     document.getElementById('chat-target-header').innerText = `Chatting with @${friendUsername}`;
+    document.getElementById('call-btn').style.display = 'inline-block';
     document.getElementById('msg-input').disabled = false;
     document.getElementById('send-btn').disabled = false;
     syncSidebar();
@@ -743,6 +778,110 @@
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
+  // --- WEBRTC CALLING SYSTEM ---
+  async function startCall() {
+    if (!activeChatFriend || !currentUser) return;
+
+    document.getElementById('call-modal').style.display = 'flex';
+    document.getElementById('call-status').innerText = `Calling @${activeChatFriend}...`;
+    document.getElementById('btn-accept-call').style.display = 'none';
+
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    } catch (err) {
+      alert("Microphone access is required to make a call.");
+      endCall();
+      return;
+    }
+
+    createPeer(activeChatFriend);
+    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+
+    await client.from('calls').insert([{
+      caller: currentUser,
+      callee: activeChatFriend,
+      type: 'offer',
+      payload: JSON.stringify(offer)
+    }]);
+  }
+
+  function createPeer(targetUser) {
+    peerConnection = new RTCPeerConnection(rtcConfig);
+
+    peerConnection.onicecandidate = (e) => {
+      if (e.candidate) {
+        client.from('calls').insert([{
+          caller: currentUser,
+          callee: targetUser,
+          type: 'ice',
+          payload: JSON.stringify(e.candidate)
+        }]);
+      }
+    };
+
+    peerConnection.ontrack = (e) => {
+      const remoteAudio = document.getElementById('remote-audio');
+      remoteAudio.srcObject = e.streams[0];
+      document.getElementById('call-status').innerText = `Connected with @${targetUser}!`;
+    };
+  }
+
+  async function acceptIncomingCall() {
+    document.getElementById('btn-accept-call').style.display = 'none';
+    document.getElementById('call-status').innerText = "Connecting...";
+
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    } catch (err) {
+      alert("Microphone access is required to take calls.");
+      endCall();
+      return;
+    }
+
+    createPeer(incomingOffer.caller);
+    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(JSON.parse(incomingOffer.payload)));
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
+
+    await client.from('calls').insert([{
+      caller: currentUser,
+      callee: incomingOffer.caller,
+      type: 'answer',
+      payload: JSON.stringify(answer)
+    }]);
+  }
+
+  async function endCall() {
+    if (localStream) {
+      localStream.getTracks().forEach(t => t.stop());
+      localStream = null;
+    }
+    if (peerConnection) {
+      peerConnection.close();
+      peerConnection = null;
+    }
+
+    const target = activeChatFriend || (incomingOffer ? incomingOffer.caller : null);
+    if (target && currentUser) {
+      await client.from('calls').insert([{
+        caller: currentUser,
+        callee: target,
+        type: 'hangup',
+        payload: '{}'
+      }]);
+    }
+
+    document.getElementById('call-modal').style.display = 'none';
+    document.getElementById('remote-audio').srcObject = null;
+    incomingOffer = null;
+  }
+
+  // Realtime listeners
   client
     .channel('direct-messages')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
@@ -751,6 +890,40 @@
         (payload.new.sender === currentUser && payload.new.receiver === activeChatFriend)
       ) {
         loadMessages();
+      }
+    })
+    .subscribe();
+
+  client
+    .channel('webrtc-signaling')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'calls' }, async (payload) => {
+      const callData = payload.new;
+      if (callData.callee !== currentUser) return;
+
+      if (callData.type === 'offer') {
+        incomingOffer = callData;
+        document.getElementById('call-modal').style.display = 'flex';
+        document.getElementById('call-status').innerText = `Incoming call from @${callData.caller}...`;
+        document.getElementById('btn-accept-call').style.display = 'inline-block';
+      } 
+      else if (callData.type === 'answer' && peerConnection) {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(JSON.parse(callData.payload)));
+        document.getElementById('call-status').innerText = `In call with @${callData.caller}`;
+      } 
+      else if (callData.type === 'ice' && peerConnection) {
+        try {
+          await peerConnection.addIceCandidate(new RTCIceCandidate(JSON.parse(callData.payload)));
+        } catch (err) {
+          console.error("ICE error:", err);
+        }
+      } 
+      else if (callData.type === 'hangup') {
+        if (localStream) localStream.getTracks().forEach(t => t.stop());
+        if (peerConnection) peerConnection.close();
+        peerConnection = null;
+        document.getElementById('call-modal').style.display = 'none';
+        document.getElementById('remote-audio').srcObject = null;
+        incomingOffer = null;
       }
     })
     .subscribe();
