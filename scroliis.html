@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>KidCha - Scroliis</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+
+    .top-title {
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #f59e0b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    .btn-nav:hover { background: rgba(255, 255, 255, 0.35); }
+
+    /* VERTICAL SWIPE FEED */
+    .feed-container {
+      height: 100vh;
+      width: 100vw;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .scrolii-card {
+      height: 100vh;
+      width: 100vw;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #09090b;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* OVERLAYS */
+    .scrolii-overlay {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      right: 70px;
+      z-index: 10;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      pointer-events: none;
+    }
+
+    .scrolii-creator {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: #38bdf8;
+      pointer-events: auto;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .scrolii-caption {
+      font-size: 0.95rem;
+      line-height: 1.35;
+      font-weight: 500;
+      color: #f8fafc;
+      word-break: break-word;
+    }
+
+    /* RIGHT ACTION BUTTONS */
+    .action-rail {
+      position: absolute;
+      right: 12px;
+      bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 20;
+    }
+
+    .rail-btn {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+    .rail-btn:active { transform: scale(0.92); }
+
+    /* UPLOAD MODAL */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      color: #fff;
+    }
+
+    .modal-box h3 { margin-bottom: 12px; font-size: 1.2rem; }
+
+    .modal-box input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #fff;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .modal-box input[type="file"] {
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      width: 100%;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-submit {
+      flex: 1;
+      background: #f59e0b;
+      color: #000;
+      font-weight: 800;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: #475569;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER NAV -->
+  <div class="top-bar">
+    <button class="btn-nav" onclick="window.location.href='index.html'">← Hub</button>
+    <div class="top-title">⚡ Scroliis</div>
+    <button class="btn-nav" style="background:#f59e0b; color:#000;" onclick="openUploadModal()">+ Post</button>
+  </div>
+
+  <!-- VIDEO FEED -->
+  <div class="feed-container" id="scrolii-feed">
+    <div style="display:flex; height:100vh; align-items:center; justify-content:center; color:#94a3b8;">
+      Generating randomized Scrolii queue...
+    </div>
+  </div>
+
+  <!-- ACTION RAIL -->
+  <div class="action-rail">
+    <button class="rail-btn" id="mute-btn" onclick="toggleMute()" title="Toggle Sound">🔊</button>
+    <button class="rail-btn" onclick="reshuffleQueue()" title="Randomize Algorithm">🎲</button>
+  </div>
+
+  <!-- UPLOAD MODAL -->
+  <div class="modal-backdrop" id="upload-modal">
+    <div class="modal-box">
+      <h3>Post a Scrolii</h3>
+      <input type="text" id="caption-input" placeholder="Caption (keep it fun & clean)" maxlength="120">
+      <label style="display:block; font-size:0.8rem; margin-bottom:4px; color:#94a3b8;">Select MP4/WebM Video (under 50MB):</label>
+      <input type="file" id="video-file-input" accept="video/mp4,video/webm">
+      <div id="upload-status" style="font-size:0.8rem; color:#f59e0b; margin-bottom:8px;"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeUploadModal()">Cancel</button>
+        <button class="btn-submit" id="post-btn" onclick="uploadScrolii()">Upload</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    let isMuted = true;
+    let scroliis = [];
+    const currentUser = localStorage.getItem("k5_user");
+
+    // Fisher-Yates Shuffle for Random Scrolii Algorithm
+    function randomizeAlgorithm(items) {
+      const arr = [...items];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    async function loadScroliis() {
+      const { data, error } = await client
+        .from('scroliis')
+        .select('*');
+
+      if (error || !data || data.length === 0) {
+        document.getElementById('scrolii-feed').innerHTML = `
+          <div style="display:flex; flex-direction:column; height:100vh; align-items:center; justify-content:center; gap:12px; color:#cbd5e1;">
+            <p>No Scroliis yet!</p>
+            <button class="btn-nav" style="background:#f59e0b; color:#000;" onclick="openUploadModal()">Be the first to post!</button>
+          </div>
+        `;
+        return;
+      }
+
+      // Execute the randomized algorithm
+      scroliis = randomizeAlgorithm(data);
+      renderFeed();
+    }
+
+    function renderFeed() {
+      const feed = document.getElementById('scrolii-feed');
+      feed.innerHTML = scroliis.map((s, idx) => `
+        <div class="scrolii-card" data-index="${idx}">
+          <video src="${escapeHtml(s.video_url)}" loop playsinline ${isMuted ? 'muted' : ''}></video>
+          <div class="scrolii-overlay">
+            <div class="scrolii-creator" onclick="window.location.href='profile.html?u=${encodeURIComponent(s.creator)}'">@${escapeHtml(s.creator)}</div>
+            <div class="scrolii-caption">${escapeHtml(s.caption)}</div>
+          </div>
+        </div>
+      `).join('');
+
+      setupObserver();
+    }
+
+    function setupObserver() {
+      const videos = document.querySelectorAll('.scrolii-card video');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const vid = entry.target;
+          if (entry.isIntersecting) {
+            vid.play().catch(() => {});
+          } else {
+            vid.pause();
+            vid.currentTime = 0;
+          }
+        });
+      }, { threshold: 0.6 });
+
+      videos.forEach(v => observer.observe(v));
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      document.getElementById('mute-btn').innerText = isMuted ? '🔇' : '🔊';
+      document.querySelectorAll('video').forEach(v => {
+        v.muted = isMuted;
+      });
+    }
+
+    function reshuffleQueue() {
+      if (scroliis.length <= 1) return;
+      scroliis = randomizeAlgorithm(scroliis);
+      renderFeed();
+      document.getElementById('scrolii-feed').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Modal & Upload
+    function openUploadModal() {
+      if (!currentUser) {
+        alert("Please log in on the Hub before uploading a Scrolii!");
+        window.location.href = 'index.html';
+        return;
+      }
+      document.getElementById('upload-modal').style.display = 'flex';
+    }
+
+    function closeUploadModal() {
+      document.getElementById('upload-modal').style.display = 'none';
+      document.getElementById('upload-status').innerText = '';
+    }
+
+    async function uploadScrolii() {
+      const caption = document.getElementById('caption-input').value.trim();
+      const fileInput = document.getElementById('video-file-input');
+      const file = fileInput.files[0];
+      const status = document.getElementById('upload-status');
+      const btn = document.getElementById('post-btn');
+
+      if (!caption || !file) {
+        alert("Please include both a caption and a video file!");
+        return;
+      }
+
+      if (file.size > 50 * 1024 * 1024) {
+        alert("Video must be under 50MB!");
+        return;
+      }
+
+      btn.disabled = true;
+      status.innerText = "Uploading video to KidCha...";
+
+      const cleanFileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '')}`;
+
+      const { data: storageData, error: storageErr } = await client.storage
+        .from('scrolii-videos')
+        .upload(cleanFileName, file, { contentType: file.type });
+
+      if (storageErr) {
+        status.innerText = "Upload failed: " + storageErr.message;
+        btn.disabled = false;
+        return;
+      }
+
+      const { data: publicUrlData } = client.storage
+        .from('scrolii-videos')
+        .getPublicUrl(cleanFileName);
+
+      const videoUrl = publicUrlData.publicUrl;
+
+      status.innerText = "Saving Scrolii...";
+
+      const { error: insertErr } = await client.from('scroliis').insert([{
+        creator: currentUser,
+        caption: caption,
+        video_url: videoUrl
+      }]);
+
+      if (insertErr) {
+        status.innerText = "Database error: " + insertErr.message;
+        btn.disabled = false;
+        return;
+      }
+
+      btn.disabled = false;
+      closeUploadModal();
+      document.getElementById('caption-input').value = '';
+      fileInput.value = '';
+      loadScroliis();
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    loadScroliis();
+  </script>
+</body>
+</html>
