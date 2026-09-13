@@ -574,22 +574,22 @@
   </div>
 
   <div class="grid-sections">
-    <!-- AUTHENTICATION CARD -->
+    <!-- AUTHENTICATION CARD (4-DIGIT PIN AUTH) -->
     <div class="card" id="auth-box">
       <div class="card-title" id="auth-title">🔐 Log In</div>
       <div id="auth-forms">
         <!-- Log In Form -->
         <div id="login-form">
-          <input type="text" id="login-username" placeholder="Username" maxlength="30">
-          <input type="password" id="login-password" placeholder="Password">
+          <input type="text" id="login-username" placeholder="Username (or [MOD] Name)" maxlength="30">
+          <input type="password" id="login-password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric" pattern="[0-9]*">
           <button onclick="login()">Log In</button>
           <button class="btn-secondary" onclick="toggleAuthMode(true)">Need an account? Register</button>
         </div>
 
         <!-- Register Form -->
         <div id="register-form" style="display: none;">
-          <input type="text" id="reg-username" placeholder="Username (letters and numbers only)" maxlength="20">
-          <input type="password" id="reg-password" placeholder="Choose a password">
+          <input type="text" id="reg-username" placeholder="Username (letters & numbers only)" maxlength="20">
+          <input type="password" id="reg-password" placeholder="Create 4-digit PIN" maxlength="4" inputmode="numeric" pattern="[0-9]*">
           <select id="reg-avatar">
             <option value="fox">🦊 Fox</option>
             <option value="cat">🐱 Cat</option>
@@ -876,14 +876,19 @@
   renderAd();
   setInterval(cycleAds, 10000);
 
-  // --- AUTHENTICATION ---
+  // --- AUTHENTICATION (4-DIGIT PIN & CASE-INSENSITIVE [MOD] COMPATIBLE) ---
   async function register() {
     const username = document.getElementById("reg-username").value.trim();
-    const password = document.getElementById("reg-password").value;
+    const pin = document.getElementById("reg-password").value.trim();
     const avatar = document.getElementById("reg-avatar").value;
 
-    if (!username || !password) {
-      alert("Please fill in all registration fields!");
+    if (!username || !pin) {
+      alert("Please enter a username and a 4-digit PIN!");
+      return;
+    }
+
+    if (!/^\d{4}$/.test(pin)) {
+      alert("PIN must be exactly 4 digits (e.g. 1234)!");
       return;
     }
 
@@ -921,7 +926,7 @@
 
     const { error } = await client.from('accounts').insert([{
       username: username,
-      password: password,
+      password: pin,
       avatar: avatar,
       bio: '',
       favorite_game: '',
@@ -941,23 +946,35 @@
   }
 
   async function login() {
-    const username = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value;
+    const rawUsername = document.getElementById("login-username").value.trim();
+    const pin = document.getElementById("login-password").value.trim();
 
-    if (!username || !password) {
-      alert("Please enter both username and password!");
+    if (!rawUsername || !pin) {
+      alert("Please enter both username and your 4-digit PIN!");
       return;
     }
 
-    const { data: account, error } = await client
+    if (!/^\d{4}$/.test(pin)) {
+      alert("PIN must be exactly 4 digits!");
+      return;
+    }
+
+    // Match username case-insensitively so [MOD] handles and standard names work
+    const { data: accounts, error } = await client
       .from('accounts')
       .select('username, password')
-      .eq('username', username)
-      .eq('password', password)
-      .maybeSingle();
+      .ilike('username', rawUsername);
 
-    if (error || !account) {
-      alert("Incorrect username or password.");
+    if (error || !accounts || accounts.length === 0) {
+      alert("Account not found. Double check your username or [MOD] tag!");
+      return;
+    }
+
+    // Check PIN against matched records
+    const account = accounts.find(a => String(a.password).trim() === pin);
+
+    if (!account) {
+      alert("Incorrect 4-digit PIN!");
       return;
     }
 
