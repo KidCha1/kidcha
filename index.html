@@ -79,7 +79,7 @@
       font-weight: 600;
     }
 
-    /* WEATHER WIDGET LINK */
+    /* LOCAL WEATHER WIDGET */
     .sb-weather-card {
       background: #ffffff;
       border-radius: 8px;
@@ -559,7 +559,7 @@
     </div>
   </div>
 
-  <!-- ROTATING SPONSOR BANNER (ERIS FOOD CO + ROTATION) -->
+  <!-- ROTATING SPONSOR BANNER (ERIS FOOD CO) -->
   <div class="kid-ad-banner" id="kid-ad-box">
     <span class="kid-ad-tag">KidCha Sponsored Announcement</span>
     <a class="kid-ad-content" id="kid-ad-link" href="#" onclick="clickAd(event)">
@@ -628,24 +628,45 @@
 
   <!-- PUBLIC BOARDS CARD -->
   <div class="card">
-    <div class="card-title">📌 Discussion Boards</div>
+    <div class="card-title">📌 Discussion Boards & Features</div>
     <div class="boards-list">
+      <!-- SCROLIIS SHORTS ENTRY -->
+      <a class="board-link" href="scroliis.html" style="border-left: 4px solid #ef4444; background: #fff1f2;">
+        <span style="color: #9f1239;">⚡ Scroliis (Random Shorts Feed)</span>
+        <span class="board-tag" style="background: #fecdd3; color: #9f1239;">NEW 🔥</span>
+      </a>
+
+      <!-- OFFICIAL UPDATES -->
       <a class="board-link" href="board.html?b=updates" style="border-left: 4px solid #f59e0b;">
         <span>📢 Updates & News (Official)</span>
         <span class="board-tag" style="background:#fef3c7; color:#b45309;">/updates/</span>
       </a>
+
+      <!-- MEMES BOARD -->
+      <a class="board-link" href="board.html?b=memes" style="border-left: 4px solid #10b981;">
+        <span>😂 Memes & Silly Posts</span>
+        <span class="board-tag" style="background: #d1fae5; color: #065f46;">/memes/</span>
+      </a>
+
+      <!-- RECESS -->
       <a class="board-link" href="board.html?b=rec">
         <span>Recess Discussion</span>
         <span class="board-tag">/rec/</span>
       </a>
+
+      <!-- GAMING -->
       <a class="board-link" href="board.html?b=gm">
         <span>Gaming & Codes</span>
         <span class="board-tag">/gm/</span>
       </a>
+
+      <!-- ART & COMICS -->
       <a class="board-link" href="board.html?b=art">
         <span>Comics & Art</span>
         <span class="board-tag">/art/</span>
       </a>
+
+      <!-- RANDOM HANGOUT -->
       <a class="board-link" href="board.html?b=b">
         <span>Random Hangout</span>
         <span class="board-tag">/b/</span>
@@ -720,10 +741,8 @@
     const fallbackLon = -117.3795;
 
     function applyWeather(lat, lon) {
-      // Connects directly to weather.com local page for exact coordinates
       document.getElementById('sb-weather-link').href = `https://weather.com/weather/today/l/${lat.toFixed(4)},${lon.toFixed(4)}`;
 
-      // Free, CORS-friendly weather API to fetch temperature
       fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit`)
         .then(res => res.json())
         .then(data => {
@@ -732,7 +751,6 @@
             const code = data.current.weather_code;
             document.getElementById('sb-weather-temp').innerText = `${temp}°F`;
 
-            // Weather code emojis
             let icon = '☀️';
             if ([1, 2, 3].includes(code)) icon = '⛅';
             else if ([45, 48].includes(code)) icon = '🌫️';
@@ -810,7 +828,7 @@
     `).join('');
   }
 
-  // --- SPONSOR ADS (FEATURING ERIS FOOD CO) ---
+  // --- SPONSOR ADS (ERIS FOOD CO OCEANSIDE) ---
   const SAFE_ADS = [
     {
       emoji: "🌱",
@@ -820,39 +838,18 @@
       action: () => window.open("https://erisfoodcoca.com", "_blank")
     },
     {
-      emoji: "🧃",
-      title: "PACIFIC COOLER SHORTAGE!",
-      sub: "Trading 1 pack of Dunkaroos for 2 Capri Suns near the 3rd grade slide.",
-      btn: "Trade",
-      action: () => alert("Cafeteria Alert: The lunch monitor intercepted the Capri Sun trade!")
+      emoji: "🥑",
+      title: "FRESH & VEGAN • ERIS FOOD CO",
+      sub: "Locally made eats, super tasty snacks, and plant-powered goodness.",
+      btn: "Menu",
+      action: () => window.open("https://erisfoodcoca.com", "_blank")
     },
     {
-      emoji: "👟",
-      title: "HEELYS ARE STILL COOL!",
-      sub: "Roll down hallway B at 15 MPH without getting caught by the principal.",
-      btn: "Roll Away",
-      action: () => alert("Squeeeeeeeek! You got sent to the office for speeding.")
-    },
-    {
-      emoji: "🍕",
-      title: "FRIDAY PIZZA DAY IS COMING!",
-      sub: "Square pizza with the tiny pepperoni cubes tastes 500% better.",
-      btn: "Grab Slice",
-      action: () => alert("Delicious! You earned +100 Energy for Recess.")
-    },
-    {
-      emoji: "🐧",
-      title: "TIP THE ICEBERG!",
-      sub: "Grab 50 blue puffles and your hard hat. Today is the day it flips.",
-      btn: "Drill Now",
-      action: () => alert("The iceberg tipped! You unlocked the blue pirate bandana.")
-    },
-    {
-      emoji: "🦖",
-      title: "NO INTERNET DINO RUN",
-      sub: "Chrome won't load? Press SPACE and jump over tiny digital cacti forever.",
-      btn: "Jump!",
-      action: () => alert("High Score: 9,999! You dodged the pterodactyl.")
+      emoji: "🥗",
+      title: "EAT CLEAN • OCEANSIDE, CA",
+      sub: "Support local business! Check out what is cooking at Eris Food Co.",
+      btn: "Check It Out",
+      action: () => window.open("https://erisfoodcoca.com", "_blank")
     }
   ];
 
