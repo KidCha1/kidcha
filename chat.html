@@ -325,29 +325,33 @@
 </div>
 
 <script>
-  const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
+const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // --- KIDCHA SAFETY PROFANITY FILTER ---
-  const BANNED_PATTERNS = [
-    /\bf+u+c+k+/i,
-    /\bs+h+i+t+/i,
-    /\bb+i+t+c+h+/i,
-    /\ba+s+s+h+o+l+e+/i,
-    /\bd+i+c+k+/i,
-    /\bp+u+s+s+y+/i,
-    /\bc+u+n+t+/i,
-    /\bn+i+g+g+/i,
-    /\bf+a+g+g+/i,
-    /\bw+h+o+r+e+/i,
-    /\bs+l+u+t+/i,
-    /\bp+o+r+n+/i,
-    /\bk+y+s+/i
+  // Safety filter for harmful/predatory phrases
+  const SEVERE_PATTERNS = [
+    /\b(pedo|paedo|pedophil\w*)\b/i,
+    /\bcsam\b/i,
+    /\bchild\s*porn\b/i,
+    /\b(send|show|gimme)\s*(me\s*)?(nudes?|pics?|feet|body)\b/i,
+    /\b(underage|groom(ing|er)?|touch\s*you|private\s*parts?)\b/i,
+    /\b(age\s*play|nsfw|rule\s*34)\b/i,
+    /\bwhat\s*r\s*u\s*wearing\b/i
   ];
 
+  const BANNED_PATTERNS = [
+    /\bf+u+c+k+/i, /\bs+h+i+t+/i, /\bb+i+t+c+h+/i,
+    /\ba+s+s+h+o+l+e+/i, /\bd+i+c+k+/i, /\bp+u+s+s+y+/i,
+    /\bc+u+n+t+/i, /\bn+i+g+g+/i, /\bf+a+g+g+/i,
+    /\bw+h+o+r+e+/i, /\bs+l+u+t+/i, /\bp+o+r+n+/i, /\bk+y+s+/i
+  ];
+
+  function isSevereViolation(text) {
+    return SEVERE_PATTERNS.some(rx => rx.test(text));
+  }
+
   function containsProfanity(text) {
-    if (!text) return false;
     return BANNED_PATTERNS.some(rx => rx.test(text));
   }
 
@@ -359,6 +363,53 @@
 
   let currentUser = localStorage.getItem("k5_user");
   let activeChatFriend = new URLSearchParams(window.location.search).get('to') || null;
+  let isChatSuspended = false;
+
+  // Check if account has an active chat ban
+  async function checkChatBanStatus() {
+    if (!currentUser) return;
+    const { data } = await client
+      .from('accounts')
+      .select('chat_banned_until')
+      .eq('username', currentUser)
+      .maybeSingle();
+
+    if (data && data.chat_banned_until) {
+      const banEnd = new Date(data.chat_banned_until).getTime();
+      if (banEnd > Date.now()) {
+        isChatSuspended = true;
+        lockChatUI("Your account is temporarily suspended from KidChat for safety violations.");
+      } else {
+        isChatSuspended = false;
+      }
+    }
+  }
+
+  function lockChatUI(noticeText) {
+    document.getElementById('msg-input').disabled = true;
+    document.getElementById('send-btn').disabled = true;
+    document.getElementById('chat-target-header').innerText = "🚫 KidChat Suspended";
+    document.getElementById('messages-box').innerHTML = `
+      <div style="text-align:center; color:#ef4444; font-weight:700; padding:2rem; margin:auto;">
+        ${noticeText}<br><br>
+        <span style="color:#64748b; font-weight:normal; font-size:0.85rem;">
+          You can still view and participate on the public boards.
+        </span>
+      </div>
+    `;
+  }
+
+  async function applyChatTimeout() {
+    isChatSuspended = true;
+    const timeoutUntil = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours
+
+    await client
+      .from('accounts')
+      .update({ chat_banned_until: timeoutUntil })
+      .eq('username', currentUser);
+
+    lockChatUI("You have been banned from KidChat for 24 hours for safety violations.");
+  }
 
   // CLOCK
   function updateClock() {
@@ -447,8 +498,8 @@
     syncSidebar();
   }
 
-  // CHAT LOGIC
   function openChat(friendUsername) {
+    if (isChatSuspended) return;
     activeChatFriend = friendUsername;
     document.getElementById('chat-target-header').innerText = `Chatting with @${friendUsername}`;
     document.getElementById('msg-input').disabled = false;
@@ -458,7 +509,7 @@
   }
 
   async function loadMessages() {
-    if (!currentUser || !activeChatFriend) return;
+    if (!currentUser || !activeChatFriend || isChatSuspended) return;
 
     const { data: messages, error } = await client
       .from('messages')
@@ -482,7 +533,7 @@
       const timeStr = new Date(m.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
       return `
         <div class="msg-bubble ${isMine ? 'msg-sent' : 'msg-recv'}">
-          <div>${escapeHtml(m.content)}</div>
+          <div>${escapeHtml(m.content || m.body)}</div>
           <div class="msg-time">${timeStr}</div>
         </div>
       `;
@@ -492,10 +543,19 @@
   }
 
   async function sendMessage() {
+    if (isChatSuspended) return;
     const input = document.getElementById('msg-input');
     const text = input.value.trim();
     if (!text || !activeChatFriend || !currentUser) return;
 
+    // Severe predatory check -> chat-only suspension
+    if (isSevereViolation(text)) {
+      input.value = '';
+      await applyChatTimeout();
+      return;
+    }
+
+    // Normal language check
     if (containsProfanity(text)) {
       alert("KidCha Rule: Inappropriate words are not allowed in chat!");
       return;
@@ -504,7 +564,8 @@
     const { error } = await client.from('messages').insert([{
       sender: currentUser,
       receiver: activeChatFriend,
-      content: text
+      content: text,
+      body: text
     }]);
 
     if (error) {
@@ -520,7 +581,6 @@
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  // Realtime subscription
   client
     .channel('direct-messages')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
@@ -533,6 +593,7 @@
     })
     .subscribe();
 
+  checkChatBanStatus();
   syncSidebar();
   setInterval(syncSidebar, 30000);
   setInterval(pingPresence, 60000);
