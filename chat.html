@@ -433,7 +433,7 @@
   <div style="background:#fff; border-radius:18px; padding:24px; width:340px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
     <div style="font-size:3rem; margin-bottom:8px;">📞</div>
     <h3 id="call-status" style="font-size:1.2rem; color:#1e293b; margin-bottom:14px;">Calling...</h3>
-    <audio id="remote-audio" autoplay></audio>
+    <audio id="remote-audio" autoplay playsinline></audio>
     <div style="display:flex; gap:10px; justify-content:center;">
       <button id="btn-accept-call" onclick="acceptIncomingCall()" style="background:#16a34a; color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer; display:none;">Answer</button>
       <button onclick="endCall()" style="background:#ef4444; color:#fff; border:none; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer;">End Call</button>
@@ -484,6 +484,7 @@
   let peerConnection = null;
   let localStream = null;
   let incomingOffer = null;
+  let pendingCandidates = [];
 
   const rtcConfig = {
     iceServers: [
@@ -779,6 +780,42 @@
   }
 
   // --- WEBRTC CALLING SYSTEM ---
+  function createPeer(targetUser) {
+    peerConnection = new RTCPeerConnection(rtcConfig);
+    pendingCandidates = [];
+
+    peerConnection.onicecandidate = (e) => {
+      if (e.candidate) {
+        client.from('calls').insert([{
+          caller: currentUser,
+          callee: targetUser,
+          type: 'ice',
+          payload: JSON.stringify(e.candidate)
+        }]);
+      }
+    };
+
+    peerConnection.ontrack = (e) => {
+      const remoteAudio = document.getElementById('remote-audio');
+      if (e.streams && e.streams[0]) {
+        remoteAudio.srcObject = e.streams[0];
+        remoteAudio.play().catch(err => console.log("Audio autoplay needed gesture:", err));
+      }
+      document.getElementById('call-status').innerText = `Connected with @${targetUser}!`;
+    };
+  }
+
+  async function processPendingCandidates() {
+    while (pendingCandidates.length > 0) {
+      const candidate = pendingCandidates.shift();
+      try {
+        await peerConnection.addIceCandidate(candidate);
+      } catch (err) {
+        console.error("Error adding queued candidate:", err);
+      }
+    }
+  }
+
   async function startCall() {
     if (!activeChatFriend || !currentUser) return;
 
@@ -808,27 +845,6 @@
     }]);
   }
 
-  function createPeer(targetUser) {
-    peerConnection = new RTCPeerConnection(rtcConfig);
-
-    peerConnection.onicecandidate = (e) => {
-      if (e.candidate) {
-        client.from('calls').insert([{
-          caller: currentUser,
-          callee: targetUser,
-          type: 'ice',
-          payload: JSON.stringify(e.candidate)
-        }]);
-      }
-    };
-
-    peerConnection.ontrack = (e) => {
-      const remoteAudio = document.getElementById('remote-audio');
-      remoteAudio.srcObject = e.streams[0];
-      document.getElementById('call-status').innerText = `Connected with @${targetUser}!`;
-    };
-  }
-
   async function acceptIncomingCall() {
     document.getElementById('btn-accept-call').style.display = 'none';
     document.getElementById('call-status').innerText = "Connecting...";
@@ -845,6 +861,8 @@
     localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
     await peerConnection.setRemoteDescription(new RTCSessionDescription(JSON.parse(incomingOffer.payload)));
+    await processPendingCandidates();
+
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
 
@@ -854,6 +872,9 @@
       type: 'answer',
       payload: JSON.stringify(answer)
     }]);
+
+    const remoteAudio = document.getElementById('remote-audio');
+    remoteAudio.play().catch(() => {});
   }
 
   async function endCall() {
@@ -877,8 +898,10 @@
     }
 
     document.getElementById('call-modal').style.display = 'none';
-    document.getElementById('remote-audio').srcObject = null;
+    const remoteAudio = document.getElementById('remote-audio');
+    remoteAudio.srcObject = null;
     incomingOffer = null;
+    pendingCandidates = [];
   }
 
   // Realtime listeners
@@ -908,13 +931,19 @@
       } 
       else if (callData.type === 'answer' && peerConnection) {
         await peerConnection.setRemoteDescription(new RTCSessionDescription(JSON.parse(callData.payload)));
+        await processPendingCandidates();
         document.getElementById('call-status').innerText = `In call with @${callData.caller}`;
       } 
-      else if (callData.type === 'ice' && peerConnection) {
-        try {
-          await peerConnection.addIceCandidate(new RTCIceCandidate(JSON.parse(callData.payload)));
-        } catch (err) {
-          console.error("ICE error:", err);
+      else if (callData.type === 'ice') {
+        const candidate = new RTCIceCandidate(JSON.parse(callData.payload));
+        if (peerConnection && peerConnection.remoteDescription && peerConnection.remoteDescription.type) {
+          try {
+            await peerConnection.addIceCandidate(candidate);
+          } catch (err) {
+            console.error("ICE Candidate Error:", err);
+          }
+        } else {
+          pendingCandidates.push(candidate);
         }
       } 
       else if (callData.type === 'hangup') {
@@ -924,6 +953,7 @@
         document.getElementById('call-modal').style.display = 'none';
         document.getElementById('remote-audio').srcObject = null;
         incomingOffer = null;
+        pendingCandidates = [];
       }
     })
     .subscribe();
