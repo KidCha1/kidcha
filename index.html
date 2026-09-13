@@ -63,7 +63,7 @@
       border-radius: 8px;
       padding: 6px 8px;
       margin-top: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.08);
       flex-shrink: 0;
       text-align: center;
@@ -77,6 +77,46 @@
       color: #64748b;
       font-size: 0.7rem;
       font-weight: 600;
+    }
+
+    /* WEATHER WIDGET LINK */
+    .sb-weather-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s ease;
+    }
+    .sb-weather-card:hover {
+      background: #eff6ff;
+    }
+    .sb-weather-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sb-weather-icon {
+      font-size: 1.1rem;
+    }
+    .sb-weather-temp {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #0284c7;
+    }
+    .sb-weather-btn {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #0369a1;
+      background: #e0f2fe;
+      padding: 2px 5px;
+      border-radius: 4px;
     }
 
     /* FRIEND REQUESTS */
@@ -180,7 +220,7 @@
     /* HUB LAYOUT */
     .wrapper { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
 
-    /* RETRO LOGO HEADER */
+    /* RETRO 5-LEAF LOGO HEADER */
     .header-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
@@ -265,7 +305,7 @@
       transform: translateY(-1px);
     }
 
-    /* KID-SAFE SPONSOR BANNER */
+    /* SPONSOR BANNER */
     .kid-ad-banner {
       background: #fff;
       border: 2px dashed #cbd5e1;
@@ -324,7 +364,7 @@
       margin-top: 2px;
     }
     .kid-ad-cta {
-      background: #f59e0b;
+      background: #16a34a;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -335,8 +375,9 @@
       white-space: nowrap;
       text-transform: uppercase;
       width: auto;
+      transition: background 0.15s ease;
     }
-    .kid-ad-cta:hover { background: #d97706; }
+    .kid-ad-cta:hover { background: #15803d; }
     .kid-ad-close {
       background: none;
       border: none;
@@ -453,6 +494,15 @@
     <div class="sb-widget-date" id="sb-date">---, --- --</div>
   </div>
 
+  <!-- LOCAL WEATHER WIDGET -->
+  <a class="sb-weather-card" id="sb-weather-link" href="https://weather.com" target="_blank" rel="noopener noreferrer" title="View full forecast on weather.com">
+    <div class="sb-weather-info">
+      <span class="sb-weather-icon" id="sb-weather-icon">☀️</span>
+      <span class="sb-weather-temp" id="sb-weather-temp">--°F</span>
+    </div>
+    <span class="sb-weather-btn">weather.com ↗</span>
+  </a>
+
   <div class="sb-requests-box" id="sb-requests"></div>
 
   <div class="sb-polygon-box">
@@ -472,7 +522,7 @@
         <path d="M50 56 Q44 76 34 88" stroke="#14532d" stroke-width="5" stroke-linecap="round" fill="none"/>
         <path d="M50 56 Q44 76 34 88" stroke="#16a34a" stroke-width="3" stroke-linecap="round" fill="none"/>
 
-        <!-- Outer 5 Petals (Star Rotation: 0°, 72°, 144°, 216°, 288°) -->
+        <!-- Outer 5 Petals -->
         <g fill="#15803d">
           <path d="M50 50 C41 47 36 31 43 20 C50 11 50 11 57 20 C64 31 59 47 50 50 Z" />
           <path d="M50 50 C41 47 36 31 43 20 C50 11 50 11 57 20 C64 31 59 47 50 50 Z" transform="rotate(72 50 50)" />
@@ -509,16 +559,16 @@
     </div>
   </div>
 
-  <!-- KID-SAFE SPONSOR AD -->
+  <!-- ROTATING SPONSOR BANNER (ERIS FOOD CO + ROTATION) -->
   <div class="kid-ad-banner" id="kid-ad-box">
     <span class="kid-ad-tag">KidCha Sponsored Announcement</span>
     <a class="kid-ad-content" id="kid-ad-link" href="#" onclick="clickAd(event)">
-      <div class="kid-ad-icon" id="kid-ad-emoji">🧃</div>
+      <div class="kid-ad-icon" id="kid-ad-emoji">🌱</div>
       <div class="kid-ad-text">
-        <div class="kid-ad-headline" id="kid-ad-title">PACIFIC COOLER SHORTAGE!</div>
-        <div class="kid-ad-sub" id="kid-ad-sub">Trading 1 pack of Dunkaroos for 2 Capri Suns near the 3rd grade slide.</div>
+        <div class="kid-ad-headline" id="kid-ad-title">ERIS FOOD CO • OCEANSIDE</div>
+        <div class="kid-ad-sub" id="kid-ad-sub">Delicious 100% plant-based vegan eats crafted in Oceanside!</div>
       </div>
-      <button type="button" class="kid-ad-cta" id="kid-ad-btn">Trade</button>
+      <button type="button" class="kid-ad-cta" id="kid-ad-btn">Visit</button>
     </a>
     <button type="button" class="kid-ad-close" onclick="document.getElementById('kid-ad-box').style.display='none'">✕</button>
   </div>
@@ -609,7 +659,7 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // KidCha Safe-Word Filter List
+  // Safe-Word Filter List
   const BANNED_PATTERNS = [
     /\bf+u+c+k+/i,
     /\bs+h+i+t+/i,
@@ -664,6 +714,51 @@
   setInterval(updateClock, 1000);
   updateClock();
 
+  // --- LOCAL WEATHER & WEATHER.COM INTEGRATION ---
+  async function loadLocalWeather() {
+    const fallbackLat = 33.1959; // Oceanside, CA
+    const fallbackLon = -117.3795;
+
+    function applyWeather(lat, lon) {
+      // Connects directly to weather.com local page for exact coordinates
+      document.getElementById('sb-weather-link').href = `https://weather.com/weather/today/l/${lat.toFixed(4)},${lon.toFixed(4)}`;
+
+      // Free, CORS-friendly weather API to fetch temperature
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.current) {
+            const temp = Math.round(data.current.temperature_2m);
+            const code = data.current.weather_code;
+            document.getElementById('sb-weather-temp').innerText = `${temp}°F`;
+
+            // Weather code emojis
+            let icon = '☀️';
+            if ([1, 2, 3].includes(code)) icon = '⛅';
+            else if ([45, 48].includes(code)) icon = '🌫️';
+            else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) icon = '🌧️';
+            else if ([71, 73, 75, 77, 85, 86].includes(code)) icon = '❄️';
+            else if ([95, 96, 99].includes(code)) icon = '⛈️';
+            document.getElementById('sb-weather-icon').innerText = icon;
+          }
+        })
+        .catch(() => {
+          document.getElementById('sb-weather-temp').innerText = 'Weather';
+        });
+    }
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => applyWeather(pos.coords.latitude, pos.coords.longitude),
+        () => applyWeather(fallbackLat, fallbackLon),
+        { timeout: 5000 }
+      );
+    } else {
+      applyWeather(fallbackLat, fallbackLon);
+    }
+  }
+  loadLocalWeather();
+
   async function pingPresence() {
     if (currentUser) {
       await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
@@ -715,8 +810,15 @@
     `).join('');
   }
 
-  // --- KID-SAFE SPONSOR ADS ---
+  // --- SPONSOR ADS (FEATURING ERIS FOOD CO) ---
   const SAFE_ADS = [
+    {
+      emoji: "🌱",
+      title: "ERIS FOOD CO • OCEANSIDE",
+      sub: "Delicious, 100% plant-based food crafted right in Oceanside!",
+      btn: "Visit",
+      action: () => window.open("https://erisfoodcoca.com", "_blank")
+    },
     {
       emoji: "🧃",
       title: "PACIFIC COOLER SHORTAGE!",
@@ -744,13 +846,6 @@
       sub: "Grab 50 blue puffles and your hard hat. Today is the day it flips.",
       btn: "Drill Now",
       action: () => alert("The iceberg tipped! You unlocked the blue pirate bandana.")
-    },
-    {
-      emoji: "✏️",
-      title: "LEGENDARY MECHANICAL PENCIL",
-      sub: "Holds 14 leads at once and the eraser hasn't been eaten yet.",
-      btn: "Inspect",
-      action: () => alert("Click, click, click... snapped lead! Too much pressure.")
     },
     {
       emoji: "🦖",
@@ -795,13 +890,11 @@
       return;
     }
 
-    // 1. Block [MOD] impersonation on the website
     if (username.toUpperCase().includes("[MOD]")) {
       alert('Registration failed: new row for relation "accounts" violates check constraint "no_reg_mods"');
       return;
     }
 
-    // 2. Format validation
     const validUsernameRegex = /^[a-zA-Z0-9]+$/;
     if (!validUsernameRegex.test(username)) {
       alert("Username can only contain letters and numbers (no spaces or symbols)!");
@@ -813,7 +906,6 @@
       return;
     }
 
-    // 3. Bad word filter check
     if (containsProfanity(username)) {
       alert("KidCha Rule: That username contains words that aren't allowed. Please pick a friendly name!");
       return;
