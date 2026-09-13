@@ -1,7 +1,4 @@
-<html>
-        <head><title>KidCha</title></head>
-        <body>
-            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -16,86 +13,101 @@
       background: #f8fafc;
       color: #0f172a;
       min-height: 100vh;
-      padding: 2rem 1rem;
-      padding-left: 180px !important;
-      padding-right: 180px !important;
+      padding: 1.5rem 1rem;
+      padding-left: 215px !important;
     }
 
-    /* Fixed Yellow Sidebars */
+    /* SINGLE LEFT SIDEBAR */
     .k5-sidebar {
       position: fixed;
       top: 0;
       bottom: 0;
-      width: 165px;
+      left: 0;
+      width: 200px;
       background-color: #f59e0b;
-      padding: 12px;
+      padding: 12px 10px;
       z-index: 1000;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+      overflow: hidden;
     }
-    .k5-sidebar-left { left: 0; }
-    .k5-sidebar-right { right: 0; }
 
     .sb-user-card {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       background: #ffffff;
-      padding: 8px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+      padding: 8px 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
     }
     .sb-username {
       font-weight: 800;
-      font-size: 0.85rem;
-      color: #000000;
+      font-size: 0.88rem;
+      color: #0f172a;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     .sb-pfp {
       font-size: 1.4rem;
-      min-width: 28px;
+      min-width: 26px;
       text-align: center;
     }
 
-    /* Friend Requests Area in Sidebars */
+    .sb-clock-box {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 6px 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+      text-align: center;
+    }
+    .sb-widget-time {
+      font-weight: 800;
+      color: #1e3a8a;
+      font-size: 0.9rem;
+    }
+    .sb-widget-date {
+      color: #64748b;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    /* FRIEND REQUESTS */
     .sb-requests-box {
-      margin-bottom: 12px;
+      margin-bottom: 6px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       flex-shrink: 0;
     }
     .sb-req-card {
       background: #ffffff;
       border: 1px solid #fde047;
-      border-radius: 8px;
-      padding: 6px 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      border-radius: 6px;
+      padding: 5px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     .sb-req-name {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 800;
       color: #0f172a;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 4px;
     }
-    .sb-req-actions {
-      display: flex;
-      gap: 4px;
-    }
+    .sb-req-actions { display: flex; gap: 4px; margin-top: 3px; }
     .sb-btn-acc {
       background: #16a34a;
-      color: #ffffff;
+      color: #fff;
       border: none;
       border-radius: 4px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 800;
       padding: 2px 6px;
       cursor: pointer;
@@ -103,220 +115,275 @@
     }
     .sb-btn-dec {
       background: #ef4444;
-      color: #ffffff;
+      color: #fff;
       border: none;
       border-radius: 4px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 800;
       padding: 2px 6px;
       cursor: pointer;
     }
 
-    /* Green Pentagon / Diamond Container */
+    /* POLYGON FRIENDS BOX */
     .sb-polygon-box {
       background-color: #c4d600;
-      clip-path: polygon(50% 0%, 100% 35%, 85% 100%, 15% 100%, 0% 35%);
-      padding: 44px 10px 24px 10px;
+      clip-path: polygon(50% 0%, 100% 12%, 92% 100%, 8% 100%, 0% 12%);
+      padding: 34px 12px 14px 12px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-top: auto;
-      margin-bottom: 16px;
-      min-height: 150px;
+      flex: 1;
+      min-height: 240px;
+    }
+    .sb-polygon-title {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #365314;
+      text-align: center;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .sb-polygon-scroll {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-right: 2px;
     }
     .sb-friend-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #000000;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #0f172a;
       text-decoration: none;
     }
-    .sb-friend-row:hover span:first-child { text-decoration: underline; }
+    .sb-friend-row:hover {
+      background: #ffffff;
+    }
     .sb-status-dot {
-      width: 14px;
-      height: 14px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       display: inline-block;
       flex-shrink: 0;
     }
-    .sb-status-dot.online { background-color: #10b981; }
-    .sb-status-dot.offline { background-color: #9ca3af; }
+    .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
+    .sb-status-dot.offline { background-color: #94a3b8; }
 
-    .wrapper { max-width: 650px; margin: 0 auto; }
-    header { text-align: center; margin-bottom: 1.75rem; }
+    /* MAIN CONTENT */
+    .wrapper { max-width: 720px; margin: 0 auto; }
+
+    .header-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .logo-title {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #2563eb;
+      letter-spacing: -0.5px;
+    }
 
     .card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: 1.25rem;
       margin-bottom: 1.25rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
-    .row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
-    input, select {
-      flex: 1;
+
+    input {
+      width: 100%;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
       padding: 0.75rem 1rem;
       font-size: 0.95rem;
       outline: none;
       background: #fff;
+      font-family: inherit;
+      margin-bottom: 0.75rem;
     }
-    input:focus, select:focus { border-color: #3b82f6; }
+
     button {
       background: #2563eb;
       color: white;
-      font-weight: 600;
+      font-weight: 700;
       border: none;
-      padding: 0.75rem 1.4rem;
+      padding: 0.65rem 1.3rem;
       border-radius: 10px;
       cursor: pointer;
       font-size: 0.95rem;
     }
     button:hover { background: #1d4ed8; }
-    .btn-secondary { background: #f1f5f9; color: #334155; }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.85rem;
+    }
     .btn-secondary:hover { background: #e2e8f0; }
 
-    .nav-grid {
+    .avatar-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-top: 1rem;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 0.75rem;
     }
-    .nav-card {
-      display: block;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      padding: 1rem;
-      border-radius: 12px;
-      text-decoration: none;
-      color: inherit;
-      font-weight: 600;
-      transition: all 0.15s ease;
-    }
-    .nav-card:hover { background: #ffffff; border-color: #3b82f6; transform: translateY(-2px); }
-    .nav-card span { display: block; font-size: 0.8rem; color: #64748b; font-weight: normal; margin-top: 0.25rem; }
-    .chat-card {
-      grid-column: span 2;
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      color: #1d4ed8;
+    .avatar-opt {
+      font-size: 1.5rem;
+      padding: 6px;
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+      background: #fff;
+      cursor: pointer;
       text-align: center;
     }
-    .chat-card:hover { background: #dbeafe; }
+    .avatar-opt.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
 
-    #auth-status { margin-top: 0.5rem; font-size: 0.9rem; font-weight: 500; }
-    .error { color: #dc2626; }
-    .loading { color: #2563eb; }
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .board-tile {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .board-tile:hover {
+      transform: translateY(-2px);
+      border-color: #3b82f6;
+    }
+    .board-tag {
+      font-weight: 900;
+      font-size: 1rem;
+      color: #2563eb;
+    }
+    .board-desc {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
   </style>
 </head>
 <body>
 
-<!-- LEFT BAR -->
-<div class="k5-sidebar k5-sidebar-left">
+<!-- SINGLE LEFT SIDEBAR -->
+<div class="k5-sidebar">
   <div class="sb-user-card">
-    <div class="sb-username" id="left-user">Guest</div>
-    <div class="sb-pfp" id="left-pfp">🦊</div>
+    <div class="sb-pfp" id="sb-pfp">🦊</div>
+    <div class="sb-username" id="sb-user">Guest</div>
   </div>
-  <div class="sb-requests-box" id="left-requests"></div>
-  <div class="sb-polygon-box" id="left-friends">
-    <div style="font-size:0.68rem; text-align:center;">Loading...</div>
-  </div>
-</div>
 
-<!-- RIGHT BAR -->
-<div class="k5-sidebar k5-sidebar-right">
-  <div class="sb-user-card">
-    <div class="sb-username" id="right-user">Guest</div>
-    <div class="sb-pfp" id="right-pfp">🦊</div>
+  <div class="sb-clock-box">
+    <div class="sb-widget-time" id="sb-time">--:-- --</div>
+    <div class="sb-widget-date" id="sb-date">---, --- --</div>
   </div>
-  <div class="sb-requests-box" id="right-requests"></div>
-  <div class="sb-polygon-box" id="right-friends">
-    <div style="font-size:0.68rem; text-align:center;">Loading...</div>
+
+  <div class="sb-requests-box" id="sb-requests"></div>
+
+  <div class="sb-polygon-box">
+    <div class="sb-polygon-title">Friends</div>
+    <div class="sb-polygon-scroll" id="sb-friends">
+      <div style="font-size:0.7rem; text-align:center; color:#365314;">Loading friends...</div>
+    </div>
   </div>
 </div>
 
 <div class="wrapper">
-  <header>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="100%" height="80">
-      <defs>
-        <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#38bdf8" />
-          <stop offset="100%" stop-color="#2563eb" />
-        </linearGradient>
-      </defs>
-      <g transform="translate(68, 60)">
-        <g transform="rotate(0)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#22c55e" /></g>
-        <g transform="rotate(72)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#16a34a" /></g>
-        <g transform="rotate(144)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#15803d" /></g>
-        <g transform="rotate(216)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#16a34a" /></g>
-        <g transform="rotate(288)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#4ade80" /></g>
-        <circle cx="0" cy="0" r="5" fill="#facc15" />
-      </g>
-      <g transform="translate(135, 78)">
-        <text x="0" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="54" fill="url(#blueGrad)" letter-spacing="-1">Kid</text>
-        <text x="85" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="54" fill="#1e293b" letter-spacing="-1">Cha</text>
-        <rect x="200" y="-36" width="68" height="24" rx="6" fill="#fef08a" stroke="#facc15" stroke-width="1.5" />
-        <text x="234" y="-20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="800" font-size="12" fill="#854d0e">K - 5th</text>
-      </g>
-    </svg>
-    <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.5rem;">The safe message board & messenger for elementary kids.</p>
-  </header>
-
-  <!-- AUTH -->
-  <div class="card" id="auth-panel">
-    <h3 style="margin-bottom: 1rem;">Join or Log In</h3>
-    <div class="row">
-      <input type="text" id="username" placeholder="Screen Name" maxlength="20">
-      <input type="password" id="pin" placeholder="Secret PIN" maxlength="6">
-    </div>
-    <div class="row">
-      <select id="reg-grade">
-        <option value="K">Kindergarten</option>
-        <option value="1st">1st Grade</option>
-        <option value="2nd">2nd Grade</option>
-        <option value="3rd" selected>3rd Grade</option>
-        <option value="4th">4th Grade</option>
-        <option value="5th">5th Grade</option>
-      </select>
-      <select id="reg-mascot">
-        <option value="Falcon">🦅 Falcon Club</option>
-        <option value="Dragon">🐉 Dragon Club</option>
-        <option value="Comet">☄️ Comet Club</option>
-        <option value="Shark">🦈 Shark Club</option>
-      </select>
-    </div>
-    <div style="display: flex; gap: 0.5rem;">
-      <button onclick="handleRegister()">Register Account</button>
-      <button class="btn-secondary" onclick="handleLogin()">Log In</button>
-    </div>
-    <div id="auth-status"></div>
+  <div class="header-banner">
+    <div class="logo-title">KidCha ⚡</div>
+    <div id="auth-controls"></div>
   </div>
 
-  <!-- SESSION -->
-  <div class="card" id="session-panel" style="display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <span>Signed in as: <strong id="user-display" style="color: #2563eb;"></strong></span>
-        <a href="profile.html" style="font-size: 0.85rem; color: #64748b; margin-left: 0.5rem;">(Edit Profile)</a>
-      </div>
-      <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="handleLogout()">Log Out</button>
+  <!-- AUTH SECTION (shown if logged out) -->
+  <div class="card" id="login-card" style="display: none;">
+    <h3 style="margin-bottom: 0.75rem; font-size: 1.15rem; color: #1e293b;">Welcome to KidCha!</h3>
+    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Log in or pick a username and 4-digit PIN to join the club.</p>
+
+    <input type="text" id="auth-username" placeholder="Username (e.g. PixelHero)" maxlength="16">
+    <input type="password" id="auth-pin" placeholder="4-Digit PIN" maxlength="4" pattern="[0-9]*" inputmode="numeric">
+
+    <div style="font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Pick your avatar:</div>
+    <div class="avatar-grid" id="avatar-picker">
+      <div class="avatar-opt selected" onclick="selectAvatar('fox', this)">🦊</div>
+      <div class="avatar-opt" onclick="selectAvatar('cat', this)">🐱</div>
+      <div class="avatar-opt" onclick="selectAvatar('dog', this)">🐶</div>
+      <div class="avatar-opt" onclick="selectAvatar('frog', this)">🐸</div>
+      <div class="avatar-opt" onclick="selectAvatar('robot', this)">🤖</div>
+      <div class="avatar-opt" onclick="selectAvatar('alien', this)">👾</div>
+      <div class="avatar-opt" onclick="selectAvatar('gamer', this)">🎮</div>
+      <div class="avatar-opt" onclick="selectAvatar('rocket', this)">🚀</div>
+      <div class="avatar-opt" onclick="selectAvatar('pizza', this)">🍕</div>
+      <div class="avatar-opt" onclick="selectAvatar('bolt', this)">⚡</div>
+    </div>
+
+    <div style="display: flex; gap: 8px; margin-top: 10px;">
+      <button onclick="handleLogin()" style="flex: 1;">Log In / Register</button>
     </div>
   </div>
 
-  <!-- NAVIGATION -->
+  <!-- ADD FRIEND CARD (shown if logged in) -->
+  <div class="card" id="add-friend-card" style="display: none;">
+    <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: #1e293b;">Add a School Friend</h3>
+    <div style="display: flex; gap: 8px;">
+      <input type="text" id="friend-input" placeholder="Friend's exact username..." maxlength="16" style="margin-bottom: 0;">
+      <button onclick="sendFriendRequest()" style="white-space: nowrap;">Send Request</button>
+    </div>
+  </div>
+
+  <!-- BOARDS DIRECTORY -->
   <div class="card">
-    <h3 style="font-size: 1.1rem;">Boards & Messenger</h3>
-    <div class="nav-grid">
-      <a class="nav-card" href="board.html?b=rec">/rec/ Recess <span>School chatter & recess games</span></a>
-      <a class="nav-card" href="board.html?b=gm">/gm/ Gaming <span>Roblox, high scores & gameplay</span></a>
-      <a class="nav-card" href="board.html?b=art">/art/ Comics & Art <span>Drawings, stories & creative ideas</span></a>
-      <a class="nav-card" href="board.html?b=b">/b/ Random <span>Anything friendly</span></a>
-      <a class="nav-card chat-card" href="chat.html">💬 Open KidChat & Voice Calls <span>Instant messaging & live calls</span></a>
+    <h3 style="margin-bottom: 0.75rem; font-size: 1.15rem; color: #1e293b;">Message Boards</h3>
+    <div class="board-grid">
+      <a href="board.html?b=rec" class="board-tile">
+        <span class="board-tag">/rec/ Recess</span>
+        <span class="board-desc">Hangout, sports, school chatter & daily recess topics.</span>
+      </a>
+      <a href="board.html?b=gm" class="board-tile">
+        <span class="board-tag">/gm/ Gaming</span>
+        <span class="board-desc">Roblox tips, Geometry Dash progress, Mario Kart & codes.</span>
+      </a>
+      <a href="board.html?b=art" class="board-tile">
+        <span class="board-tag">/art/ Comics & Art</span>
+        <span class="board-desc">Share drawings, scans of your original comics, and fan art.</span>
+      </a>
+      <a href="board.html?b=b" class="board-tile">
+        <span class="board-tag">/b/ Random</span>
+        <span class="board-desc">Random funny thoughts, clean jokes, and general questions.</span>
+      </a>
     </div>
+  </div>
+
+  <!-- QUICK NAVIGATION LINKS -->
+  <div class="card" style="display: flex; justify-content: space-around; text-align: center;">
+    <a href="chat.html" class="btn-secondary" style="font-size: 0.95rem; padding: 0.7rem 1.4rem;">💬 Direct Chats</a>
+    <a href="profile.html" class="btn-secondary" style="font-size: 0.95rem; padding: 0.7rem 1.4rem;">⚙️ My Profile</a>
   </div>
 </div>
 
@@ -325,6 +392,28 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  // --- KIDCHA SAFETY PROFANITY FILTER ---
+  const BANNED_PATTERNS = [
+    /\bf+u+c+k+/i,
+    /\bs+h+i+t+/i,
+    /\bb+i+t+c+h+/i,
+    /\ba+s+s+h+o+l+e+/i,
+    /\bd+i+c+k+/i,
+    /\bp+u+s+s+y+/i,
+    /\bc+u+n+t+/i,
+    /\bn+i+g+g+/i,
+    /\bf+a+g+g+/i,
+    /\bw+h+o+r+e+/i,
+    /\bs+l+u+t+/i,
+    /\bp+o+r+n+/i,
+    /\bk+y+s+/i
+  ];
+
+  function containsProfanity(text) {
+    if (!text) return false;
+    return BANNED_PATTERNS.some(rx => rx.test(text));
+  }
+
   const AVATARS = {
     'fox': '🦊', 'cat': '🐱', 'dog': '🐶', 'frog': '🐸',
     'robot': '🤖', 'alien': '👾', 'gamer': '🎮', 'rocket': '🚀',
@@ -332,225 +421,235 @@
   };
 
   let currentUser = localStorage.getItem("k5_user");
+  let selectedAvatar = 'fox';
 
-  function syncAuthUI() {
-    if (currentUser) {
-      document.getElementById("auth-panel").style.display = "none";
-      document.getElementById("session-panel").style.display = "block";
-      document.getElementById("user-display").innerText = currentUser;
-      document.getElementById("left-user").innerText = currentUser;
-      document.getElementById("right-user").innerText = currentUser;
-      syncSidebars();
-    } else {
-      document.getElementById("auth-panel").style.display = "block";
-      document.getElementById("session-panel").style.display = "none";
-      document.getElementById("left-user").innerText = "Guest";
-      document.getElementById("right-user").innerText = "Guest";
-      document.getElementById("left-requests").innerHTML = '';
-      document.getElementById("right-requests").innerHTML = '';
-      document.getElementById("left-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center;">Log in to view</div>';
-      document.getElementById("right-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center;">Log in to view</div>';
-    }
+  function selectAvatar(name, el) {
+    selectedAvatar = name;
+    document.querySelectorAll('.avatar-opt').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
   }
 
+  // CLOCK
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    document.getElementById('sb-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // PRESENCE
   async function pingPresence() {
     if (currentUser) {
       await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
     }
   }
 
- async function syncSidebars() {
-  if (!currentUser) return;
+  // AUTH STATE
+  function updateAuthUI() {
+    const authBox = document.getElementById("auth-controls");
+    const loginCard = document.getElementById("login-card");
+    const addFriendCard = document.getElementById("add-friend-card");
 
-  try {
-    // 1. Fetch current user avatar
-    const { data: myAcc, error: myAccErr } = await client
-      .from('accounts')
-      .select('avatar')
-      .eq('username', currentUser)
-      .maybeSingle();
+    if (currentUser) {
+      authBox.innerHTML = `
+        <span style="font-weight:700; font-size:0.9rem; color:#475569; margin-right:8px;">Hi, ${escapeHtml(currentUser)}</span>
+        <button onclick="logout()" class="btn-secondary" style="padding:4px 10px; font-size:0.8rem;">Log Out</button>
+      `;
+      loginCard.style.display = "none";
+      addFriendCard.style.display = "block";
+    } else {
+      authBox.innerHTML = `<span style="font-size:0.85rem; color:#64748b;">Not logged in</span>`;
+      loginCard.style.display = "block";
+      addFriendCard.style.display = "none";
+    }
+  }
 
-    if (myAccErr) console.error("Sidebar user error:", myAccErr);
-    const pfp = AVATARS[myAcc?.avatar] || '🦊';
-    document.getElementById("left-pfp").innerText = pfp;
-    document.getElementById("right-pfp").innerText = pfp;
+  async function handleLogin() {
+    const username = document.getElementById('auth-username').value.trim();
+    const pin = document.getElementById('auth-pin').value.trim();
 
-    // 2. Fetch pending incoming friend requests
-    const { data: requests, error: reqErr } = await client
+    if (!username || !pin) {
+      alert("Please enter both a username and a 4-digit PIN!");
+      return;
+    }
+
+    if (containsProfanity(username)) {
+      alert("KidCha Rule: Inappropriate usernames are not permitted!");
+      return;
+    }
+
+    if (!/^\d{4}$/.test(pin)) {
+      alert("PIN must be exactly 4 numbers (0-9).");
+      return;
+    }
+
+    // Check if user exists
+    const { data: userRow } = await client.from('accounts').select('*').eq('username', username).maybeSingle();
+
+    if (userRow) {
+      // User exists -> verify PIN
+      if (userRow.pin === pin) {
+        localStorage.setItem("k5_user", username);
+        currentUser = username;
+        updateAuthUI();
+        syncSidebar();
+        pingPresence();
+      } else {
+        alert("Incorrect PIN for this username.");
+      }
+    } else {
+      // New user -> register
+      const { error } = await client.from('accounts').insert([{
+        username: username,
+        pin: pin,
+        avatar: selectedAvatar,
+        last_seen: new Date().toISOString()
+      }]);
+
+      if (error) {
+        alert("Registration failed: " + error.message);
+      } else {
+        localStorage.setItem("k5_user", username);
+        currentUser = username;
+        updateAuthUI();
+        syncSidebar();
+      }
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("k5_user");
+    currentUser = null;
+    updateAuthUI();
+    syncSidebar();
+  }
+
+  // SIDEBAR & FRIENDS SYNC
+  async function syncSidebar() {
+    if (!currentUser) {
+      document.getElementById("sb-user").innerText = "Guest";
+      document.getElementById("sb-pfp").innerText = "🦊";
+      document.getElementById("sb-requests").innerHTML = "";
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:10px;">Log in to see friends</div>';
+      return;
+    }
+
+    document.getElementById("sb-user").innerText = currentUser;
+
+    // Fetch Avatar
+    const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
+    document.getElementById("sb-pfp").innerText = AVATARS[myAcc?.avatar] || '🦊';
+
+    // Pending friend requests sent to current user
+    const { data: requests } = await client
       .from('friends')
       .select('id, user_from')
       .eq('user_to', currentUser)
       .eq('status', 'pending');
 
-    if (reqErr) console.error("Sidebar request error:", reqErr);
-
     let reqHtml = '';
     if (requests && requests.length > 0) {
       reqHtml = requests.map(r => `
         <div class="sb-req-card">
-          <div class="sb-req-name" title="${escapeHtml(r.user_from)}">${escapeHtml(r.user_from)}</div>
+          <div class="sb-req-name">${escapeHtml(r.user_from)}</div>
           <div class="sb-req-actions">
-            <button class="sb-btn-acc" onclick="acceptFriendRequest(${r.id})">✓</button>
-            <button class="sb-btn-dec" onclick="declineFriendRequest(${r.id})">✕</button>
+            <button class="sb-btn-acc" onclick="acceptFriend(${r.id})">✓ Accept</button>
+            <button class="sb-btn-dec" onclick="declineFriend(${r.id})">✕</button>
           </div>
         </div>
       `).join('');
     }
-    document.getElementById("left-requests").innerHTML = reqHtml;
-    document.getElementById("right-requests").innerHTML = reqHtml;
+    document.getElementById("sb-requests").innerHTML = reqHtml;
 
-    // 3. Fetch accepted friends (separate queries to avoid SQL filter syntax failures)
-    const { data: sentFriends } = await client
-      .from('friends')
-      .select('user_to')
-      .eq('user_from', currentUser)
-      .eq('status', 'accepted');
+    // Accepted friends
+    const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
+    const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
 
-    const { data: recvFriends } = await client
-      .from('friends')
-      .select('user_from')
-      .eq('user_to', currentUser)
-      .eq('status', 'accepted');
-
-    const names = [
+    const friendUsernames = [
       ...(sentFriends || []).map(f => f.user_to),
       ...(recvFriends || []).map(f => f.user_from)
     ];
 
-    // If no friends, update both bars and STOP early so .in() is not passed an empty list
-    if (names.length === 0) {
-      document.getElementById("left-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center;">No friends yet</div>';
-      document.getElementById("right-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center;">No friends yet</div>';
+    if (friendUsernames.length === 0) {
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:15px;">No friends added yet!</div>';
       return;
     }
 
-    // 4. Fetch presence for those friends
-    const { data: accounts, error: accErr } = await client
-      .from('accounts')
-      .select('username, last_seen')
-      .in('username', names);
-
-    if (accErr) {
-      console.error("Sidebar accounts error:", accErr);
-      return;
-    }
-
+    const { data: accounts } = await client.from('accounts').select('username, last_seen').in('username', friendUsernames);
     const now = Date.now();
+
     const friendHtml = (accounts || []).map(a => {
       const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
-      const isOnline = (now - lastSeen) < (3 * 60 * 1000); // Online if active in last 3 mins
+      const isOnline = (now - lastSeen) < (3 * 60 * 1000);
       return `
         <a class="sb-friend-row" href="chat.html">
           <span>${escapeHtml(a.username)}</span>
-          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
+          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}" title="${isOnline ? 'Online' : 'Offline'}"></span>
         </a>
       `;
     }).join('');
 
-    document.getElementById("left-friends").innerHTML = friendHtml;
-    document.getElementById("right-friends").innerHTML = friendHtml;
-
-  } catch (err) {
-    console.error("Critical sidebar failure:", err);
-  }
-}
-
-  async function acceptFriendRequest(id) {
-    await client.from('friends').update({ status: 'accepted' }).eq('id', id);
-    syncSidebars();
+    document.getElementById("sb-friends").innerHTML = friendHtml;
   }
 
-  async function declineFriendRequest(id) {
-    await client.from('friends').delete().eq('id', id);
-    syncSidebars();
-  }
+  async function sendFriendRequest() {
+    const friendInput = document.getElementById('friend-input');
+    const friendName = friendInput.value.trim();
 
-  async function handleRegister() {
-    const user = document.getElementById("username").value.trim();
-    const pin = document.getElementById("pin").value.trim();
-    const grade = document.getElementById("reg-grade").value;
-    const mascot = document.getElementById("reg-mascot").value;
-    const status = document.getElementById("auth-status");
-
-    if (!user || !pin) {
-      status.className = "error";
-      status.innerText = "Enter username and PIN!";
-      return;
-    }
-    status.className = "loading";
-    status.innerText = "Creating account...";
-
-    const { data: existing } = await client.from('accounts').select('username').eq('username', user).maybeSingle();
-    if (existing) {
-      status.className = "error";
-      status.innerText = "Name is already taken!";
+    if (!friendName) return;
+    if (friendName === currentUser) {
+      alert("You cannot add yourself as a friend!");
       return;
     }
 
-    const { error } = await client.from('accounts').insert([{
-      username: user,
-      pin: pin,
-      grade: grade,
-      mascot: mascot,
-      avatar: 'fox'
+    // Check if target account exists
+    const { data: targetUser } = await client.from('accounts').select('username').eq('username', friendName).maybeSingle();
+    if (!targetUser) {
+      alert("User '" + friendName + "' was not found!");
+      return;
+    }
+
+    const { error } = await client.from('friends').insert([{
+      user_from: currentUser,
+      user_to: friendName,
+      status: 'pending'
     }]);
 
     if (error) {
-      status.className = "error";
-      status.innerText = error.message;
+      alert("Request failed: " + error.message);
     } else {
-      localStorage.setItem("k5_user", user);
-      currentUser = user;
-      syncAuthUI();
+      alert("Friend request sent to " + friendName + "!");
+      friendInput.value = '';
     }
   }
 
-  async function handleLogin() {
-    const user = document.getElementById("username").value.trim();
-    const pin = document.getElementById("pin").value.trim();
-    const status = document.getElementById("auth-status");
-
-    if (!user || !pin) {
-      status.className = "error";
-      status.innerText = "Enter username and PIN.";
-      return;
-    }
-
-    const { data: acc } = await client.from('accounts').select('*').eq('username', user).maybeSingle();
-    if (!acc || acc.pin !== pin) {
-      status.className = "error";
-      status.innerText = "Incorrect screen name or PIN.";
-      return;
-    }
-
-    localStorage.setItem("k5_user", user);
-    currentUser = user;
-    syncAuthUI();
+  async function acceptFriend(id) {
+    await client.from('friends').update({ status: 'accepted' }).eq('id', id);
+    syncSidebar();
   }
 
-  function handleLogout() {
-    localStorage.removeItem("k5_user");
-    currentUser = null;
-    syncAuthUI();
+  async function declineFriend(id) {
+    await client.from('friends').delete().eq('id', id);
+    syncSidebar();
   }
 
   function escapeHtml(str) {
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  // Realtime subscription for friends table changes so requests pop up immediately
+  // Realtime updates for friend requests & presence
   client
-    .channel('public:friends')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'friends' }, () => {
-      syncSidebars();
-    })
+    .channel('hub-friends-sync')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'friends' }, () => syncSidebar())
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'accounts' }, () => syncSidebar())
     .subscribe();
 
-  syncAuthUI();
+  updateAuthUI();
+  syncSidebar();
+  setInterval(syncSidebar, 30000);
   setInterval(pingPresence, 60000);
   pingPresence();
 </script>
 </body>
-</html></pre>
-        </body>
-    </html>
+</html>
