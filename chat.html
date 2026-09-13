@@ -243,6 +243,14 @@
       color: #0f172a;
       border-bottom-left-radius: 2px;
     }
+    .msg-img {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 8px;
+      margin-top: 4px;
+      display: block;
+      cursor: pointer;
+    }
     .msg-time {
       font-size: 0.65rem;
       margin-top: 4px;
@@ -250,15 +258,80 @@
       text-align: right;
     }
 
+    /* INPUT CONTROLS */
+    .chat-controls-container {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid #e2e8f0;
+      background: #ffffff;
+    }
+
+    .attachment-preview {
+      display: none;
+      padding: 8px 12px;
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .attachment-preview img {
+      max-height: 70px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-clear-att {
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .gif-picker-box {
+      display: none;
+      padding: 8px;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      max-height: 140px;
+      overflow-y: auto;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .gif-opt {
+      width: 75px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .gif-opt:hover {
+      border-color: #2563eb;
+    }
+
     .chat-input-bar {
       display: flex;
       gap: 8px;
-      padding: 10px;
-      background: #ffffff;
-      border-top: 1px solid #e2e8f0;
+      padding: 8px 10px;
       align-items: center;
     }
-    .chat-input-bar input {
+    .btn-action-icon {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      user-select: none;
+    }
+    .btn-action-icon input[type="file"] { display: none; }
+    .btn-action-icon:hover { background: #e2e8f0; }
+
+    .chat-input-bar input[type="text"] {
       flex: 1;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
@@ -267,7 +340,7 @@
       outline: none;
       font-family: inherit;
     }
-    .chat-input-bar button {
+    .chat-input-bar button#send-btn {
       background: #2563eb;
       color: white;
       font-weight: 700;
@@ -277,7 +350,7 @@
       cursor: pointer;
       font-size: 0.95rem;
     }
-    .chat-input-bar button:hover { background: #1d4ed8; }
+    .chat-input-bar button#send-btn:hover { background: #1d4ed8; }
   </style>
 </head>
 <body>
@@ -317,19 +390,44 @@
       </div>
     </div>
 
-    <div class="chat-input-bar">
-      <input type="text" id="msg-input" placeholder="Type a message..." maxlength="400" onkeydown="if(event.key==='Enter') sendMessage()" disabled>
-      <button id="send-btn" onclick="sendMessage()" disabled>Send</button>
+    <div class="chat-controls-container">
+      <!-- Image/GIF Pending Attachment Preview -->
+      <div class="attachment-preview" id="att-preview">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="" id="att-preview-img" alt="Attachment" />
+          <span style="font-size:0.8rem; font-weight:700; color:#475569;" id="att-preview-label">Attachment ready</span>
+        </div>
+        <button class="btn-clear-att" onclick="clearAttachment()">Remove</button>
+      </div>
+
+      <!-- Quick Safe GIF Tray -->
+      <div class="gif-picker-box" id="gif-tray">
+        <img class="gif-opt" src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" alt="Cat" onclick="selectGif(this.src)">
+        <img class="gif-opt" src="https://media.giphy.com/media/13CoXDiaCcCoyk/giphy.gif" alt="Dance" onclick="selectGif(this.src)">
+        <img class="gif-opt" src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" alt="Clap" onclick="selectGif(this.src)">
+        <img class="gif-opt" src="https://media.giphy.com/media/l41lI4bYmcsPJX9Go/giphy.gif" alt="High Five" onclick="selectGif(this.src)">
+        <img class="gif-opt" src="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif" alt="Excited" onclick="selectGif(this.src)">
+        <img class="gif-opt" src="https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif" alt="Wave" onclick="selectGif(this.src)">
+      </div>
+
+      <div class="chat-input-bar">
+        <label class="btn-action-icon" title="Send Image">
+          🖼️
+          <input type="file" id="chat-file-input" accept="image/*" onchange="handleChatImage(this)">
+        </label>
+        <button class="btn-action-icon" onclick="toggleGifTray()" type="button" title="Pick a GIF">GIF</button>
+        <input type="text" id="msg-input" placeholder="Type a message..." maxlength="400" onkeydown="if(event.key==='Enter') sendMessage()" disabled>
+        <button id="send-btn" onclick="sendMessage()" disabled>Send</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
+  const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // Safety filter for harmful/predatory phrases
   const SEVERE_PATTERNS = [
     /\b(pedo|paedo|pedophil\w*)\b/i,
     /\bcsam\b/i,
@@ -347,13 +445,8 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
     /\bw+h+o+r+e+/i, /\bs+l+u+t+/i, /\bp+o+r+n+/i, /\bk+y+s+/i
   ];
 
-  function isSevereViolation(text) {
-    return SEVERE_PATTERNS.some(rx => rx.test(text));
-  }
-
-  function containsProfanity(text) {
-    return BANNED_PATTERNS.some(rx => rx.test(text));
-  }
+  function isSevereViolation(text) { return SEVERE_PATTERNS.some(rx => rx.test(text)); }
+  function containsProfanity(text) { return BANNED_PATTERNS.some(rx => rx.test(text)); }
 
   const AVATARS = {
     'fox': '🦊', 'cat': '🐱', 'dog': '🐶', 'frog': '🐸',
@@ -364,16 +457,26 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
   let currentUser = localStorage.getItem("k5_user");
   let activeChatFriend = new URLSearchParams(window.location.search).get('to') || null;
   let isChatSuspended = false;
+  let selectedChatImageBase64 = null;
+  let selectedChatGifUrl = null;
 
-  // Check if account has an active chat ban
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    document.getElementById('sb-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  async function pingPresence() {
+    if (currentUser) {
+      await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
+    }
+  }
+
   async function checkChatBanStatus() {
     if (!currentUser) return;
-    const { data } = await client
-      .from('accounts')
-      .select('chat_banned_until')
-      .eq('username', currentUser)
-      .maybeSingle();
-
+    const { data } = await client.from('accounts').select('chat_banned_until').eq('username', currentUser).maybeSingle();
     if (data && data.chat_banned_until) {
       const banEnd = new Date(data.chat_banned_until).getTime();
       if (banEnd > Date.now()) {
@@ -401,33 +504,54 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
 
   async function applyChatTimeout() {
     isChatSuspended = true;
-    const timeoutUntil = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours
-
-    await client
-      .from('accounts')
-      .update({ chat_banned_until: timeoutUntil })
-      .eq('username', currentUser);
-
+    const timeoutUntil = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    await client.from('accounts').update({ chat_banned_until: timeoutUntil }).eq('username', currentUser);
     lockChatUI("You have been banned from KidChat for 24 hours for safety violations.");
   }
 
-  // CLOCK
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    document.getElementById('sb-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
+  function handleChatImage(input) {
+    const file = input.files[0];
+    if (!file) return;
 
-  // PRESENCE
-  async function pingPresence() {
-    if (currentUser) {
-      await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
+    if (file.size > 3 * 1024 * 1024) {
+      alert("Image is too large! Pick an image under 3MB.");
+      input.value = "";
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      selectedChatImageBase64 = e.target.result;
+      selectedChatGifUrl = null;
+      document.getElementById('att-preview-img').src = selectedChatImageBase64;
+      document.getElementById('att-preview-label').innerText = "Image attached";
+      document.getElementById('att-preview').style.display = 'flex';
+      document.getElementById('gif-tray').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
   }
 
-  // SIDEBAR & FRIENDS
+  function toggleGifTray() {
+    const tray = document.getElementById('gif-tray');
+    tray.style.display = tray.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  function selectGif(url) {
+    selectedChatGifUrl = url;
+    selectedChatImageBase64 = null;
+    document.getElementById('att-preview-img').src = url;
+    document.getElementById('att-preview-label').innerText = "GIF attached";
+    document.getElementById('att-preview').style.display = 'flex';
+    document.getElementById('gif-tray').style.display = 'none';
+  }
+
+  function clearAttachment() {
+    selectedChatImageBase64 = null;
+    selectedChatGifUrl = null;
+    document.getElementById('att-preview').style.display = 'none';
+    document.getElementById('chat-file-input').value = '';
+  }
+
   async function syncSidebar() {
     if (!currentUser) {
       document.getElementById("sb-user").innerText = "Guest";
@@ -440,7 +564,6 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
     const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
     document.getElementById("sb-pfp").innerText = AVATARS[myAcc?.avatar] || '🦊';
 
-    // Friend requests
     const { data: requests } = await client.from('friends').select('id, user_from').eq('user_to', currentUser).eq('status', 'pending');
     let reqHtml = '';
     if (requests && requests.length > 0) {
@@ -456,7 +579,6 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
     }
     document.getElementById("sb-requests").innerHTML = reqHtml;
 
-    // Accepted friends
     const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
     const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
 
@@ -531,9 +653,15 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
     box.innerHTML = messages.map(m => {
       const isMine = m.sender === currentUser;
       const timeStr = new Date(m.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      const imgContent = m.image_data ? `<a href="${m.image_data}" target="_blank"><img class="msg-img" src="${m.image_data}" alt="Pic" /></a>` : '';
+      const gifContent = m.gif_url ? `<img class="msg-img" src="${m.gif_url}" alt="GIF" />` : '';
+      const textContent = (m.content || m.body) ? `<div>${escapeHtml(m.content || m.body)}</div>` : '';
+
       return `
         <div class="msg-bubble ${isMine ? 'msg-sent' : 'msg-recv'}">
-          <div>${escapeHtml(m.content || m.body)}</div>
+          ${textContent}
+          ${imgContent}
+          ${gifContent}
           <div class="msg-time">${timeStr}</div>
         </div>
       `;
@@ -546,16 +674,16 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
     if (isChatSuspended) return;
     const input = document.getElementById('msg-input');
     const text = input.value.trim();
-    if (!text || !activeChatFriend || !currentUser) return;
 
-    // Severe predatory check -> chat-only suspension
+    if (!text && !selectedChatImageBase64 && !selectedChatGifUrl) return;
+
     if (isSevereViolation(text)) {
       input.value = '';
+      clearAttachment();
       await applyChatTimeout();
       return;
     }
 
-    // Normal language check
     if (containsProfanity(text)) {
       alert("KidCha Rule: Inappropriate words are not allowed in chat!");
       return;
@@ -564,8 +692,10 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
     const { error } = await client.from('messages').insert([{
       sender: currentUser,
       receiver: activeChatFriend,
-      content: text,
-      body: text
+      content: text || '',
+      body: text || '',
+      image_data: selectedChatImageBase64,
+      gif_url: selectedChatGifUrl
     }]);
 
     if (error) {
@@ -574,6 +704,7 @@ const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
     }
 
     input.value = '';
+    clearAttachment();
     loadMessages();
   }
 
