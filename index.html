@@ -17,7 +17,7 @@
       padding-left: 215px !important;
     }
 
-    /* SINGLE LEFT SIDEBAR */
+    /* LEFT SIDEBAR */
     .k5-sidebar {
       position: fixed;
       top: 0;
@@ -42,6 +42,7 @@
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
+      cursor: pointer;
     }
     .sb-username {
       font-weight: 800;
@@ -161,7 +162,7 @@
       font-size: 0.78rem;
       font-weight: 800;
       color: #0f172a;
-      text-decoration: none;
+      cursor: pointer;
     }
     .sb-friend-row:hover {
       background: #ffffff;
@@ -176,19 +177,79 @@
     .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
     .sb-status-dot.offline { background-color: #94a3b8; }
 
-    /* MAIN CONTENT */
-    .wrapper { max-width: 720px; margin: 0 auto; }
+    /* HUB LAYOUT */
+    .wrapper { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
 
-    .header-banner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      gap: 16px;
+    .header-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
-    .logo-container {
-      max-width: 320px;
-      flex-shrink: 0;
+    .header-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #2563eb;
+      letter-spacing: -0.5px;
+    }
+    .header-sub {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    /* FAVORITES SHORTCUT CARD */
+    .fav-shortcuts-card {
+      background: #fefce8;
+      border: 1px solid #fef08a;
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .fav-shortcuts-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #854d0e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .fav-chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fav-board-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ffffff;
+      color: #a16207;
+      border: 1px solid #fde047;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: all 0.15s ease;
+    }
+    .fav-board-chip:hover {
+      background: #fef9c3;
+      transform: translateY(-1px);
+    }
+
+    .grid-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 640px) {
+      .grid-sections { grid-template-columns: 1fr; }
     }
 
     .card {
@@ -196,20 +257,28 @@
       border: 1px solid #e2e8f0;
       border-radius: 16px;
       padding: 1.25rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    input {
+    input, select {
       width: 100%;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
-      padding: 0.75rem 1rem;
-      font-size: 0.95rem;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.92rem;
       outline: none;
       background: #fff;
       font-family: inherit;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
     }
 
     button {
@@ -217,84 +286,59 @@
       color: white;
       font-weight: 700;
       border: none;
-      padding: 0.65rem 1.3rem;
+      padding: 0.7rem 1.2rem;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
+      width: 100%;
     }
     button:hover { background: #1d4ed8; }
-
     .btn-secondary {
-      background: #f1f5f9;
+      background: #e2e8f0;
       color: #334155;
-      font-weight: 700;
-      border: 1px solid #cbd5e1;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 0.85rem;
+      margin-top: 0.5rem;
     }
-    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-secondary:hover { background: #cbd5e1; }
 
-    .avatar-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-bottom: 0.75rem;
-    }
-    .avatar-opt {
-      font-size: 1.5rem;
-      padding: 6px;
-      border-radius: 8px;
-      border: 2px solid #e2e8f0;
-      background: #fff;
-      cursor: pointer;
-      text-align: center;
-    }
-    .avatar-opt.selected {
-      border-color: #2563eb;
-      background: #eff6ff;
-    }
-
-    .board-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    .board-tile {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 12px;
-      text-decoration: none;
-      color: inherit;
+    /* BOARDS LIST */
+    .boards-list {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      gap: 8px;
     }
-    .board-tile:hover {
-      transform: translateY(-2px);
-      border-color: #3b82f6;
+    .board-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 0.92rem;
+      transition: background 0.15s;
+    }
+    .board-link:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
     }
     .board-tag {
-      font-weight: 900;
-      font-size: 1rem;
-      color: #2563eb;
-    }
-    .board-desc {
-      font-size: 0.8rem;
-      color: #64748b;
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
     }
   </style>
 </head>
 <body>
 
-<!-- SINGLE LEFT SIDEBAR -->
+<!-- LEFT SIDEBAR -->
 <div class="k5-sidebar">
-  <div class="sb-user-card">
+  <div class="sb-user-card" onclick="goToProfile(currentUser)">
     <div class="sb-pfp" id="sb-pfp">🦊</div>
     <div class="sb-username" id="sb-user">Guest</div>
   </div>
@@ -315,101 +359,97 @@
 </div>
 
 <div class="wrapper">
-  <div class="header-banner">
-    <div class="logo-container">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="100%" height="80">
-        <defs>
-          <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#38bdf8" />
-            <stop offset="100%" stop-color="#2563eb" />
-          </linearGradient>
-        </defs>
-        <g transform="translate(68, 60)">
-          <g transform="rotate(0)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#22c55e" /></g>
-          <g transform="rotate(72)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#16a34a" /></g>
-          <g transform="rotate(144)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#15803d" /></g>
-          <g transform="rotate(216)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#16a34a" /></g>
-          <g transform="rotate(288)"><path d="M 0 0 C -14 -20 -30 -5 0 24 C 30 -5 14 -20 0 0 Z" fill="#4ade80" /></g>
-          <circle cx="0" cy="0" r="5" fill="#facc15" />
-        </g>
-        <g transform="translate(135, 78)">
-          <text x="0" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="54" fill="url(#blueGrad)" letter-spacing="-1">Kid</text>
-          <text x="85" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="54" fill="#1e293b" letter-spacing="-1">Cha</text>
-          <rect x="200" y="-36" width="68" height="24" rx="6" fill="#fef08a" stroke="#facc15" stroke-width="1.5" />
-          <text x="234" y="-20" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="800" font-size="12" fill="#854d0e">K - 5th</text>
-        </g>
-      </svg>
-    </div>
-    <div id="auth-controls"></div>
+  <div class="header-card">
+    <div class="header-title">KidCha</div>
+    <div class="header-sub">Safe, fun messaging and boards for elementary students!</div>
   </div>
 
-  <!-- AUTH SECTION (shown if logged out) -->
-  <div class="card" id="login-card" style="display: none;">
-    <h3 style="margin-bottom: 0.75rem; font-size: 1.15rem; color: #1e293b;">Welcome to KidCha!</h3>
-    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1rem;">Log in or pick a username and 4-digit PIN to join the club.</p>
-
-    <input type="text" id="auth-username" placeholder="Username (e.g. PixelHero)" maxlength="16">
-    <input type="password" id="auth-pin" placeholder="4-Digit PIN" maxlength="4" pattern="[0-9]*" inputmode="numeric">
-
-    <div style="font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Pick your avatar:</div>
-    <div class="avatar-grid" id="avatar-picker">
-      <div class="avatar-opt selected" onclick="selectAvatar('fox', this)">🦊</div>
-      <div class="avatar-opt" onclick="selectAvatar('cat', this)">🐱</div>
-      <div class="avatar-opt" onclick="selectAvatar('dog', this)">🐶</div>
-      <div class="avatar-opt" onclick="selectAvatar('frog', this)">🐸</div>
-      <div class="avatar-opt" onclick="selectAvatar('robot', this)">🤖</div>
-      <div class="avatar-opt" onclick="selectAvatar('alien', this)">👾</div>
-      <div class="avatar-opt" onclick="selectAvatar('gamer', this)">🎮</div>
-      <div class="avatar-opt" onclick="selectAvatar('rocket', this)">🚀</div>
-      <div class="avatar-opt" onclick="selectAvatar('pizza', this)">🍕</div>
-      <div class="avatar-opt" onclick="selectAvatar('bolt', this)">⚡</div>
-    </div>
-
-    <div style="display: flex; gap: 8px; margin-top: 10px;">
-      <button onclick="handleLogin()" style="flex: 1;">Log In / Register</button>
+  <!-- FAVORITE BOARDS SHORTCUTS -->
+  <div class="fav-shortcuts-card" id="fav-shortcuts-box">
+    <div class="fav-shortcuts-title">⭐ Your Starred Boards</div>
+    <div class="fav-chips-container" id="fav-chips-container">
+      <span style="font-size:0.8rem; color:#a16207;">Log in to view your starred board shortcuts!</span>
     </div>
   </div>
 
-  <!-- ADD FRIEND CARD (shown if logged in) -->
-  <div class="card" id="add-friend-card" style="display: none;">
-    <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: #1e293b;">Add a School Friend</h3>
-    <div style="display: flex; gap: 8px;">
-      <input type="text" id="friend-input" placeholder="Friend's exact username..." maxlength="16" style="margin-bottom: 0;">
-      <button onclick="sendFriendRequest()" style="white-space: nowrap;">Send Request</button>
+  <div class="grid-sections">
+    <!-- AUTHENTICATION CARD -->
+    <div class="card" id="auth-box">
+      <div class="card-title" id="auth-title">🔐 Log In</div>
+      <div id="auth-forms">
+        <!-- Log In Form -->
+        <div id="login-form">
+          <input type="text" id="login-username" placeholder="Username" maxlength="30">
+          <input type="password" id="login-password" placeholder="Password">
+          <button onclick="login()">Log In</button>
+          <button class="btn-secondary" onclick="toggleAuthMode(true)">Need an account? Register</button>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" style="display: none;">
+          <input type="text" id="reg-username" placeholder="Username (letters and numbers only)" maxlength="20">
+          <input type="password" id="reg-password" placeholder="Choose a password">
+          <select id="reg-avatar">
+            <option value="fox">🦊 Fox</option>
+            <option value="cat">🐱 Cat</option>
+            <option value="dog">🐶 Dog</option>
+            <option value="frog">🐸 Frog</option>
+            <option value="robot">🤖 Robot</option>
+            <option value="alien">👾 Alien</option>
+            <option value="gamer">🎮 Gamer</option>
+            <option value="rocket">🚀 Rocket</option>
+            <option value="pizza">🍕 Pizza</option>
+            <option value="bolt">⚡ Bolt</option>
+          </select>
+          <button onclick="register()">Create Account</button>
+          <button class="btn-secondary" onclick="toggleAuthMode(false)">Back to Log In</button>
+        </div>
+      </div>
+
+      <!-- Logged In State -->
+      <div id="user-info-box" style="display: none; text-align: center;">
+        <p style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem;" id="greeting-txt">Welcome!</p>
+        <div style="display:flex; gap:6px;">
+          <button onclick="goToProfile(currentUser)">My Profile</button>
+          <button onclick="logout()" class="btn-secondary">Log Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD FRIEND CARD -->
+    <div class="card">
+      <div class="card-title">👋 Add Friend</div>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.75rem;">Type a friend's exact username to send a request.</p>
+      <input type="text" id="friend-target-input" placeholder="Friend username..." maxlength="30">
+      <button onclick="sendFriendRequest()">Send Request</button>
     </div>
   </div>
 
-  <!-- BOARDS DIRECTORY -->
+  <!-- PUBLIC BOARDS CARD -->
   <div class="card">
-    <h3 style="margin-bottom: 0.75rem; font-size: 1.15rem; color: #1e293b;">Message Boards</h3>
-    <div class="board-grid">
-      <a href="board.html?b=rec" class="board-tile">
-        <span class="board-tag">/rec/ Recess</span>
-        <span class="board-desc">Hangout, sports, school chatter & daily recess topics.</span>
-      </a>
-      <a href="board.html?b=gm" class="board-tile">
-        <span class="board-tag">/gm/ Gaming</span>
-        <span class="board-desc">Roblox tips, Geometry Dash progress, Mario Kart & codes.</span>
-      </a>
-           <a class="board-link" href="board.html?b=updates" style="border-left: 4px solid #f59e0b;">
-        <span>📢 Updates & News</span>
+    <div class="card-title">📌 Discussion Boards</div>
+    <div class="boards-list">
+      <a class="board-link" href="board.html?b=updates" style="border-left: 4px solid #f59e0b;">
+        <span>📢 Updates & News (Official)</span>
         <span class="board-tag" style="background:#fef3c7; color:#b45309;">/updates/</span>
       </a>
- <a href="board.html?b=art" class="board-tile">
-        <span class="board-tag">/art/ Comics & Art</span>
-        <span class="board-desc">Share drawings, scans of your original comics, and fan art.</span>
+      <a class="board-link" href="board.html?b=rec">
+        <span>Recess Discussion</span>
+        <span class="board-tag">/rec/</span>
       </a>
-      <a href="board.html?b=b" class="board-tile">
-        <span class="board-tag">/b/ Random</span>
-        <span class="board-desc">Random funny thoughts, clean jokes, and general questions.</span>
+      <a class="board-link" href="board.html?b=gm">
+        <span>Gaming & Codes</span>
+        <span class="board-tag">/gm/</span>
+      </a>
+      <a class="board-link" href="board.html?b=art">
+        <span>Comics & Art</span>
+        <span class="board-tag">/art/</span>
+      </a>
+      <a class="board-link" href="board.html?b=b">
+        <span>Random Hangout</span>
+        <span class="board-tag">/b/</span>
       </a>
     </div>
-  </div>
-
-  <!-- QUICK NAVIGATION LINKS -->
-  <div class="card" style="display: flex; justify-content: space-around; text-align: center;">
-    <a href="chat.html" class="btn-secondary" style="font-size: 0.95rem; padding: 0.7rem 1.4rem;">💬 Direct Chats</a>
-    <a href="profile.html" class="btn-secondary" style="font-size: 0.95rem; padding: 0.7rem 1.4rem;">⚙️ My Profile</a>
   </div>
 </div>
 
@@ -418,28 +458,6 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // --- KIDCHA SAFETY PROFANITY FILTER ---
-  const BANNED_PATTERNS = [
-    /\bf+u+c+k+/i,
-    /\bs+h+i+t+/i,
-    /\bb+i+t+c+h+/i,
-    /\ba+s+s+h+o+l+e+/i,
-    /\bd+i+c+k+/i,
-    /\bp+u+s+s+y+/i,
-    /\bc+u+n+t+/i,
-    /\bn+i+g+g+/i,
-    /\bf+a+g+g+/i,
-    /\bw+h+o+r+e+/i,
-    /\bs+l+u+t+/i,
-    /\bp+o+r+n+/i,
-    /\bk+y+s+/i
-  ];
-
-  function containsProfanity(text) {
-    if (!text) return false;
-    return BANNED_PATTERNS.some(rx => rx.test(text));
-  }
-
   const AVATARS = {
     'fox': '🦊', 'cat': '🐱', 'dog': '🐶', 'frog': '🐸',
     'robot': '🤖', 'alien': '👾', 'gamer': '🎮', 'rocket': '🚀',
@@ -447,15 +465,19 @@
   };
 
   let currentUser = localStorage.getItem("k5_user");
-  let selectedAvatar = 'fox';
 
-  function selectAvatar(name, el) {
-    selectedAvatar = name;
-    document.querySelectorAll('.avatar-opt').forEach(opt => opt.classList.remove('selected'));
-    el.classList.add('selected');
+  function toProfileUrl(rawName) {
+    if (!rawName) return 'profile.html';
+    const clean = rawName.startsWith('[MOD] ')
+      ? `${rawName.replace('[MOD] ', '')}_mod`
+      : rawName;
+    return `profile.html?u=${encodeURIComponent(clean)}`;
   }
 
-  // CLOCK
+  function goToProfile(rawName) {
+    window.location.href = toProfileUrl(rawName);
+  }
+
   function updateClock() {
     const now = new Date();
     document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -464,84 +486,125 @@
   setInterval(updateClock, 1000);
   updateClock();
 
-  // PRESENCE
   async function pingPresence() {
     if (currentUser) {
       await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
     }
   }
 
-  // AUTH STATE
-  function updateAuthUI() {
-    const authBox = document.getElementById("auth-controls");
-    const loginCard = document.getElementById("login-card");
-    const addFriendCard = document.getElementById("add-friend-card");
+  function toggleAuthMode(showRegister) {
+    document.getElementById('login-form').style.display = showRegister ? 'none' : 'block';
+    document.getElementById('register-form').style.display = showRegister ? 'block' : 'none';
+    document.getElementById('auth-title').innerText = showRegister ? '📝 Register' : '🔐 Log In';
+  }
 
+  function updateAuthUI() {
     if (currentUser) {
-      authBox.innerHTML = `
-        <span style="font-weight:700; font-size:0.9rem; color:#475569; margin-right:8px;">Hi, ${escapeHtml(currentUser)}</span>
-        <button onclick="logout()" class="btn-secondary" style="padding:4px 10px; font-size:0.8rem;">Log Out</button>
-      `;
-      loginCard.style.display = "none";
-      addFriendCard.style.display = "block";
+      document.getElementById('auth-forms').style.display = 'none';
+      document.getElementById('user-info-box').style.display = 'block';
+      document.getElementById('auth-title').innerText = '👤 Profile';
+      document.getElementById('greeting-txt').innerText = `Logged in as @${currentUser}`;
     } else {
-      authBox.innerHTML = `<span style="font-size:0.85rem; color:#64748b;">Not logged in</span>`;
-      loginCard.style.display = "block";
-      addFriendCard.style.display = "none";
+      document.getElementById('auth-forms').style.display = 'block';
+      document.getElementById('user-info-box').style.display = 'none';
+      toggleAuthMode(false);
     }
   }
 
-  async function handleLogin() {
-    const username = document.getElementById('auth-username').value.trim();
-    const pin = document.getElementById('auth-pin').value.trim();
-
-    if (!username || !pin) {
-      alert("Please enter both a username and a 4-digit PIN!");
+  // --- CLOUD-SYNCED FAVORITE SHORTCUTS ON INDEX ---
+  async function loadFavoriteShortcuts() {
+    const container = document.getElementById('fav-chips-container');
+    if (!currentUser) {
+      container.innerHTML = '<span style="font-size:0.8rem; color:#a16207;">Log in to view your starred board shortcuts!</span>';
       return;
     }
 
-    if (containsProfanity(username)) {
-      alert("KidCha Rule: Inappropriate usernames are not permitted!");
+    const { data: favs, error } = await client
+      .from('favorite_boards')
+      .select('board')
+      .eq('username', currentUser)
+      .order('created_at', { ascending: true });
+
+    if (error || !favs || favs.length === 0) {
+      container.innerHTML = '<span style="font-size:0.8rem; color:#a16207;">No starred boards yet! Click "☆ Favorite" on any board page to pin it here.</span>';
       return;
     }
 
-    if (!/^\d{4}$/.test(pin)) {
-      alert("PIN must be exactly 4 numbers (0-9).");
+    container.innerHTML = favs.map(f => `
+      <a class="fav-board-chip" href="board.html?b=${escapeHtml(f.board)}">
+        <span>★</span> /${escapeHtml(f.board)}/
+      </a>
+    `).join('');
+  }
+
+  async function register() {
+    const username = document.getElementById("reg-username").value.trim();
+    const password = document.getElementById("reg-password").value;
+    const avatar = document.getElementById("reg-avatar").value;
+
+    if (!username || !password) {
+      alert("Please fill in all registration fields!");
       return;
     }
 
-    // Check if user exists
-    const { data: userRow } = await client.from('accounts').select('*').eq('username', username).maybeSingle();
+    const { data: existing } = await client
+      .from('accounts')
+      .select('username')
+      .eq('username', username)
+      .maybeSingle();
 
-    if (userRow) {
-      // User exists -> verify PIN
-      if (userRow.pin === pin) {
-        localStorage.setItem("k5_user", username);
-        currentUser = username;
-        updateAuthUI();
-        syncSidebar();
-        pingPresence();
-      } else {
-        alert("Incorrect PIN for this username.");
-      }
-    } else {
-      // New user -> register
-      const { error } = await client.from('accounts').insert([{
-        username: username,
-        pin: pin,
-        avatar: selectedAvatar,
-        last_seen: new Date().toISOString()
-      }]);
-
-      if (error) {
-        alert("Registration failed: " + error.message);
-      } else {
-        localStorage.setItem("k5_user", username);
-        currentUser = username;
-        updateAuthUI();
-        syncSidebar();
-      }
+    if (existing) {
+      alert("That username is already taken! Try another one.");
+      return;
     }
+
+    const { error } = await client.from('accounts').insert([{
+      username: username,
+      password: password,
+      avatar: avatar,
+      bio: '',
+      favorite_game: '',
+      last_seen: new Date().toISOString()
+    }]);
+
+    if (error) {
+      alert("Registration failed: " + error.message);
+      return;
+    }
+
+    localStorage.setItem("k5_user", username);
+    currentUser = username;
+    updateAuthUI();
+    syncSidebar();
+    loadFavoriteShortcuts();
+  }
+
+  async function login() {
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value;
+
+    if (!username || !password) {
+      alert("Please enter both username and password!");
+      return;
+    }
+
+    const { data: account, error } = await client
+      .from('accounts')
+      .select('username, password')
+      .eq('username', username)
+      .eq('password', password)
+      .maybeSingle();
+
+    if (error || !account) {
+      alert("Incorrect username or password.");
+      return;
+    }
+
+    localStorage.setItem("k5_user", account.username);
+    currentUser = account.username;
+    updateAuthUI();
+    syncSidebar();
+    loadFavoriteShortcuts();
   }
 
   function logout() {
@@ -549,38 +612,77 @@
     currentUser = null;
     updateAuthUI();
     syncSidebar();
+    loadFavoriteShortcuts();
   }
 
-  // SIDEBAR & FRIENDS SYNC
+  async function sendFriendRequest() {
+    if (!currentUser) {
+      alert("Please log in first to add friends!");
+      return;
+    }
+
+    const target = document.getElementById("friend-target-input").value.trim();
+    if (!target) return;
+
+    if (target.toLowerCase() === currentUser.toLowerCase()) {
+      alert("You cannot add yourself as a friend!");
+      return;
+    }
+
+    const { data: acc } = await client.from('accounts').select('username').eq('username', target).maybeSingle();
+    if (!acc) {
+      alert("User @" + target + " does not exist.");
+      return;
+    }
+
+    const { data: existing } = await client
+      .from('friends')
+      .select('id, status')
+      .or(`and(user_from.eq.${currentUser},user_to.eq.${target}),and(user_from.eq.${target},user_to.eq.${currentUser})`)
+      .maybeSingle();
+
+    if (existing) {
+      alert("A friend request is already pending or you are already friends!");
+      return;
+    }
+
+    const { error } = await client.from('friends').insert([{
+      user_from: currentUser,
+      user_to: target,
+      status: 'pending'
+    }]);
+
+    if (error) {
+      alert("Failed to send request: " + error.message);
+      return;
+    }
+
+    alert("Friend request sent to @" + target + "!");
+    document.getElementById("friend-target-input").value = "";
+  }
+
   async function syncSidebar() {
     if (!currentUser) {
       document.getElementById("sb-user").innerText = "Guest";
       document.getElementById("sb-pfp").innerText = "🦊";
-      document.getElementById("sb-requests").innerHTML = "";
-      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:10px;">Log in to see friends</div>';
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:10px;">Log in on Hub</div>';
+      document.getElementById("sb-requests").innerHTML = '';
       return;
     }
 
     document.getElementById("sb-user").innerText = currentUser;
 
-    // Fetch Avatar
     const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
     document.getElementById("sb-pfp").innerText = AVATARS[myAcc?.avatar] || '🦊';
 
-    // Pending friend requests sent to current user
-    const { data: requests } = await client
-      .from('friends')
-      .select('id, user_from')
-      .eq('user_to', currentUser)
-      .eq('status', 'pending');
-
+    const { data: requests } = await client.from('friends').select('id, user_from').eq('user_to', currentUser).eq('status', 'pending');
     let reqHtml = '';
     if (requests && requests.length > 0) {
       reqHtml = requests.map(r => `
         <div class="sb-req-card">
           <div class="sb-req-name">${escapeHtml(r.user_from)}</div>
           <div class="sb-req-actions">
-            <button class="sb-btn-acc" onclick="acceptFriend(${r.id})">✓ Accept</button>
+            <button class="sb-btn-acc" onclick="acceptFriend(${r.id})">✓</button>
             <button class="sb-btn-dec" onclick="declineFriend(${r.id})">✕</button>
           </div>
         </div>
@@ -588,7 +690,6 @@
     }
     document.getElementById("sb-requests").innerHTML = reqHtml;
 
-    // Accepted friends
     const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
     const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
 
@@ -598,7 +699,7 @@
     ];
 
     if (friendUsernames.length === 0) {
-      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:15px;">No friends added yet!</div>';
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:15px;">No friends yet</div>';
       return;
     }
 
@@ -609,44 +710,14 @@
       const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
       const isOnline = (now - lastSeen) < (3 * 60 * 1000);
       return `
-        <a class="sb-friend-row" href="chat.html">
+        <div class="sb-friend-row" onclick="goToProfile('${escapeHtml(a.username)}')">
           <span>${escapeHtml(a.username)}</span>
-          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}" title="${isOnline ? 'Online' : 'Offline'}"></span>
-        </a>
+          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
+        </div>
       `;
     }).join('');
 
     document.getElementById("sb-friends").innerHTML = friendHtml;
-  }
-
-  async function sendFriendRequest() {
-    const friendInput = document.getElementById('friend-input');
-    const friendName = friendInput.value.trim();
-
-    if (!friendName) return;
-    if (friendName === currentUser) {
-      alert("You cannot add yourself as a friend!");
-      return;
-    }
-
-    const { data: targetUser } = await client.from('accounts').select('username').eq('username', friendName).maybeSingle();
-    if (!targetUser) {
-      alert("User '" + friendName + "' was not found!");
-      return;
-    }
-
-    const { error } = await client.from('friends').insert([{
-      user_from: currentUser,
-      user_to: friendName,
-      status: 'pending'
-    }]);
-
-    if (error) {
-      alert("Request failed: " + error.message);
-    } else {
-      alert("Friend request sent to " + friendName + "!");
-      friendInput.value = '';
-    }
   }
 
   async function acceptFriend(id) {
@@ -663,15 +734,9 @@
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  // Realtime updates
-  client
-    .channel('hub-friends-sync')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'friends' }, () => syncSidebar())
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'accounts' }, () => syncSidebar())
-    .subscribe();
-
   updateAuthUI();
   syncSidebar();
+  loadFavoriteShortcuts();
   setInterval(syncSidebar, 30000);
   setInterval(pingPresence, 60000);
   pingPresence();
