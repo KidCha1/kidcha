@@ -10,14 +10,14 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #ffffff;
-      color: #000000;
+      background: #f8fafc;
+      color: #0f172a;
       min-height: 100vh;
-      padding: 2rem 1.5rem;
-      padding-left: 230px !important;
+      padding: 1.5rem 1rem;
+      padding-left: 215px !important;
     }
 
-    /* SINGLE LEFT SIDEBAR */
+    /* SIDEBAR */
     .k5-sidebar {
       position: fixed;
       top: 0;
@@ -42,6 +42,7 @@
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
+      cursor: pointer;
     }
     .sb-username {
       font-weight: 800;
@@ -78,7 +79,6 @@
       font-weight: 600;
     }
 
-    /* FRIEND REQUESTS */
     .sb-requests-box {
       margin-bottom: 6px;
       display: flex;
@@ -124,7 +124,6 @@
       cursor: pointer;
     }
 
-    /* POLYGON FRIENDS BOX */
     .sb-polygon-box {
       background-color: #c4d600;
       clip-path: polygon(50% 0%, 100% 12%, 92% 100%, 8% 100%, 0% 12%);
@@ -162,7 +161,9 @@
       font-weight: 800;
       color: #0f172a;
       text-decoration: none;
+      cursor: pointer;
     }
+    .sb-friend-row:hover { background: #ffffff; }
     .sb-status-dot {
       width: 10px;
       height: 10px;
@@ -173,159 +174,154 @@
     .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
     .sb-status-dot.offline { background-color: #94a3b8; }
 
-    /* PROFILE CONTAINER (Matches Image Design) */
-    .profile-wrap {
-      max-width: 650px;
-      margin: 0 auto;
-    }
+    /* PROFILE CONTAINER */
+    .wrapper { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
 
     .top-nav {
-      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
     .top-nav a {
       text-decoration: none;
       color: #2563eb;
       font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    /* TOP GRADE HEADER */
-    .grade-header {
-      text-align: center;
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 2rem;
-      color: #000000;
-    }
-
-    /* PFP & BIO ROW */
-    .user-row {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      margin-bottom: 2rem;
-    }
-
-    /* CIRCLE PFP */
-    .circle-pfp {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      border: 4px solid #000000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 3.8rem;
+      font-size: 0.9rem;
       flex-shrink: 0;
-      position: relative;
-      cursor: pointer;
-      user-select: none;
-      background: #fafafa;
-    }
-    .circle-pfp-sub {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #475569;
-      margin-top: 2px;
     }
 
-    /* DETAILS COLUMN */
-    .user-info {
+    .search-bar {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      gap: 6px;
+      flex: 1;
+      max-width: 380px;
     }
-    .user-name {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #000000;
-      line-height: 1.1;
-    }
-    .user-status {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #16a34a; /* Green matching image */
-      line-height: 1.3;
-    }
-    .user-game {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #000000;
-      line-height: 1.3;
-    }
-
-    /* FRIENDS LIST SECTION */
-    .friends-section {
-      margin-top: 1.5rem;
-    }
-    .friends-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #000000;
-      margin-bottom: 0.75rem;
-    }
-    .friends-display-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .friend-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: #000000;
-    }
-    .online-indicator {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .online-indicator.online { background-color: #22c55e; }
-    .online-indicator.offline { background-color: #cbd5e1; }
-
-    /* EDIT CARD */
-    .edit-box {
-      margin-top: 2.5rem;
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 1rem;
-    }
-    .edit-box h4 {
-      margin-bottom: 0.5rem;
-      font-size: 0.95rem;
-      color: #334155;
-    }
-    .edit-box select, .edit-box input {
+    .search-bar input {
       width: 100%;
-      padding: 8px 12px;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      margin-bottom: 8px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      outline: none;
+      background: #fff;
     }
-    .btn-save {
+    .search-bar button {
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .profile-avatar-display {
+      font-size: 3.8rem;
+      background: #f1f5f9;
+      width: 85px;
+      height: 85px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 3px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .profile-info { flex: 1; }
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-mod {
+      background: #f59e0b;
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    button, .btn-link {
       background: #2563eb;
-      color: #fff;
+      color: white;
       font-weight: 700;
       border: none;
-      padding: 8px 16px;
+      padding: 0.55rem 1.1rem;
       border-radius: 8px;
       cursor: pointer;
+      font-size: 0.88rem;
+      text-decoration: none;
+      display: inline-block;
     }
-    .btn-save:hover { background: #1d4ed8; }
+    button:hover, .btn-link:hover { background: #1d4ed8; }
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .btn-secondary:hover { background: #cbd5e1; }
+    .btn-danger {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    .btn-danger:hover { background: #dc2626; }
+
+    .activity-section { margin-top: 0.5rem; }
+    .activity-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 0.75rem;
+    }
+    .thread-snippet {
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .thread-snippet:hover { background: #f1f5f9; }
+    .snippet-title { font-weight: 700; font-size: 0.9rem; color: #1e293b; }
+    .snippet-meta { font-size: 0.72rem; color: #64748b; margin-top: 2px; }
   </style>
 </head>
 <body>
 
-<!-- SINGLE LEFT SIDEBAR -->
 <div class="k5-sidebar">
-  <div class="sb-user-card">
+  <div class="sb-user-card" onclick="viewUserByName(currentUser)">
     <div class="sb-pfp" id="sb-pfp">🦊</div>
     <div class="sb-username" id="sb-user">Guest</div>
   </div>
@@ -345,56 +341,24 @@
   </div>
 </div>
 
-<div class="profile-wrap">
+<div class="wrapper">
   <div class="top-nav">
     <a href="index.html">← Back to Hub</a>
-  </div>
-
-  <!-- GRADE HEADER (Matching Image) -->
-  <div class="grade-header" id="disp-grade">Grade: 3rd Grade</div>
-
-  <!-- PFP & USER INFO ROW (Matching Image) -->
-  <div class="user-row">
-    <div class="circle-pfp" id="disp-pfp-circle" title="Click to rotate avatar" onclick="cycleAvatar()">
-      <span id="disp-pfp-emoji">🦊</span>
-      <span class="circle-pfp-sub">click to change</span>
-    </div>
-
-    <div class="user-info">
-      <div class="user-name" id="disp-username">example</div>
-      <div class="user-status" id="disp-status">Status: Being an example</div>
-      <div class="user-game" id="disp-game">Favorite Game: Roblox</div>
+    <div class="search-bar">
+      <input type="text" id="search-user-input" placeholder="Search user (e.g. asti or asti_mod)..." onkeydown="if(event.key==='Enter') executeProfileSearch()">
+      <button type="button" onclick="executeProfileSearch()">Search</button>
     </div>
   </div>
 
-  <!-- FRIENDS LIST (Matching Image) -->
-  <div class="friends-section">
-    <div class="friends-title">Friends:</div>
-    <div class="friends-display-list" id="profile-friends-list">
-      <div style="color:#64748b; font-size:1.1rem;">No friends yet</div>
-    </div>
+  <div id="profile-container">
+    <div class="card" style="text-align:center; color:#64748b;">Loading profile...</div>
   </div>
 
-  <!-- EDIT PROFILE FORM -->
-  <div class="edit-box" id="edit-profile-section">
-    <h4>✏️ Update Your Profile Info</h4>
-    <label style="font-size:0.8rem; font-weight:700; color:#475569;">Your Grade:</label>
-    <select id="edit-grade">
-      <option value="Kindergarten">Kindergarten</option>
-      <option value="1st Grade">1st Grade</option>
-      <option value="2nd Grade">2nd Grade</option>
-      <option value="3rd Grade" selected>3rd Grade</option>
-      <option value="4th Grade">4th Grade</option>
-      <option value="5th Grade">5th Grade</option>
-    </select>
-
-    <label style="font-size:0.8rem; font-weight:700; color:#475569;">Your Status:</label>
-    <input type="text" id="edit-status" placeholder="Status: Being an example" maxlength="50">
-
-    <label style="font-size:0.8rem; font-weight:700; color:#475569;">Favorite Game:</label>
-    <input type="text" id="edit-game" placeholder="Favorite Game: Roblox" maxlength="40">
-
-    <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+  <div class="card activity-section">
+    <div class="activity-title" id="activity-heading">Recent Posts</div>
+    <div id="user-posts-list">
+      <div style="font-size:0.85rem; color:#64748b;">Loading posts...</div>
+    </div>
   </div>
 </div>
 
@@ -403,39 +367,48 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // --- KIDCHA SAFETY PROFANITY FILTER ---
-  const BANNED_PATTERNS = [
-    /\bf+u+c+k+/i,
-    /\bs+h+i+t+/i,
-    /\bb+i+t+c+h+/i,
-    /\ba+s+s+h+o+l+e+/i,
-    /\bd+i+c+k+/i,
-    /\bp+u+s+s+y+/i,
-    /\bc+u+n+t+/i,
-    /\bn+i+g+g+/i,
-    /\bf+a+g+g+/i,
-    /\bw+h+o+r+e+/i,
-    /\bs+l+u+t+/i,
-    /\bp+o+r+n+/i,
-    /\bk+y+s+/i
-  ];
-
-  function containsProfanity(text) {
-    if (!text) return false;
-    return BANNED_PATTERNS.some(rx => rx.test(text));
-  }
-
-  const AVATARS = ['fox', 'cat', 'dog', 'frog', 'robot', 'alien', 'gamer', 'rocket', 'pizza', 'bolt'];
-  const AVATAR_MAP = {
+  const AVATARS = {
     'fox': '🦊', 'cat': '🐱', 'dog': '🐶', 'frog': '🐸',
     'robot': '🤖', 'alien': '👾', 'gamer': '🎮', 'rocket': '🚀',
     'pizza': '🍕', 'bolt': '⚡'
   };
 
   let currentUser = localStorage.getItem("k5_user");
-  let currentAvatar = 'fox';
 
-  // CLOCK
+  function getQueryUser() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let raw = urlParams.get('u');
+    if (raw) {
+      raw = raw.trim();
+      if (raw.toLowerCase().endsWith('_mod')) {
+        return `[MOD] ${raw.slice(0, -4)}`;
+      }
+      return raw;
+    }
+    return currentUser;
+  }
+
+  let targetUsername = getQueryUser();
+
+  function toProfileUrl(rawName) {
+    if (!rawName) return 'profile.html';
+    const clean = rawName.startsWith('[MOD] ')
+      ? `${rawName.replace('[MOD] ', '')}_mod`
+      : rawName;
+    return `profile.html?u=${encodeURIComponent(clean)}`;
+  }
+
+  function viewUserByName(username) {
+    if (!username) return;
+    window.location.href = toProfileUrl(username);
+  }
+
+  function executeProfileSearch() {
+    const term = document.getElementById('search-user-input').value.trim();
+    if (!term) return;
+    window.location.href = `profile.html?u=${encodeURIComponent(term)}`;
+  }
+
   function updateClock() {
     const now = new Date();
     document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -444,14 +417,170 @@
   setInterval(updateClock, 1000);
   updateClock();
 
-  // PRESENCE
   async function pingPresence() {
     if (currentUser) {
       await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
     }
   }
 
-  // SIDEBAR & FRIENDS
+  async function loadProfile() {
+    const container = document.getElementById('profile-container');
+    const activityHeading = document.getElementById('activity-heading');
+    const postsList = document.getElementById('user-posts-list');
+
+    if (!targetUsername) {
+      container.innerHTML = `
+        <div class="card" style="text-align:center;">
+          <h3 style="color:#ef4444; margin-bottom:8px;">No Profile Specified</h3>
+          <p style="font-size:0.9rem; color:#64748b;">Please log in on the Hub or search for a username above.</p>
+        </div>
+      `;
+      postsList.innerHTML = '';
+      return;
+    }
+
+    const { data: userAcc, error } = await client
+      .from('accounts')
+      .select('*')
+      .ilike('username', targetUsername)
+      .maybeSingle();
+
+    if (error || !userAcc) {
+      container.innerHTML = `
+        <div class="card" style="text-align:center;">
+          <h3 style="color:#ef4444; margin-bottom:8px;">User Not Found</h3>
+          <p style="font-size:0.9rem; color:#64748b;">No account was found for <b>@${escapeHtml(targetUsername)}</b>.</p>
+        </div>
+      `;
+      postsList.innerHTML = '<div style="font-size:0.85rem; color:#64748b;">No activity.</div>';
+      return;
+    }
+
+    const actualName = userAcc.username;
+    const isOwner = currentUser && currentUser === actualName;
+    const isTargetMod = actualName.startsWith('[MOD] ');
+    const isViewerMod = currentUser && currentUser.startsWith('[MOD] ');
+
+    const lastSeen = userAcc.last_seen ? new Date(userAcc.last_seen).getTime() : 0;
+    const isOnline = (Date.now() - lastSeen) < (3 * 60 * 1000);
+
+    let actionsHtml = '';
+    if (!isOwner && currentUser) {
+      actionsHtml += `
+        <a class="btn-link" href="chat.html?to=${encodeURIComponent(actualName)}">💬 Send Message</a>
+        <button class="btn-secondary" onclick="sendFriendRequestTo('${escapeHtml(actualName)}')">👋 Add Friend</button>
+      `;
+
+      if (isViewerMod && !isTargetMod) {
+        actionsHtml += `
+          <button class="btn-danger" onclick="modBanUser('${escapeHtml(actualName)}')">🔨 Ban</button>
+          <button style="background:#f59e0b;" onclick="modPromoteUser('${escapeHtml(actualName)}')">⭐ Promote to [MOD]</button>
+        `;
+      }
+    } else if (isOwner) {
+      actionsHtml += `
+        <span style="font-size:0.8rem; color:#64748b; font-weight:700;">This is your public KidCha profile!</span>
+      `;
+    }
+
+    container.innerHTML = `
+      <div class="card">
+        <div class="profile-header">
+          <div class="profile-avatar-display">${AVATARS[userAcc.avatar] || '🦊'}</div>
+          <div class="profile-info">
+            <div class="profile-name">
+              <span>${escapeHtml(actualName)}</span>
+              ${isTargetMod ? '<span class="badge-mod">OFFICIAL MOD</span>' : ''}
+            </div>
+            <div class="badge-status">
+              <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
+              <span>${isOnline ? 'Online now' : 'Offline'}</span>
+            </div>
+          </div>
+        </div>
+        ${actionsHtml ? `<div class="profile-actions">${actionsHtml}</div>` : ''}
+      </div>
+    `;
+
+    activityHeading.innerText = `Recent Posts by @${actualName}`;
+    loadUserPosts(actualName);
+  }
+
+  async function loadUserPosts(authorName) {
+    const listContainer = document.getElementById('user-posts-list');
+
+    const { data: posts, error } = await client
+      .from('threads')
+      .select('id, title, board, created_at')
+      .eq('author', authorName)
+      .order('created_at', { ascending: false })
+      .limit(6);
+
+    if (error || !posts || posts.length === 0) {
+      listContainer.innerHTML = '<div style="font-size:0.85rem; color:#64748b;">No threads created yet.</div>';
+      return;
+    }
+
+    listContainer.innerHTML = posts.map(p => `
+      <a class="thread-snippet" href="board.html?b=${escapeHtml(p.board)}#thread-${p.id}">
+        <div class="snippet-title">${escapeHtml(p.title)}</div>
+        <div class="snippet-meta">Posted in <b>/${escapeHtml(p.board)}/</b> on ${new Date(p.created_at).toLocaleDateString()}</div>
+      </a>
+    `).join('');
+  }
+
+  async function sendFriendRequestTo(target) {
+    if (!currentUser) return;
+    const { data: existing } = await client
+      .from('friends')
+      .select('id, status')
+      .or(`and(user_from.eq.${currentUser},user_to.eq.${target}),and(user_from.eq.${target},user_to.eq.${currentUser})`)
+      .maybeSingle();
+
+    if (existing) {
+      alert("A request is already pending or you are already friends!");
+      return;
+    }
+
+    const { error } = await client.from('friends').insert([{
+      user_from: currentUser,
+      user_to: target,
+      status: 'pending'
+    }]);
+
+    if (error) alert("Failed: " + error.message);
+    else alert(`Friend request sent to @${target}!`);
+  }
+
+  async function modBanUser(target) {
+    const hours = prompt(`How many hours should @${target} be suspended for?`, "24");
+    if (!hours) return;
+
+    const { data, error } = await client.rpc('mod_ban_user', {
+      admin_user: currentUser,
+      target_user: target,
+      hours: parseInt(hours, 10)
+    });
+
+    if (error) alert(error.message);
+    else alert(data);
+  }
+
+  async function modPromoteUser(target) {
+    if (!confirm(`Are you sure you want to appoint @${target} as an official KidCha Team [MOD]?`)) return;
+
+    const { data, error } = await client.rpc('promote_team_mod', {
+      admin_user: currentUser,
+      target_user: target
+    });
+
+    if (error) alert(error.message);
+    else {
+      alert(data);
+      window.location.reload();
+    }
+  }
+
   async function syncSidebar() {
     if (!currentUser) {
       document.getElementById("sb-user").innerText = "Guest";
@@ -461,22 +590,9 @@
 
     document.getElementById("sb-user").innerText = currentUser;
 
-    const { data: myAcc } = await client.from('accounts').select('*').eq('username', currentUser).maybeSingle();
-    if (myAcc) {
-      currentAvatar = myAcc.avatar || 'fox';
-      document.getElementById("sb-pfp").innerText = AVATAR_MAP[currentAvatar] || '🦊';
-      document.getElementById("disp-pfp-emoji").innerText = AVATAR_MAP[currentAvatar] || '🦊';
-      document.getElementById("disp-username").innerText = currentUser;
-      document.getElementById("disp-grade").innerText = `Grade: ${myAcc.grade || '3rd Grade'}`;
-      document.getElementById("disp-status").innerText = `Status: ${myAcc.status || 'Being an example'}`;
-      document.getElementById("disp-game").innerText = `Favorite Game: ${myAcc.favorite_game || 'Roblox'}`;
+    const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
+    document.getElementById("sb-pfp").innerText = AVATARS[myAcc?.avatar] || '🦊';
 
-      document.getElementById("edit-grade").value = myAcc.grade || '3rd Grade';
-      document.getElementById("edit-status").value = myAcc.status || '';
-      document.getElementById("edit-game").value = myAcc.favorite_game || '';
-    }
-
-    // Friend requests
     const { data: requests } = await client.from('friends').select('id, user_from').eq('user_to', currentUser).eq('status', 'pending');
     let reqHtml = '';
     if (requests && requests.length > 0) {
@@ -492,7 +608,6 @@
     }
     document.getElementById("sb-requests").innerHTML = reqHtml;
 
-    // Accepted friends
     const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
     const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
 
@@ -503,75 +618,24 @@
 
     if (friendUsernames.length === 0) {
       document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:15px;">No friends yet</div>';
-      document.getElementById("profile-friends-list").innerHTML = '<div style="color:#64748b; font-size:1.1rem;">No friends yet</div>';
       return;
     }
 
     const { data: accounts } = await client.from('accounts').select('username, last_seen').in('username', friendUsernames);
     const now = Date.now();
 
-    const sidebarFriendHtml = (accounts || []).map(a => {
+    const friendHtml = (accounts || []).map(a => {
       const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
       const isOnline = (now - lastSeen) < (3 * 60 * 1000);
       return `
-        <a class="sb-friend-row" href="chat.html?to=${escapeHtml(a.username)}">
+        <div class="sb-friend-row" onclick="viewUserByName('${escapeHtml(a.username)}')">
           <span>${escapeHtml(a.username)}</span>
           <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
-        </a>
-      `;
-    }).join('');
-    document.getElementById("sb-friends").innerHTML = sidebarFriendHtml;
-
-    // Main page friends list matching the drawing style
-    const mainFriendsHtml = (accounts || []).map(a => {
-      const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
-      const isOnline = (now - lastSeen) < (3 * 60 * 1000);
-      return `
-        <div class="friend-item">
-          <span>${escapeHtml(a.username)}</span>
-          <span class="online-indicator ${isOnline ? 'online' : 'offline'}"></span>
         </div>
       `;
     }).join('');
-    document.getElementById("profile-friends-list").innerHTML = mainFriendsHtml;
-  }
 
-  async function cycleAvatar() {
-    if (!currentUser) return;
-    const currentIndex = AVATARS.indexOf(currentAvatar);
-    currentAvatar = AVATARS[(currentIndex + 1) % AVATARS.length];
-    document.getElementById("disp-pfp-emoji").innerText = AVATAR_MAP[currentAvatar];
-    document.getElementById("sb-pfp").innerText = AVATAR_MAP[currentAvatar];
-    await client.from('accounts').update({ avatar: currentAvatar }).eq('username', currentUser);
-  }
-
-  async function saveProfile() {
-    if (!currentUser) {
-      alert("Please log in on the Hub first!");
-      return;
-    }
-
-    const grade = document.getElementById("edit-grade").value;
-    const status = document.getElementById("edit-status").value.trim();
-    const game = document.getElementById("edit-game").value.trim();
-
-    if (containsProfanity(status) || containsProfanity(game)) {
-      alert("KidCha Rule: Inappropriate words are not permitted!");
-      return;
-    }
-
-    const { error } = await client.from('accounts').update({
-      grade: grade,
-      status: status || 'Being an example',
-      favorite_game: game || 'Roblox'
-    }).eq('username', currentUser);
-
-    if (error) {
-      alert("Error updating profile: " + error.message);
-    } else {
-      alert("Profile updated!");
-      syncSidebar();
-    }
+    document.getElementById("sb-friends").innerHTML = friendHtml;
   }
 
   async function acceptFriend(id) {
@@ -589,6 +653,7 @@
   }
 
   syncSidebar();
+  loadProfile();
   setInterval(syncSidebar, 30000);
   setInterval(pingPresence, 60000);
   pingPresence();
