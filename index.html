@@ -180,24 +180,46 @@
     /* HUB LAYOUT */
     .wrapper { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
 
+    /* RETRO LOGO HEADER */
     .header-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: 1.5rem 1rem;
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
-    .header-title {
-      font-size: 2.2rem;
+    .k5-logo-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      user-select: none;
+    }
+    .k5-clover-icon {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+      flex-shrink: 0;
+    }
+    .k5-logo-wordmark {
+      font-family: "Trebuchet MS", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 2.7rem;
       font-weight: 900;
-      color: #2563eb;
-      letter-spacing: -0.5px;
+      letter-spacing: -1.5px;
+      line-height: 1;
+    }
+    .k5-word-k5 {
+      color: #166534;
+      text-shadow: 1px 1px 0px #bbf7d0;
+    }
+    .k5-word-chan {
+      color: #ea580c;
+      text-shadow: 1px 1px 0px #fed7aa;
     }
     .header-sub {
       color: #64748b;
       font-size: 0.95rem;
-      margin-top: 4px;
+      margin-top: 8px;
+      font-weight: 600;
     }
 
     /* FAVORITES SHORTCUT CARD */
@@ -359,8 +381,40 @@
 </div>
 
 <div class="wrapper">
+  <!-- RETRO LOGO HEADER -->
   <div class="header-card">
-    <div class="header-title">KidCha</div>
+    <div class="k5-logo-container">
+      <svg class="k5-clover-icon" viewBox="0 0 100 100" width="50" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Stem -->
+        <path d="M50 56 Q44 76 34 88" stroke="#14532d" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M50 56 Q44 76 34 88" stroke="#16a34a" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+        <!-- Outer 5 Petals (Star Rotation: 0°, 72°, 144°, 216°, 288°) -->
+        <g fill="#15803d">
+          <path d="M50 50 C41 47 36 31 43 20 C50 11 50 11 57 20 C64 31 59 47 50 50 Z" />
+          <path d="M50 50 C41 47 36 31 43 20 C50 11 50 11 57 20 C64 31 59 47 50 50 Z" transform="rotate(72 50 50)" />
+          <path d="M50 50 C41 47 36 31 43 20 C50 11 50 11 57 20 C64 31 59 47 50 50 Z" transform="rotate(144 50 50)" />
+          <path d="M50 50 C41 47 36 31 43 20 C50 11 50 11 57 20 C64 31 59 47 50 50 Z" transform="rotate(216 50 50)" />
+          <path d="M50 50 C41 47 36 31 43 20 C50 11 50 11 57 20 C64 31 59 47 50 50 Z" transform="rotate(288 50 50)" />
+        </g>
+
+        <!-- Inner Highlights -->
+        <g fill="#22c55e">
+          <path d="M50 49 C44 46 40 34 45 25 C50 18 50 18 55 25 C60 34 56 46 50 49 Z" />
+          <path d="M50 49 C44 46 40 34 45 25 C50 18 50 18 55 25 C60 34 56 46 50 49 Z" transform="rotate(72 50 50)" />
+          <path d="M50 49 C44 46 40 34 45 25 C50 18 50 18 55 25 C60 34 56 46 50 49 Z" transform="rotate(144 50 50)" />
+          <path d="M50 49 C44 46 40 34 45 25 C50 18 50 18 55 25 C60 34 56 46 50 49 Z" transform="rotate(216 50 50)" />
+          <path d="M50 49 C44 46 40 34 45 25 C50 18 50 18 55 25 C60 34 56 46 50 49 Z" transform="rotate(288 50 50)" />
+        </g>
+
+        <!-- Center Bud -->
+        <circle cx="50" cy="50" r="4.5" fill="#14532d"/>
+      </svg>
+
+      <span class="k5-logo-wordmark">
+        <span class="k5-word-k5">Kid</span><span class="k5-word-chan">Cha</span>
+      </span>
+    </div>
     <div class="header-sub">Safe, fun messaging and boards for elementary students!</div>
   </div>
 
@@ -387,7 +441,7 @@
 
         <!-- Register Form -->
         <div id="register-form" style="display: none;">
-          <input type="text" id="reg-username" placeholder="Username (letters and numbers only)" maxlength="20">
+          <input type="text" id="reg-username" placeholder="Username" maxlength="20">
           <input type="password" id="reg-password" placeholder="Choose a password">
           <select id="reg-avatar">
             <option value="fox">🦊 Fox</option>
