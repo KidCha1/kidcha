@@ -17,7 +17,6 @@
       padding-left: 215px !important;
     }
 
-    /* SINGLE LEFT SIDEBAR */
     .k5-sidebar {
       position: fixed;
       top: 0;
@@ -78,7 +77,6 @@
       font-weight: 600;
     }
 
-    /* FRIEND REQUESTS */
     .sb-requests-box {
       margin-bottom: 6px;
       display: flex;
@@ -124,7 +122,6 @@
       cursor: pointer;
     }
 
-    /* POLYGON FRIENDS BOX */
     .sb-polygon-box {
       background-color: #c4d600;
       clip-path: polygon(50% 0%, 100% 12%, 92% 100%, 8% 100%, 0% 12%);
@@ -177,7 +174,6 @@
     .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
     .sb-status-dot.offline { background-color: #94a3b8; }
 
-    /* CHAT LAYOUT */
     .wrapper { max-width: 760px; margin: 0 auto; height: calc(100vh - 3rem); display: flex; flex-direction: column; }
 
     .top-nav {
@@ -258,7 +254,6 @@
       text-align: right;
     }
 
-    /* INPUT CONTROLS */
     .chat-controls-container {
       display: flex;
       flex-direction: column;
@@ -295,18 +290,24 @@
       padding: 8px;
       background: #fff;
       border-bottom: 1px solid #e2e8f0;
-      max-height: 140px;
-      overflow-y: auto;
+      flex-direction: column;
       gap: 6px;
-      flex-wrap: wrap;
+    }
+    .gif-scroll-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      min-height: 65px;
+      align-items: center;
     }
     .gif-opt {
-      width: 75px;
       height: 60px;
       object-fit: cover;
       border-radius: 6px;
       cursor: pointer;
       border: 2px solid transparent;
+      flex-shrink: 0;
     }
     .gif-opt:hover {
       border-color: #2563eb;
@@ -324,7 +325,7 @@
       padding: 6px 10px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       user-select: none;
     }
@@ -355,7 +356,6 @@
 </head>
 <body>
 
-<!-- SINGLE LEFT SIDEBAR -->
 <div class="k5-sidebar">
   <div class="sb-user-card">
     <div class="sb-pfp" id="sb-pfp">🦊</div>
@@ -391,7 +391,6 @@
     </div>
 
     <div class="chat-controls-container">
-      <!-- Image/GIF Pending Attachment Preview -->
       <div class="attachment-preview" id="att-preview">
         <div style="display: flex; align-items: center; gap: 8px;">
           <img src="" id="att-preview-img" alt="Attachment" />
@@ -400,14 +399,12 @@
         <button class="btn-clear-att" onclick="clearAttachment()">Remove</button>
       </div>
 
-      <!-- Quick Safe GIF Tray -->
       <div class="gif-picker-box" id="gif-tray">
-        <img class="gif-opt" src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" alt="Cat" onclick="selectGif(this.src)">
-        <img class="gif-opt" src="https://media.giphy.com/media/13CoXDiaCcCoyk/giphy.gif" alt="Dance" onclick="selectGif(this.src)">
-        <img class="gif-opt" src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" alt="Clap" onclick="selectGif(this.src)">
-        <img class="gif-opt" src="https://media.giphy.com/media/l41lI4bYmcsPJX9Go/giphy.gif" alt="High Five" onclick="selectGif(this.src)">
-        <img class="gif-opt" src="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif" alt="Excited" onclick="selectGif(this.src)">
-        <img class="gif-opt" src="https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif" alt="Wave" onclick="selectGif(this.src)">
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="giphy-search-input" placeholder="Search safe GIFs (e.g. cat, dance, high five)..." style="flex:1; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;" onkeydown="if(event.key==='Enter') searchSfwGifs()">
+          <button type="button" onclick="searchSfwGifs()" style="padding:6px 12px; font-size:0.8rem; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">Search</button>
+        </div>
+        <div class="gif-scroll-row" id="giphy-results"></div>
       </div>
 
       <div class="chat-input-bar">
@@ -427,6 +424,8 @@
   const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  const GIPHY_API_KEY = "dc6zaTOxFJmzC";
 
   const SEVERE_PATTERNS = [
     /\b(pedo|paedo|pedophil\w*)\b/i,
@@ -524,23 +523,55 @@
       selectedChatImageBase64 = e.target.result;
       selectedChatGifUrl = null;
       document.getElementById('att-preview-img').src = selectedChatImageBase64;
-      document.getElementById('att-preview-label').innerText = "Image attached";
+      document.getElementById('att-preview-label').innerText = "Image ready";
       document.getElementById('att-preview').style.display = 'flex';
       document.getElementById('gif-tray').style.display = 'none';
     };
     reader.readAsDataURL(file);
   }
 
+  async function loadSfwGifs(query = "happy cartoon") {
+    const container = document.getElementById("giphy-results");
+    container.innerHTML = '<span style="font-size:0.75rem; color:#64748b;">Loading safe GIFs...</span>';
+
+    try {
+      const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=15&rating=g`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (!data.data || data.data.length === 0) {
+        container.innerHTML = '<span style="font-size:0.75rem; color:#64748b;">No G-rated GIFs found.</span>';
+        return;
+      }
+
+      container.innerHTML = data.data.map(g => {
+        const fixedUrl = g.images.fixed_height_small.url;
+        return `<img class="gif-opt" src="${fixedUrl}" alt="${escapeHtml(g.title)}" onclick="selectGif('${fixedUrl}')">`;
+      }).join('');
+    } catch (err) {
+      container.innerHTML = '<span style="font-size:0.75rem; color:#ef4444;">Could not load GIFs.</span>';
+    }
+  }
+
   function toggleGifTray() {
     const tray = document.getElementById('gif-tray');
-    tray.style.display = tray.style.display === 'flex' ? 'none' : 'flex';
+    const isOpening = tray.style.display !== 'flex';
+    tray.style.display = isOpening ? 'flex' : 'none';
+    if (isOpening) {
+      loadSfwGifs("happy cartoon");
+    }
+  }
+
+  function searchSfwGifs() {
+    const query = document.getElementById('giphy-search-input').value.trim();
+    if (query) loadSfwGifs(query);
   }
 
   function selectGif(url) {
     selectedChatGifUrl = url;
     selectedChatImageBase64 = null;
     document.getElementById('att-preview-img').src = url;
-    document.getElementById('att-preview-label').innerText = "GIF attached";
+    document.getElementById('att-preview-label').innerText = "Safe GIF attached";
     document.getElementById('att-preview').style.display = 'flex';
     document.getElementById('gif-tray').style.display = 'none';
   }
