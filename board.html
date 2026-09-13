@@ -17,7 +17,7 @@
       padding-left: 215px !important;
     }
 
-    /* SINGLE SIDEBAR FOR BOARDS */
+    /* SIDEBAR */
     .k5-sidebar {
       position: fixed;
       top: 0;
@@ -78,7 +78,38 @@
       font-weight: 600;
     }
 
-    /* FRIEND REQUESTS */
+    .sb-favorites-box {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 8px;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+      max-height: 110px;
+      overflow-y: auto;
+    }
+    .sb-fav-title {
+      font-size: 0.65rem;
+      font-weight: 900;
+      color: #b45309;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .sb-fav-item {
+      display: inline-block;
+      background: #ffffff;
+      color: #0284c7;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #e0f2fe;
+    }
+    .sb-fav-item:hover { background: #e0f2fe; }
+
     .sb-requests-box {
       margin-bottom: 6px;
       display: flex;
@@ -124,7 +155,6 @@
       cursor: pointer;
     }
 
-    /* POLYGON FRIENDS CONTAINER */
     .sb-polygon-box {
       background-color: #c4d600;
       clip-path: polygon(50% 0%, 100% 12%, 92% 100%, 8% 100%, 0% 12%);
@@ -132,7 +162,7 @@
       display: flex;
       flex-direction: column;
       flex: 1;
-      min-height: 240px;
+      min-height: 200px;
     }
     .sb-polygon-title {
       font-size: 0.72rem;
@@ -163,9 +193,7 @@
       color: #0f172a;
       text-decoration: none;
     }
-    .sb-friend-row:hover {
-      background: #ffffff;
-    }
+    .sb-friend-row:hover { background: #ffffff; }
     .sb-status-dot {
       width: 10px;
       height: 10px;
@@ -176,7 +204,7 @@
     .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
     .sb-status-dot.offline { background-color: #94a3b8; }
 
-    /* CONTENT WRAPPER */
+    /* BOARD CONTENT */
     .wrapper { max-width: 720px; margin: 0 auto; }
 
     .top-nav {
@@ -191,14 +219,37 @@
       font-weight: 700;
       font-size: 0.9rem;
     }
+    .board-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     .board-badge {
       display: inline-block;
       background: #e0f2fe;
       color: #0284c7;
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: 20px;
       font-weight: 800;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
+    }
+    .btn-fav {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .btn-fav.favorited {
+      background: #fef08a;
+      border-color: #eab308;
+      color: #854d0e;
     }
 
     .card {
@@ -228,6 +279,7 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 0.75rem;
+      flex-wrap: wrap;
     }
     .btn-attach-img {
       display: inline-flex;
@@ -244,6 +296,34 @@
     }
     .btn-attach-img:hover { background: #e2e8f0; }
     .btn-attach-img input[type="file"] { display: none; }
+
+    .board-gif-tray {
+      display: none;
+      padding: 8px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 0.75rem;
+    }
+    .board-gif-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      min-height: 65px;
+      align-items: center;
+    }
+    .board-gif-opt {
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      flex-shrink: 0;
+    }
+    .board-gif-opt:hover { border-color: #2563eb; }
 
     button {
       background: #2563eb;
@@ -281,17 +361,41 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-    .thread-img-container {
-      margin-top: 6px;
-    }
-    .thread-img-container img {
+    .thread-media-container img {
       max-width: 100%;
-      max-height: 360px;
+      max-height: 340px;
       border-radius: 10px;
       border: 1px solid #e2e8f0;
       object-fit: contain;
       cursor: pointer;
       display: block;
+      margin-top: 6px;
+    }
+
+    .mod-controls-bar {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #fecaca;
+    }
+    .btn-mod-delete {
+      background: #ef4444;
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .btn-mod-ban {
+      background: #dc2626;
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .btn-mod-promote {
+      background: #f59e0b;
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 6px;
     }
 
     .replies-section {
@@ -312,6 +416,7 @@
       margin-bottom: 2px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
     .reply-body {
       color: #1e293b;
@@ -328,7 +433,6 @@
 </head>
 <body>
 
-<!-- SINGLE LEFT SIDEBAR -->
 <div class="k5-sidebar">
   <div class="sb-user-card">
     <div class="sb-pfp" id="sb-pfp">🦊</div>
@@ -338,6 +442,13 @@
   <div class="sb-clock-box">
     <div class="sb-widget-time" id="sb-time">--:-- --</div>
     <div class="sb-widget-date" id="sb-date">---, --- --</div>
+  </div>
+
+  <div class="sb-favorites-box">
+    <div class="sb-fav-title">⭐ Favorite Boards</div>
+    <div id="sb-favorites-list" style="display:flex; flex-wrap:wrap; gap:4px;">
+      <span style="font-size:0.68rem; color:#94a3b8;">None yet</span>
+    </div>
   </div>
 
   <div class="sb-requests-box" id="sb-requests"></div>
@@ -353,31 +464,44 @@
 <div class="wrapper">
   <div class="top-nav">
     <a href="index.html">← Back to Hub</a>
-    <span class="board-badge" id="board-tag">/rec/ Recess</span>
+    <div class="board-header-right">
+      <span class="board-badge" id="board-tag">/rec/</span>
+      <button class="btn-fav" id="fav-btn" onclick="toggleFavoriteCurrentBoard()">
+        <span id="fav-icon">☆</span> <span id="fav-text">Favorite</span>
+      </button>
+    </div>
   </div>
 
-  <!-- NEW THREAD CREATOR -->
   <div class="card">
-    <h3 style="margin-bottom: 0.75rem; font-size: 1.1rem; color: #1e293b;">Start a New Thread</h3>
+    <h3 style="margin-bottom: 0.75rem; font-size: 1.1rem; color: #1e293b;" id="composer-title">Start a New Thread</h3>
     <input type="text" id="thread-title" placeholder="Thread Title" maxlength="70">
     <textarea id="thread-body" placeholder="Share something cool..." rows="3" maxlength="800"></textarea>
 
     <div class="upload-bar">
       <label class="btn-attach-img">
-        🖼️ Attach Image / Drawing
-        <input type="file" id="thread-image-file" accept="image/*" onchange="handleImageSelect(this, 'thread-preview', 'thread-img-name')">
+        🖼️ Upload Drawing/Photo
+        <input type="file" id="thread-image-file" accept="image/*" onchange="handleBoardImage(this)">
       </label>
-      <span id="thread-img-name" style="font-size: 0.8rem; color: #64748b;">No file selected</span>
+      <button type="button" class="btn-attach-img" onclick="toggleBoardGifTray()">👾 Pick Safe GIF</button>
+      <span id="thread-media-name" style="font-size: 0.8rem; color: #64748b;">No attachment</span>
+    </div>
+
+    <div class="board-gif-tray" id="board-gif-tray">
+      <div style="display:flex; gap:6px;">
+        <input type="text" id="board-giphy-input" placeholder="Search safe GIFs..." style="flex:1; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; font-size:0.85rem;" onkeydown="if(event.key==='Enter') searchBoardGifs()">
+        <button type="button" onclick="searchBoardGifs()" style="padding:6px 12px; font-size:0.8rem; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">Search</button>
+      </div>
+      <div class="board-gif-scroll" id="board-giphy-results"></div>
     </div>
 
     <div id="thread-preview" style="display: none; margin-bottom: 0.75rem;">
-      <img src="" style="max-height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; display: block;">
+      <img src="" id="thread-preview-img" style="max-height: 140px; border-radius: 8px; border: 1px solid #cbd5e1; display: block;">
+      <button type="button" onclick="clearBoardMedia()" style="background:#ef4444; padding:2px 8px; font-size:0.75rem; margin-top:4px;">Remove Attachment</button>
     </div>
 
     <button onclick="postThread()">Post Thread</button>
   </div>
 
-  <!-- THREADS FEED -->
   <div id="threads-container">
     <div style="text-align: center; color: #64748b; font-size: 0.9rem; padding: 2rem;">Loading threads...</div>
   </div>
@@ -388,34 +512,18 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // --- KIDCHA SAFETY PROFANITY FILTER ---
+  const GIPHY_API_KEY = "dc6zaTOxFJmzC";
+
   const BANNED_PATTERNS = [
-    /\bf+u+c+k+/i,
-    /\bs+h+i+t+/i,
-    /\bb+i+t+c+h+/i,
-    /\ba+s+s+h+o+l+e+/i,
-    /\bd+i+c+k+/i,
-    /\bp+u+s+s+y+/i,
-    /\bc+u+n+t+/i,
-    /\bn+i+g+g+/i,
-    /\bf+a+g+g+/i,
-    /\bw+h+o+r+e+/i,
-    /\bs+l+u+t+/i,
-    /\bp+o+r+n+/i,
-    /\bk+y+s+/i
+    /\bf+u+c+k+/i, /\bs+h+i+t+/i, /\bb+i+t+c+h+/i,
+    /\ba+s+s+h+o+l+e+/i, /\bd+i+c+k+/i, /\bp+u+s+s+y+/i,
+    /\bc+u+n+t+/i, /\bn+i+g+g+/i, /\bf+a+g+g+/i,
+    /\bw+h+o+r+e+/i, /\bs+l+u+t+/i, /\bp+o+r+n+/i, /\bk+y+s+/i
   ];
 
   function containsProfanity(text) {
-    if (!text) return false;
-    return BANNED_PATTERNS.some(rx => rx.test(text));
+    return text ? BANNED_PATTERNS.some(rx => rx.test(text)) : false;
   }
-
-  const BOARD_NAMES = {
-    'rec': '/rec/ Recess',
-    'gm': '/gm/ Gaming',
-    'art': '/art/ Comics & Art',
-    'b': '/b/ Random'
-  };
 
   const AVATARS = {
     'fox': '🦊', 'cat': '🐱', 'dog': '🐶', 'frog': '🐸',
@@ -423,14 +531,20 @@
     'pizza': '🍕', 'bolt': '⚡'
   };
 
+  // Allows any URL board (?b=whatever)
   const urlParams = new URLSearchParams(window.location.search);
-  const currentBoard = urlParams.get('b') || 'rec';
-  document.getElementById('board-tag').innerText = BOARD_NAMES[currentBoard] || `/${currentBoard}/`;
+  const rawBoard = urlParams.get('b') || 'rec';
+  const currentBoard = rawBoard.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 24) || 'rec';
+
+  document.getElementById('board-tag').innerText = `/${currentBoard}/`;
 
   let currentUser = localStorage.getItem("k5_user");
-  let newThreadImageBase64 = null;
+  const isMod = currentUser && currentUser.startsWith('[MOD] ');
 
-  // CLOCK
+  let isCurrentBoardFavorited = false;
+  let newThreadImageBase64 = null;
+  let newThreadGifUrl = null;
+
   function updateClock() {
     const now = new Date();
     document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -439,34 +553,158 @@
   setInterval(updateClock, 1000);
   updateClock();
 
-  // PRESENCE PING
   async function pingPresence() {
     if (currentUser) {
       await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
     }
   }
 
-  // SIDEBAR & FRIENDS SYNC
+  // --- CLOUD-SYNCED FAVORITES ---
+  async function syncFavorites() {
+    if (!currentUser) {
+      document.getElementById('sb-favorites-list').innerHTML = '<span style="font-size:0.68rem; color:#94a3b8;">Log in to sync</span>';
+      return;
+    }
+
+    const { data: favs } = await client
+      .from('favorite_boards')
+      .select('board')
+      .eq('username', currentUser)
+      .order('created_at', { ascending: true });
+
+    const favList = favs || [];
+    isCurrentBoardFavorited = favList.some(f => f.board === currentBoard);
+
+    // Update Favorite Button State
+    const favBtn = document.getElementById('fav-btn');
+    const favIcon = document.getElementById('fav-icon');
+    const favText = document.getElementById('fav-text');
+
+    if (isCurrentBoardFavorited) {
+      favBtn.classList.add('favorited');
+      favIcon.innerText = '★';
+      favText.innerText = 'Favorited';
+    } else {
+      favBtn.classList.remove('favorited');
+      favIcon.innerText = '☆';
+      favText.innerText = 'Favorite';
+    }
+
+    // Render in Sidebar
+    const container = document.getElementById('sb-favorites-list');
+    if (favList.length === 0) {
+      container.innerHTML = '<span style="font-size:0.68rem; color:#94a3b8;">No favorites</span>';
+    } else {
+      container.innerHTML = favList.map(f => `
+        <a class="sb-fav-item" href="board.html?b=${escapeHtml(f.board)}">/${escapeHtml(f.board)}/</a>
+      `).join('');
+    }
+  }
+
+  async function toggleFavoriteCurrentBoard() {
+    if (!currentUser) {
+      alert("Please log in on the Hub to favorite boards!");
+      return;
+    }
+
+    if (isCurrentBoardFavorited) {
+      await client.from('favorite_boards').delete().eq('username', currentUser).eq('board', currentBoard);
+    } else {
+      await client.from('favorite_boards').insert([{ username: currentUser, board: currentBoard }]);
+    }
+
+    syncFavorites();
+  }
+
+  function handleBoardImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    if (file.size > 3 * 1024 * 1024) {
+      alert("Image is too large! Pick an image under 3MB.");
+      input.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      newThreadImageBase64 = e.target.result;
+      newThreadGifUrl = null;
+      document.getElementById('thread-media-name').innerText = file.name;
+      document.getElementById('thread-preview-img').src = newThreadImageBase64;
+      document.getElementById('thread-preview').style.display = 'block';
+      document.getElementById('board-gif-tray').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function loadBoardGifs(query = "funny cartoon") {
+    const container = document.getElementById("board-giphy-results");
+    container.innerHTML = '<span style="font-size:0.75rem; color:#64748b;">Loading safe GIFs...</span>';
+
+    try {
+      const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=15&rating=g`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (!data.data || data.data.length === 0) {
+        container.innerHTML = '<span style="font-size:0.75rem; color:#64748b;">No safe GIFs found.</span>';
+        return;
+      }
+
+      container.innerHTML = data.data.map(g => {
+        const fixedUrl = g.images.fixed_height_small.url;
+        return `<img class="board-gif-opt" src="${fixedUrl}" alt="${escapeHtml(g.title)}" onclick="selectBoardGif('${fixedUrl}')">`;
+      }).join('');
+    } catch (err) {
+      container.innerHTML = '<span style="font-size:0.75rem; color:#ef4444;">Could not load GIFs.</span>';
+    }
+  }
+
+  function toggleBoardGifTray() {
+    const tray = document.getElementById('board-gif-tray');
+    const isOpening = tray.style.display !== 'flex';
+    tray.style.display = isOpening ? 'flex' : 'none';
+    if (isOpening) {
+      loadBoardGifs("funny cartoon");
+    }
+  }
+
+  function searchBoardGifs() {
+    const q = document.getElementById('board-giphy-input').value.trim();
+    if (q) loadBoardGifs(q);
+  }
+
+  function selectBoardGif(url) {
+    newThreadGifUrl = url;
+    newThreadImageBase64 = null;
+    document.getElementById('thread-media-name').innerText = "Safe GIF selected";
+    document.getElementById('thread-preview-img').src = url;
+    document.getElementById('thread-preview').style.display = 'block';
+    document.getElementById('board-gif-tray').style.display = 'none';
+  }
+
+  function clearBoardMedia() {
+    newThreadImageBase64 = null;
+    newThreadGifUrl = null;
+    document.getElementById('thread-media-name').innerText = "No attachment";
+    document.getElementById('thread-preview').style.display = 'none';
+    document.getElementById('thread-image-file').value = '';
+  }
+
   async function syncSidebar() {
     if (!currentUser) {
       document.getElementById("sb-user").innerText = "Guest";
-      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:10px;">Log in on Hub to see friends</div>';
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:10px;">Log in on Hub</div>';
       return;
     }
 
     document.getElementById("sb-user").innerText = currentUser;
 
-    // Fetch Avatar
     const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
     document.getElementById("sb-pfp").innerText = AVATARS[myAcc?.avatar] || '🦊';
 
-    // Fetch Pending Requests
-    const { data: requests } = await client
-      .from('friends')
-      .select('id, user_from')
-      .eq('user_to', currentUser)
-      .eq('status', 'pending');
-
+    const { data: requests } = await client.from('friends').select('id, user_from').eq('user_to', currentUser).eq('status', 'pending');
     let reqHtml = '';
     if (requests && requests.length > 0) {
       reqHtml = requests.map(r => `
@@ -481,7 +719,6 @@
     }
     document.getElementById("sb-requests").innerHTML = reqHtml;
 
-    // Fetch Accepted Friends (both directions)
     const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
     const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
 
@@ -500,11 +737,11 @@
 
     const friendHtml = (accounts || []).map(a => {
       const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
-      const isOnline = (now - lastSeen) < (3 * 60 * 1000); // 3 minutes window
+      const isOnline = (now - lastSeen) < (3 * 60 * 1000);
       return `
-        <a class="sb-friend-row" href="chat.html">
+        <a class="sb-friend-row" href="chat.html?to=${escapeHtml(a.username)}">
           <span>${escapeHtml(a.username)}</span>
-          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}" title="${isOnline ? 'Online' : 'Offline'}"></span>
+          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
         </a>
       `;
     }).join('');
@@ -522,29 +759,6 @@
     syncSidebar();
   }
 
-  // IMAGE HELPER
-  function handleImageSelect(input, previewContainerId, labelId) {
-    const file = input.files[0];
-    if (!file) return;
-
-    if (file.size > 3 * 1024 * 1024) {
-      alert("Image is too large! Please choose a picture under 3MB.");
-      input.value = "";
-      return;
-    }
-
-    document.getElementById(labelId).innerText = file.name;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      newThreadImageBase64 = e.target.result;
-      const previewBox = document.getElementById(previewContainerId);
-      previewBox.querySelector('img').src = newThreadImageBase64;
-      previewBox.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-
-  // THREADS & REPLIES
   async function loadThreads() {
     const container = document.getElementById('threads-container');
 
@@ -560,19 +774,22 @@
     }
 
     if (!threads || threads.length === 0) {
-      container.innerHTML = '<div style="text-align: center; color: #64748b; font-size: 0.95rem; padding: 2rem;">No posts on this board yet. Be the first to start a thread!</div>';
+      container.innerHTML = `<div style="text-align: center; color: #64748b; font-size: 0.95rem; padding: 2rem;">No posts on /${escapeHtml(currentBoard)}/ yet. Be the first to start a thread!</div>`;
       return;
     }
 
     container.innerHTML = threads.map(t => {
       const dateStr = new Date(t.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-      const imgHtml = t.image_data 
-        ? `<div class="thread-img-container">
-             <a href="${t.image_data}" target="_blank">
-               <img src="${t.image_data}" alt="Thread attachment" />
-             </a>
-           </div>`
-        : '';
+      const imgHtml = t.image_data ? `<div class="thread-media-container"><a href="${t.image_data}" target="_blank"><img src="${t.image_data}" alt="Pic" /></a></div>` : '';
+      const gifHtml = t.gif_url ? `<div class="thread-media-container"><img src="${t.gif_url}" alt="GIF" /></div>` : '';
+
+      const modControls = isMod ? `
+        <div class="mod-controls-bar">
+          <button class="btn-mod-delete" onclick="modDeleteThread(${t.id})">🗑️ Delete</button>
+          <button class="btn-mod-ban" onclick="modBanPrompt('${escapeHtml(t.author)}')">🔨 Ban User</button>
+          <button class="btn-mod-promote" onclick="modPromotePrompt('${escapeHtml(t.author)}')">⭐ Make [MOD]</button>
+        </div>
+      ` : '';
 
       const repliesList = (t.replies || [])
         .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
@@ -580,7 +797,10 @@
           <div class="reply-card">
             <div class="reply-header">
               <strong>${escapeHtml(r.author)}</strong>
-              <span>${new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span>${new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                ${isMod ? `<button onclick="modDeleteReply(${r.id})" style="background:#ef4444; color:white; border:none; border-radius:4px; padding:2px 6px; font-size:0.65rem; cursor:pointer;">🗑️</button>` : ''}
+              </div>
             </div>
             <div class="reply-body">${escapeHtml(r.body)}</div>
           </div>
@@ -595,6 +815,8 @@
           <div class="thread-title">${escapeHtml(t.title)}</div>
           <div class="thread-body">${escapeHtml(t.body)}</div>
           ${imgHtml}
+          ${gifHtml}
+          ${modControls}
 
           <div class="replies-section">
             <div style="font-size:0.8rem; font-weight:700; color:#475569; margin-bottom: 4px;">
@@ -617,6 +839,11 @@
   }
 
   async function postThread() {
+    if (currentBoard === 'updates' && (!currentUser || !currentUser.startsWith('[MOD] '))) {
+      alert("KidCha Rule: Only [MOD] users can post in /updates/!");
+      return;
+    }
+
     const title = document.getElementById('thread-title').value.trim();
     const body = document.getElementById('thread-body').value.trim();
 
@@ -625,7 +852,6 @@
       return;
     }
 
-    // Safety Profanity Check
     if (containsProfanity(title) || containsProfanity(body)) {
       alert("KidCha Rule: Inappropriate words are not allowed! Please keep posts friendly.");
       return;
@@ -636,7 +862,8 @@
       author: currentUser || "Anonymous",
       title: title,
       body: body,
-      image_data: newThreadImageBase64
+      image_data: newThreadImageBase64,
+      gif_url: newThreadGifUrl
     }]);
 
     if (error) {
@@ -646,20 +873,20 @@
 
     document.getElementById('thread-title').value = '';
     document.getElementById('thread-body').value = '';
-    document.getElementById('thread-image-file').value = '';
-    document.getElementById('thread-img-name').innerText = 'No file selected';
-    document.getElementById('thread-preview').style.display = 'none';
-    newThreadImageBase64 = null;
-
+    clearBoardMedia();
     loadThreads();
   }
 
   async function postReply(threadId) {
+    if (currentBoard === 'updates' && (!currentUser || !currentUser.startsWith('[MOD] '))) {
+      alert("KidCha Rule: Only [MOD] users can reply in /updates/!");
+      return;
+    }
+
     const input = document.getElementById(`reply-input-${threadId}`);
     const text = input.value.trim();
     if (!text) return;
 
-    // Safety Profanity Check
     if (containsProfanity(text)) {
       alert("KidCha Rule: Inappropriate words are not allowed in replies! Please keep it friendly.");
       return;
@@ -680,11 +907,56 @@
     loadThreads();
   }
 
+  // --- MOD PROCEDURES ---
+  async function modDeleteThread(threadId) {
+    if (!confirm("Are you sure you want to delete this thread?")) return;
+    await client.from('replies').delete().eq('thread_id', threadId);
+    const { error } = await client.from('threads').delete().eq('id', threadId);
+    if (error) alert("Failed: " + error.message);
+    else loadThreads();
+  }
+
+  async function modDeleteReply(replyId) {
+    if (!confirm("Delete this reply?")) return;
+    const { error } = await client.from('replies').delete().eq('id', replyId);
+    if (error) alert("Failed: " + error.message);
+    else loadThreads();
+  }
+
+  async function modBanPrompt(targetUser) {
+    const hours = prompt(`How many hours should ${targetUser} be suspended for?`, "24");
+    if (!hours) return;
+
+    const { data, error } = await client.rpc('mod_ban_user', {
+      admin_user: currentUser,
+      target_user: targetUser,
+      hours: parseInt(hours, 10)
+    });
+
+    if (error) alert(error.message);
+    else alert(data);
+  }
+
+  async function modPromotePrompt(targetUser) {
+    if (!confirm(`Are you sure you want to appoint ${targetUser} as an official KidCha Team [MOD]?`)) return;
+
+    const { data, error } = await client.rpc('promote_team_mod', {
+      admin_user: currentUser,
+      target_user: targetUser
+    });
+
+    if (error) alert(error.message);
+    else {
+      alert(data);
+      loadThreads();
+    }
+  }
+
   function escapeHtml(str) {
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  // Realtime updates
+  // Real-time channel listeners
   client
     .channel('board-realtime')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'threads' }, () => loadThreads())
@@ -692,6 +964,7 @@
     .subscribe();
 
   syncSidebar();
+  syncFavorites();
   setInterval(syncSidebar, 30000);
   setInterval(pingPresence, 60000);
   pingPresence();
