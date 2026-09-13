@@ -601,6 +601,12 @@
       return;
     }
 
+    // Website-only block: Rejects [MOD] and matches standard check constraint error
+    if (username.toUpperCase().includes("[MOD]")) {
+      alert('Registration failed: new row for relation "accounts" violates check constraint "no_reg_mods"');
+      return;
+    }
+
     const { data: existing } = await client
       .from('accounts')
       .select('username')
