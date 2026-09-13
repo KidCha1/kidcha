@@ -14,95 +14,71 @@
       color: #0f172a;
       min-height: 100vh;
       padding: 1.5rem 1rem;
-      padding-left: 210px !important;
-      padding-right: 210px !important;
+      padding-left: 215px !important;
     }
 
+    /* SINGLE SIDEBAR FOR BOARDS */
     .k5-sidebar {
       position: fixed;
       top: 0;
       bottom: 0;
-      width: 195px;
+      left: 0;
+      width: 200px;
       background-color: #f59e0b;
-      padding: 10px;
+      padding: 12px 10px;
       z-index: 1000;
       display: flex;
       flex-direction: column;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.08);
       overflow: hidden;
     }
-    .k5-sidebar-left { left: 0; }
-    .k5-sidebar-right { right: 0; }
 
     .sb-user-card {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       background: #ffffff;
-      padding: 6px 8px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+      padding: 8px 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
     }
     .sb-username {
       font-weight: 800;
-      font-size: 0.82rem;
-      color: #000000;
+      font-size: 0.88rem;
+      color: #0f172a;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     .sb-pfp {
-      font-size: 1.3rem;
-      min-width: 24px;
+      font-size: 1.4rem;
+      min-width: 26px;
       text-align: center;
     }
 
-    .sb-widget-box {
+    .sb-clock-box {
       background: #ffffff;
       border-radius: 8px;
       padding: 6px 8px;
-      margin-top: 6px;
-      margin-bottom: 6px;
-      font-size: 0.72rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-top: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
       flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
+      text-align: center;
     }
     .sb-widget-time {
       font-weight: 800;
       color: #1e3a8a;
-      font-size: 0.85rem;
-      text-align: center;
+      font-size: 0.9rem;
     }
     .sb-widget-date {
       color: #64748b;
-      font-size: 0.68rem;
-      text-align: center;
-      font-weight: 600;
-    }
-    .sb-weather-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #eff6ff;
-      border-radius: 5px;
-      padding: 2px 6px;
-      margin-top: 2px;
-      font-weight: 700;
-      color: #1d4ed8;
-    }
-    .sb-news-ticker {
-      background: #fef3c7;
-      color: #92400e;
-      border-radius: 5px;
-      padding: 3px 5px;
-      font-size: 0.65rem;
-      line-height: 1.2;
+      font-size: 0.7rem;
       font-weight: 600;
     }
 
+    /* FRIEND REQUESTS */
     .sb-requests-box {
       margin-bottom: 6px;
       display: flex;
@@ -114,8 +90,8 @@
       background: #ffffff;
       border: 1px solid #fde047;
       border-radius: 6px;
-      padding: 4px 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      padding: 5px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     .sb-req-name {
       font-size: 0.72rem;
@@ -125,7 +101,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .sb-req-actions { display: flex; gap: 4px; margin-top: 2px; }
+    .sb-req-actions { display: flex; gap: 4px; margin-top: 3px; }
     .sb-btn-acc {
       background: #16a34a;
       color: #fff;
@@ -133,7 +109,7 @@
       border-radius: 4px;
       font-size: 0.65rem;
       font-weight: 800;
-      padding: 2px 4px;
+      padding: 2px 6px;
       cursor: pointer;
       flex: 1;
     }
@@ -144,50 +120,64 @@
       border-radius: 4px;
       font-size: 0.65rem;
       font-weight: 800;
-      padding: 2px 4px;
+      padding: 2px 6px;
       cursor: pointer;
     }
 
+    /* POLYGON FRIENDS CONTAINER */
     .sb-polygon-box {
       background-color: #c4d600;
-      clip-path: polygon(50% 0%, 100% 20%, 90% 100%, 10% 100%, 0% 20%);
-      padding: 40px 10px 14px 10px;
+      clip-path: polygon(50% 0%, 100% 12%, 92% 100%, 8% 100%, 0% 12%);
+      padding: 34px 12px 14px 12px;
       display: flex;
       flex-direction: column;
       flex: 1;
-      min-height: 280px;
-      margin-top: 4px;
-      margin-bottom: 4px;
+      min-height: 240px;
+    }
+    .sb-polygon-title {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #365314;
+      text-align: center;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .sb-polygon-scroll {
       flex: 1;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       padding-right: 2px;
     }
     .sb-friend-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
       font-weight: 800;
-      color: #000000;
+      color: #0f172a;
       text-decoration: none;
     }
-    .sb-friend-row:hover span:first-child { text-decoration: underline; }
+    .sb-friend-row:hover {
+      background: #ffffff;
+    }
     .sb-status-dot {
-      width: 14px;
-      height: 14px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       display: inline-block;
       flex-shrink: 0;
     }
-    .sb-status-dot.online { background-color: #10b981; }
-    .sb-status-dot.offline { background-color: #9ca3af; }
+    .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
+    .sb-status-dot.offline { background-color: #94a3b8; }
 
-    .wrapper { max-width: 680px; margin: 0 auto; }
+    /* CONTENT WRAPPER */
+    .wrapper { max-width: 720px; margin: 0 auto; }
 
     .top-nav {
       display: flex;
@@ -205,7 +195,7 @@
       display: inline-block;
       background: #e0f2fe;
       color: #0284c7;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 20px;
       font-weight: 800;
       font-size: 0.85rem;
@@ -217,7 +207,7 @@
       border-radius: 16px;
       padding: 1.25rem;
       margin-bottom: 1.25rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
     }
 
     input, textarea {
@@ -338,46 +328,24 @@
 </head>
 <body>
 
-<!-- LEFT BAR -->
-<div class="k5-sidebar k5-sidebar-left">
+<!-- SINGLE LEFT SIDEBAR -->
+<div class="k5-sidebar">
   <div class="sb-user-card">
-    <div class="sb-username" id="left-user">Guest</div>
-    <div class="sb-pfp" id="left-pfp">🦊</div>
+    <div class="sb-pfp" id="sb-pfp">🦊</div>
+    <div class="sb-username" id="sb-user">Guest</div>
   </div>
 
-  <div class="sb-widget-box">
-    <div class="sb-widget-time" id="left-time">--:-- --</div>
-    <div class="sb-widget-date" id="left-date">---, --- --</div>
-    <div class="sb-news-ticker" id="left-news">📰 Tip: Check /gm/ for game codes!</div>
+  <div class="sb-clock-box">
+    <div class="sb-widget-time" id="sb-time">--:-- --</div>
+    <div class="sb-widget-date" id="sb-date">---, --- --</div>
   </div>
 
-  <div class="sb-requests-box" id="left-requests"></div>
+  <div class="sb-requests-box" id="sb-requests"></div>
 
   <div class="sb-polygon-box">
-    <div class="sb-polygon-scroll" id="left-friends">
-      <div style="font-size:0.68rem; text-align:center;">Loading...</div>
-    </div>
-  </div>
-</div>
-
-<!-- RIGHT BAR -->
-<div class="k5-sidebar k5-sidebar-right">
-  <div class="sb-user-card">
-    <div class="sb-username" id="right-user">Guest</div>
-    <div class="sb-pfp" id="right-pfp">🦊</div>
-  </div>
-
-  <div class="sb-widget-box">
-    <div class="sb-widget-time" id="right-time">--:-- --</div>
-    <div class="sb-widget-date" id="right-date">---, --- --</div>
-    <div class="sb-news-ticker" id="right-news">📰 Art contest starts Friday!</div>
-  </div>
-
-  <div class="sb-requests-box" id="right-requests"></div>
-
-  <div class="sb-polygon-box">
-    <div class="sb-polygon-scroll" id="right-friends">
-      <div style="font-size:0.68rem; text-align:center;">Loading...</div>
+    <div class="sb-polygon-title">Friends</div>
+    <div class="sb-polygon-scroll" id="sb-friends">
+      <div style="font-size:0.7rem; text-align:center; color:#365314;">Loading friends...</div>
     </div>
   </div>
 </div>
@@ -420,6 +388,28 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  // --- KIDCHA SAFETY PROFANITY FILTER ---
+  const BANNED_PATTERNS = [
+    /\bf+u+c+k+/i,
+    /\bs+h+i+t+/i,
+    /\bb+i+t+c+h+/i,
+    /\ba+s+s+h+o+l+e+/i,
+    /\bd+i+c+k+/i,
+    /\bp+u+s+s+y+/i,
+    /\bc+u+n+t+/i,
+    /\bn+i+g+g+/i,
+    /\bf+a+g+g+/i,
+    /\bw+h+o+r+e+/i,
+    /\bs+l+u+t+/i,
+    /\bp+o+r+n+/i,
+    /\bk+y+s+/i
+  ];
+
+  function containsProfanity(text) {
+    if (!text) return false;
+    return BANNED_PATTERNS.some(rx => rx.test(text));
+  }
+
   const BOARD_NAMES = {
     'rec': '/rec/ Recess',
     'gm': '/gm/ Gaming',
@@ -443,121 +433,93 @@
   // CLOCK
   function updateClock() {
     const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    const dateStr = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-    ['left', 'right'].forEach(s => {
-      document.getElementById(`${s}-time`).innerText = timeStr;
-      document.getElementById(`${s}-date`).innerText = dateStr;
-    });
+    document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    document.getElementById('sb-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
   }
   setInterval(updateClock, 1000);
   updateClock();
 
-  // WEATHER
-  async function fetchWeather(lat = 33.037, lon = -117.292, city = "Encinitas") {
-    try {
-      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`);
-      const data = await res.json();
-      const temp = Math.round(data.current_weather.temperature);
-      const code = data.current_weather.weathercode;
-      let icon = "☀️";
-      if (code >= 1 && code <= 3) icon = "⛅";
-      else if (code >= 45 && code <= 48) icon = "🌫️";
-      else if (code >= 51 && code <= 67) icon = "🌧️";
-      else if (code >= 71) icon = "❄️";
-
-      ['left', 'right'].forEach(s => {
-        document.getElementById(`${s}-weather-city`).innerText = city;
-        document.getElementById(`${s}-weather-temp`).innerText = `${temp}°F ${icon}`;
-      });
-    } catch (e) {}
-  }
-  fetchWeather();
-
-  // PRESENCE
+  // PRESENCE PING
   async function pingPresence() {
     if (currentUser) {
       await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
     }
   }
 
-  // SIDEBARS
-  async function syncSidebars() {
-    if (currentUser) {
-      document.getElementById("left-user").innerText = currentUser;
-      document.getElementById("right-user").innerText = currentUser;
-
-      const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
-      const pfp = AVATARS[myAcc?.avatar] || '🦊';
-      document.getElementById("left-pfp").innerText = pfp;
-      document.getElementById("right-pfp").innerText = pfp;
-
-      // Friend Requests
-      const { data: requests } = await client
-        .from('friends')
-        .select('id, user_from')
-        .eq('user_to', currentUser)
-        .eq('status', 'pending');
-
-      let reqHtml = '';
-      if (requests && requests.length > 0) {
-        reqHtml = requests.map(r => `
-          <div class="sb-req-card">
-            <div class="sb-req-name">${escapeHtml(r.user_from)}</div>
-            <div class="sb-req-actions">
-              <button class="sb-btn-acc" onclick="acceptFriend(${r.id})">✓</button>
-              <button class="sb-btn-dec" onclick="declineFriend(${r.id})">✕</button>
-            </div>
-          </div>
-        `).join('');
-      }
-      document.getElementById("left-requests").innerHTML = reqHtml;
-      document.getElementById("right-requests").innerHTML = reqHtml;
-
-      // Friends
-      const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
-      const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
-
-      const names = [
-        ...(sentFriends || []).map(f => f.user_to),
-        ...(recvFriends || []).map(f => f.user_from)
-      ];
-
-      if (names.length === 0) {
-        document.getElementById("left-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center; padding-top:20px;">No friends yet</div>';
-        document.getElementById("right-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center; padding-top:20px;">No friends yet</div>';
-      } else {
-        const { data: accounts } = await client.from('accounts').select('username, last_seen').in('username', names);
-        const now = Date.now();
-        const friendHtml = (accounts || []).map(a => {
-          const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
-          const isOnline = (now - lastSeen) < (3 * 60 * 1000);
-          return `
-            <a class="sb-friend-row" href="chat.html">
-              <span>${escapeHtml(a.username)}</span>
-              <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
-            </a>
-          `;
-        }).join('');
-        document.getElementById("left-friends").innerHTML = friendHtml;
-        document.getElementById("right-friends").innerHTML = friendHtml;
-      }
-    } else {
-      document.getElementById("left-user").innerText = "Guest";
-      document.getElementById("right-user").innerText = "Guest";
-      document.getElementById("left-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center;">Log in to view</div>';
-      document.getElementById("right-friends").innerHTML = '<div style="font-size:0.68rem; text-align:center;">Log in to view</div>';
+  // SIDEBAR & FRIENDS SYNC
+  async function syncSidebar() {
+    if (!currentUser) {
+      document.getElementById("sb-user").innerText = "Guest";
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:10px;">Log in on Hub to see friends</div>';
+      return;
     }
+
+    document.getElementById("sb-user").innerText = currentUser;
+
+    // Fetch Avatar
+    const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
+    document.getElementById("sb-pfp").innerText = AVATARS[myAcc?.avatar] || '🦊';
+
+    // Fetch Pending Requests
+    const { data: requests } = await client
+      .from('friends')
+      .select('id, user_from')
+      .eq('user_to', currentUser)
+      .eq('status', 'pending');
+
+    let reqHtml = '';
+    if (requests && requests.length > 0) {
+      reqHtml = requests.map(r => `
+        <div class="sb-req-card">
+          <div class="sb-req-name">${escapeHtml(r.user_from)}</div>
+          <div class="sb-req-actions">
+            <button class="sb-btn-acc" onclick="acceptFriend(${r.id})">✓ Accept</button>
+            <button class="sb-btn-dec" onclick="declineFriend(${r.id})">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    document.getElementById("sb-requests").innerHTML = reqHtml;
+
+    // Fetch Accepted Friends (both directions)
+    const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
+    const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
+
+    const friendUsernames = [
+      ...(sentFriends || []).map(f => f.user_to),
+      ...(recvFriends || []).map(f => f.user_from)
+    ];
+
+    if (friendUsernames.length === 0) {
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:15px;">No friends added yet!</div>';
+      return;
+    }
+
+    const { data: accounts } = await client.from('accounts').select('username, last_seen').in('username', friendUsernames);
+    const now = Date.now();
+
+    const friendHtml = (accounts || []).map(a => {
+      const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
+      const isOnline = (now - lastSeen) < (3 * 60 * 1000); // 3 minutes window
+      return `
+        <a class="sb-friend-row" href="chat.html">
+          <span>${escapeHtml(a.username)}</span>
+          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}" title="${isOnline ? 'Online' : 'Offline'}"></span>
+        </a>
+      `;
+    }).join('');
+
+    document.getElementById("sb-friends").innerHTML = friendHtml;
   }
 
   async function acceptFriend(id) {
     await client.from('friends').update({ status: 'accepted' }).eq('id', id);
-    syncSidebars();
+    syncSidebar();
   }
 
   async function declineFriend(id) {
     await client.from('friends').delete().eq('id', id);
-    syncSidebars();
+    syncSidebar();
   }
 
   // IMAGE HELPER
@@ -582,7 +544,7 @@
     reader.readAsDataURL(file);
   }
 
-  // THREADS LOGIC
+  // THREADS & REPLIES
   async function loadThreads() {
     const container = document.getElementById('threads-container');
 
@@ -645,7 +607,7 @@
             <div class="reply-form">
               <input type="text" id="reply-input-${t.id}" placeholder="Write a friendly reply..." maxlength="300" style="margin-bottom:0;" />
               <div style="text-align:right;">
-                <button onclick="postReply(${t.id})" style="padding:4px 10px; font-size:0.8rem;">Reply</button>
+                <button onclick="postReply(${t.id})" style="padding:5px 12px; font-size:0.8rem;">Reply</button>
               </div>
             </div>
           </div>
@@ -660,6 +622,12 @@
 
     if (!title || !body) {
       alert("Please enter both a title and text.");
+      return;
+    }
+
+    // Safety Profanity Check
+    if (containsProfanity(title) || containsProfanity(body)) {
+      alert("KidCha Rule: Inappropriate words are not allowed! Please keep posts friendly.");
       return;
     }
 
@@ -691,6 +659,12 @@
     const text = input.value.trim();
     if (!text) return;
 
+    // Safety Profanity Check
+    if (containsProfanity(text)) {
+      alert("KidCha Rule: Inappropriate words are not allowed in replies! Please keep it friendly.");
+      return;
+    }
+
     const { error } = await client.from('replies').insert([{
       thread_id: threadId,
       author: currentUser || "Anonymous",
@@ -710,14 +684,15 @@
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  // Realtime subscription for instant new threads and replies
+  // Realtime updates
   client
     .channel('board-realtime')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'threads' }, () => loadThreads())
     .on('postgres_changes', { event: '*', schema: 'public', table: 'replies' }, () => loadThreads())
     .subscribe();
 
-  syncSidebars();
+  syncSidebar();
+  setInterval(syncSidebar, 30000);
   setInterval(pingPresence, 60000);
   pingPresence();
   loadThreads();
