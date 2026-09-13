@@ -1,7 +1,4 @@
-<html>
-        <head><title>KidChat</title></head>
-        <body>
-            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,363 +7,348 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f1f5f9;
-      color: #0f172a;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 0.85rem 1.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header strong { font-size: 1.15rem; color: #1e3a8a; }
-    header a { text-decoration: none; color: #2563eb; font-weight: 600; font-size: 0.9rem; }
-
-    .chat-app {
-      flex: 1;
-      display: flex;
-      max-width: 1000px;
-      width: 100%;
-      margin: 1.5rem auto;
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid #e2e8f0;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-      height: calc(100vh - 120px);
-    }
-
-    .sidebar {
-      width: 310px;
-      border-right: 1px solid #e2e8f0;
-      display: flex;
-      flex-direction: column;
       background: #f8fafc;
-    }
-    .sidebar-header {
-      padding: 1rem 1.1rem;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-    }
-    .btn-new {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 5px 12px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .scroll-list { flex: 1; overflow-y: auto; padding: 0.6rem; }
-    .section-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #94a3b8;
-      text-transform: uppercase;
-      padding: 0.6rem 0.5rem 0.3rem;
+      color: #0f172a;
+      min-height: 100vh;
+      padding: 1.5rem 1rem;
+      padding-left: 215px !important;
     }
 
-    .request-box {
-      background: #fef9c3;
-      border: 1px solid #fde047;
-      padding: 0.6rem;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .btn-acc {
-      background: #16a34a;
-      color: white;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-    .btn-dec {
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0.65rem 0.75rem;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-bottom: 3px;
-    }
-    .contact-item:hover { background: #e2e8f0; }
-    .contact-item.active { background: #e0e7ff; color: #3730a3; }
-
-    .chat-main {
-      flex: 1;
+    /* SINGLE LEFT SIDEBAR */
+    .k5-sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 200px;
+      background-color: #f59e0b;
+      padding: 12px 10px;
+      z-index: 1000;
       display: flex;
       flex-direction: column;
-      background: #ffffff;
-      position: relative;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+      overflow: hidden;
     }
-    .chat-topbar {
-      padding: 0.9rem 1.25rem;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .topbar-actions { display: flex; align-items: center; gap: 10px; }
 
-    .call-bar {
-      display: none;
-      background: #ecfdf5;
-      border-bottom: 1px solid #a7f3d0;
-      padding: 9px 16px;
-      justify-content: space-between;
+    .sb-user-card {
+      display: flex;
       align-items: center;
-      font-size: 0.85rem;
-      color: #065f46;
+      gap: 8px;
+      background: #ffffff;
+      padding: 8px 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+    .sb-username {
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: #0f172a;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sb-pfp {
+      font-size: 1.4rem;
+      min-width: 26px;
+      text-align: center;
+    }
+
+    .sb-clock-box {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 6px 8px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+      text-align: center;
+    }
+    .sb-widget-time {
+      font-weight: 800;
+      color: #1e3a8a;
+      font-size: 0.9rem;
+    }
+    .sb-widget-date {
+      color: #64748b;
+      font-size: 0.7rem;
       font-weight: 600;
     }
-    .btn-call {
-      background: #10b981;
-      color: white;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
+
+    /* FRIEND REQUESTS */
+    .sb-requests-box {
+      margin-bottom: 6px;
       display: flex;
-      align-items: center;
-      gap: 5px;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
     }
-    .btn-call:hover { background: #059669; }
-    .btn-hangup {
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 4px 12px;
+    .sb-req-card {
+      background: #ffffff;
+      border: 1px solid #fde047;
       border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
+      padding: 5px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .sb-req-name {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #0f172a;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sb-req-actions { display: flex; gap: 4px; margin-top: 3px; }
+    .sb-btn-acc {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      cursor: pointer;
+      flex: 1;
+    }
+    .sb-btn-dec {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
       cursor: pointer;
     }
 
-    .message-stream {
+    /* POLYGON FRIENDS BOX */
+    .sb-polygon-box {
+      background-color: #c4d600;
+      clip-path: polygon(50% 0%, 100% 12%, 92% 100%, 8% 100%, 0% 12%);
+      padding: 34px 12px 14px 12px;
+      display: flex;
+      flex-direction: column;
       flex: 1;
-      padding: 1.25rem;
+      min-height: 240px;
+    }
+    .sb-polygon-title {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #365314;
+      text-align: center;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .sb-polygon-scroll {
+      flex: 1;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
+      padding-right: 2px;
     }
-    .bubble {
-      max-width: 68%;
-      padding: 0.75rem 1rem;
-      border-radius: 14px;
+    .sb-friend-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #0f172a;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .sb-friend-row:hover, .sb-friend-row.active {
+      background: #ffffff;
+    }
+    .sb-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .sb-status-dot.online { background-color: #10b981; box-shadow: 0 0 4px #10b981; }
+    .sb-status-dot.offline { background-color: #94a3b8; }
+
+    /* CHAT LAYOUT */
+    .wrapper { max-width: 760px; margin: 0 auto; height: calc(100vh - 3rem); display: flex; flex-direction: column; }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+    }
+    .top-nav a {
+      text-decoration: none;
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .chat-target-badge {
       font-size: 0.95rem;
-      line-height: 1.4;
-      word-wrap: break-word;
-      position: relative;
+      font-weight: 800;
+      color: #1e293b;
+      background: #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 20px;
     }
-    .bubble.sent {
+
+    .chat-container {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .messages-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f8fafc;
+    }
+
+    .msg-bubble {
+      max-width: 70%;
+      padding: 8px 12px;
+      border-radius: 14px;
+      font-size: 0.92rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .msg-sent {
       align-self: flex-end;
       background: #2563eb;
       color: #ffffff;
-      border-bottom-right-radius: 4px;
+      border-bottom-right-radius: 2px;
     }
-    .bubble.received {
+    .msg-recv {
       align-self: flex-start;
-      background: #f1f5f9;
+      background: #e2e8f0;
       color: #0f172a;
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: 2px;
     }
-    .bubble img {
-      max-width: 100%;
-      border-radius: 8px;
-      display: block;
+    .msg-time {
+      font-size: 0.65rem;
       margin-top: 4px;
-      max-height: 250px;
-      object-fit: cover;
-    }
-    .bubble-meta {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.7rem;
-      opacity: 0.8;
-      margin-top: 4px;
-    }
-    .edit-btn {
-      color: #ffffff;
-      text-decoration: underline;
-      cursor: pointer;
-      font-weight: 600;
-      background: none;
-      border: none;
-      font-size: 0.7rem;
-      padding: 0;
+      opacity: 0.75;
+      text-align: right;
     }
 
-    .composer {
-      padding: 0.85rem 1rem;
-      border-top: 1px solid #e2e8f0;
+    .chat-input-bar {
       display: flex;
+      gap: 8px;
+      padding: 10px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
       align-items: center;
-      gap: 0.6rem;
     }
-    .composer input[type="text"] {
+    .chat-input-bar input {
       flex: 1;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
       padding: 0.75rem 1rem;
-      outline: none;
       font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
     }
-    .composer button {
+    .chat-input-bar button {
       background: #2563eb;
       color: white;
+      font-weight: 700;
       border: none;
-      padding: 0.75rem 1.3rem;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .img-upload-btn {
-      background: #f1f5f9;
-      color: #334155;
-      padding: 0.65rem 0.85rem;
+      padding: 0.75rem 1.4rem;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 1.15rem;
-      border: 1px solid #cbd5e1;
+      font-size: 0.95rem;
     }
-
-    .call-dialog {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-    .call-card {
-      background: white;
-      border-radius: 16px;
-      padding: 1.75rem;
-      text-align: center;
-      max-width: 320px;
-      width: 100%;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .call-card h3 { margin-bottom: 6px; font-size: 1.15rem; }
+    .chat-input-bar button:hover { background: #1d4ed8; }
   </style>
 </head>
 <body>
 
-<header>
-  <strong>KidChat</strong>
-  <div>
-    <a href="index.html" style="margin-right: 1.25rem;">&larr; Back to KidCha Hub</a>
-    <a href="profile.html">My Profile</a>
-  </div>
-</header>
-
-<div class="chat-app">
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <span>Messages</span>
-      <button class="btn-new" onclick="startNewChat()">+ New Chat</button>
-    </div>
-    <div class="scroll-list">
-      <div id="requests-container"></div>
-      <div class="section-title">Friends</div>
-      <div id="friends-container"><p style="padding:0.5rem; color:#94a3b8; font-size:0.85rem;">Loading...</p></div>
-    </div>
+<!-- SINGLE LEFT SIDEBAR -->
+<div class="k5-sidebar">
+  <div class="sb-user-card">
+    <div class="sb-pfp" id="sb-pfp">🦊</div>
+    <div class="sb-username" id="sb-user">Guest</div>
   </div>
 
-  <div class="chat-main">
-    <div class="chat-topbar">
-      <div>
-        <strong id="active-title">Select a friend</strong>
-        <span id="active-sub" style="font-size: 0.8rem; color: #16a34a; margin-left: 6px;"></span>
-      </div>
-      <div class="topbar-actions">
-        <button id="call-btn" class="btn-call" style="display: none;" onclick="startVoiceCall()">📞 Start Call</button>
-      </div>
-    </div>
+  <div class="sb-clock-box">
+    <div class="sb-widget-time" id="sb-time">--:-- --</div>
+    <div class="sb-widget-date" id="sb-date">---, --- --</div>
+  </div>
 
-    <!-- Active Call Header Strip -->
-    <div class="call-bar" id="call-bar">
-      <span id="call-status-label">Voice Call in Progress...</span>
-      <button class="btn-hangup" onclick="endVoiceCall()">End Call</button>
-    </div>
+  <div class="sb-requests-box" id="sb-requests"></div>
 
-    <div class="message-stream" id="stream">
-      <div style="text-align: center; color: #94a3b8; margin-top: 130px; font-size: 0.95rem;">
-        Select a friend or start a new chat!
-      </div>
-    </div>
-
-    <div class="composer">
-      <!-- Image Upload Handler -->
-      <label class="img-upload-btn" title="Add Image">
-        🖼️
-        <input type="file" id="img-input" accept="image/*" style="display:none;" onchange="handleImageAttach(this)">
-      </label>
-      <input type="text" id="msg-input" placeholder="Type a message..." maxlength="300" disabled onkeydown="if(event.key==='Enter') sendDM()">
-      <button id="send-btn" disabled onclick="sendDM()">Send</button>
+  <div class="sb-polygon-box">
+    <div class="sb-polygon-title">Friends</div>
+    <div class="sb-polygon-scroll" id="sb-friends">
+      <div style="font-size:0.7rem; text-align:center; color:#365314;">Loading friends...</div>
     </div>
   </div>
 </div>
 
-<!-- Incoming Call Dialog -->
-<div class="call-dialog" id="incoming-modal">
-  <div class="call-card">
-    <div style="font-size: 2.5rem; margin-bottom: 8px;">📞</div>
-    <h3 id="incoming-caller">Incoming Voice Call</h3>
-    <p style="color: #64748b; font-size: 0.85rem; margin-bottom: 20px;">wants to talk on voice.</p>
-    <div style="display: flex; gap: 10px; justify-content: center;">
-      <button class="btn-call" style="padding: 8px 18px;" onclick="acceptIncomingCall()">Accept</button>
-      <button class="btn-hangup" style="padding: 8px 18px;" onclick="rejectIncomingCall()">Decline</button>
+<div class="wrapper">
+  <div class="top-nav">
+    <a href="index.html">← Back to Hub</a>
+    <div class="chat-target-badge" id="chat-target-header">Select a friend to chat</div>
+  </div>
+
+  <div class="chat-container">
+    <div class="messages-box" id="messages-box">
+      <div style="text-align:center; color:#64748b; font-size:0.9rem; margin-top: auto; margin-bottom: auto;">
+        Click any friend on the left sidebar to start chatting!
+      </div>
+    </div>
+
+    <div class="chat-input-bar">
+      <input type="text" id="msg-input" placeholder="Type a message..." maxlength="400" onkeydown="if(event.key==='Enter') sendMessage()" disabled>
+      <button id="send-btn" onclick="sendMessage()" disabled>Send</button>
     </div>
   </div>
 </div>
-
-<audio id="remote-audio" autoplay></audio>
 
 <script>
   const SUPABASE_URL = "https://wdidjrotndftbltarzkz.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_O3iNU2_emhcxpuTkliynSg_TNHj9QWK";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  const currentUser = localStorage.getItem("k5_user");
-  if (!currentUser) {
-    alert("Please log in on KidCha first!");
-    window.location.href = "index.html";
+  // --- KIDCHA SAFETY PROFANITY FILTER ---
+  const BANNED_PATTERNS = [
+    /\bf+u+c+k+/i,
+    /\bs+h+i+t+/i,
+    /\bb+i+t+c+h+/i,
+    /\ba+s+s+h+o+l+e+/i,
+    /\bd+i+c+k+/i,
+    /\bp+u+s+s+y+/i,
+    /\bc+u+n+t+/i,
+    /\bn+i+g+g+/i,
+    /\bf+a+g+g+/i,
+    /\bw+h+o+r+e+/i,
+    /\bs+l+u+t+/i,
+    /\bp+o+r+n+/i,
+    /\bk+y+s+/i
+  ];
+
+  function containsProfanity(text) {
+    if (!text) return false;
+    return BANNED_PATTERNS.some(rx => rx.test(text));
   }
 
   const AVATARS = {
@@ -375,403 +357,190 @@
     'pizza': '🍕', 'bolt': '⚡'
   };
 
-  let activeFriend = null;
+  let currentUser = localStorage.getItem("k5_user");
+  let activeChatFriend = new URLSearchParams(window.location.search).get('to') || null;
 
-  // WebRTC Setup
-  let peerConnection = null;
-  let localStream = null;
-  let pendingOffer = null;
-  let signalingChannel = null;
+  // CLOCK
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('sb-time').innerText = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    document.getElementById('sb-date').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
 
-  const rtcConfig = {
-    iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' }
-    ]
-  };
+  // PRESENCE
+  async function pingPresence() {
+    if (currentUser) {
+      await client.from('accounts').update({ last_seen: new Date().toISOString() }).eq('username', currentUser);
+    }
+  }
 
-  // 1. Load Sidebar: Incoming Friend Requests & Active Friends
-  async function loadSidebar() {
-    // Check incoming requests
-    const { data: incoming } = await client
-      .from('friends')
-      .select('*')
-      .eq('user_to', currentUser)
-      .eq('status', 'pending');
-
-    const reqContainer = document.getElementById('requests-container');
-    if (incoming && incoming.length > 0) {
-      reqContainer.innerHTML = `
-        <div class="section-title">Friend Requests (${incoming.length})</div>
-        ${incoming.map(r => `
-          <div class="request-box">
-            <span><b>${escapeHtml(r.user_from)}</b></span>
-            <div>
-              <button class="btn-acc" onclick="acceptFriend(${r.id})">Accept</button>
-              <button class="btn-dec" onclick="declineFriend(${r.id})">✕</button>
-            </div>
-          </div>
-        `).join('')}
-      `;
-    } else {
-      reqContainer.innerHTML = '';
+  // SIDEBAR & FRIENDS
+  async function syncSidebar() {
+    if (!currentUser) {
+      document.getElementById("sb-user").innerText = "Guest";
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:10px;">Log in on Hub</div>';
+      return;
     }
 
-    // Get Accepted Friends
+    document.getElementById("sb-user").innerText = currentUser;
+
+    const { data: myAcc } = await client.from('accounts').select('avatar').eq('username', currentUser).maybeSingle();
+    document.getElementById("sb-pfp").innerText = AVATARS[myAcc?.avatar] || '🦊';
+
+    // Friend requests
+    const { data: requests } = await client.from('friends').select('id, user_from').eq('user_to', currentUser).eq('status', 'pending');
+    let reqHtml = '';
+    if (requests && requests.length > 0) {
+      reqHtml = requests.map(r => `
+        <div class="sb-req-card">
+          <div class="sb-req-name">${escapeHtml(r.user_from)}</div>
+          <div class="sb-req-actions">
+            <button class="sb-btn-acc" onclick="acceptFriend(${r.id})">✓</button>
+            <button class="sb-btn-dec" onclick="declineFriend(${r.id})">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    document.getElementById("sb-requests").innerHTML = reqHtml;
+
+    // Accepted friends
     const { data: sentFriends } = await client.from('friends').select('user_to').eq('user_from', currentUser).eq('status', 'accepted');
     const { data: recvFriends } = await client.from('friends').select('user_from').eq('user_to', currentUser).eq('status', 'accepted');
 
-    const names = [
+    const friendUsernames = [
       ...(sentFriends || []).map(f => f.user_to),
       ...(recvFriends || []).map(f => f.user_from)
     ];
 
-    const container = document.getElementById('friends-container');
-    if (names.length === 0) {
-      container.innerHTML = '<p style="padding:0.5rem; color:#94a3b8; font-size:0.85rem;">No friends yet. Click "+ New Chat" to add one!</p>';
+    if (friendUsernames.length === 0) {
+      document.getElementById("sb-friends").innerHTML = '<div style="font-size:0.72rem; text-align:center; color:#365314; padding-top:15px;">No friends yet</div>';
       return;
     }
 
-    const { data: accounts } = await client.from('accounts').select('username, avatar, status').in('username', names);
-    const accMap = {};
-    (accounts || []).forEach(a => { accMap[a.username] = a; });
+    const { data: accounts } = await client.from('accounts').select('username, last_seen').in('username', friendUsernames);
+    const now = Date.now();
 
-    container.innerHTML = names.map(name => {
-      const acc = accMap[name] || { avatar: 'fox', status: 'Online' };
+    const friendHtml = (accounts || []).map(a => {
+      const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
+      const isOnline = (now - lastSeen) < (3 * 60 * 1000);
+      const isActive = a.username === activeChatFriend ? 'active' : '';
       return `
-        <div class="contact-item ${activeFriend === name ? 'active' : ''}" id="item-${name}" onclick="openChat('${name}')">
-          <span style="font-size: 1.3rem;">${AVATARS[acc.avatar] || '🦊'}</span>
-          <div>
-            <div style="font-weight: 600; font-size: 0.9rem;">${escapeHtml(name)}</div>
-            <div style="font-size: 0.75rem; color: #16a34a;">● ${escapeHtml(acc.status || 'Active')}</div>
-          </div>
+        <div class="sb-friend-row ${isActive}" onclick="openChat('${escapeHtml(a.username)}')">
+          <span>${escapeHtml(a.username)}</span>
+          <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
         </div>
       `;
     }).join('');
+
+    document.getElementById("sb-friends").innerHTML = friendHtml;
   }
 
   async function acceptFriend(id) {
     await client.from('friends').update({ status: 'accepted' }).eq('id', id);
-    loadSidebar();
+    syncSidebar();
   }
 
   async function declineFriend(id) {
     await client.from('friends').delete().eq('id', id);
-    loadSidebar();
+    syncSidebar();
   }
 
-  // 2. Strict Check: Only message real people, and send Friend Request if needed
-  async function startNewChat() {
-    const target = prompt("Enter screen name to chat with:");
-    if (!target) return;
-    const cleanTarget = target.trim();
-
-    if (cleanTarget.toLowerCase() === currentUser.toLowerCase()) {
-      alert("You cannot message yourself!");
-      return;
-    }
-
-    // Verify user actually exists in the database
-    const { data: existingUser } = await client
-      .from('accounts')
-      .select('username')
-      .eq('username', cleanTarget)
-      .maybeSingle();
-
-    if (!existingUser) {
-      alert(`User "${cleanTarget}" does not exist! Check the spelling and try again.`);
-      return;
-    }
-
-    // Check if a friend connection exists
-    const { data: sent } = await client.from('friends').select('*').eq('user_from', currentUser).eq('user_to', cleanTarget).maybeSingle();
-    const { data: recv } = await client.from('friends').select('*').eq('user_from', cleanTarget).eq('user_to', currentUser).maybeSingle();
-
-    if (!sent && !recv) {
-      // Create pending friend request automatically
-      await client.from('friends').insert([{
-        user_from: currentUser,
-        user_to: cleanTarget,
-        status: 'pending'
-      }]);
-      alert(`Sent a friend request to ${cleanTarget}! You can chat now while the request is pending.`);
-    }
-
-    openChat(cleanTarget);
-    loadSidebar();
-  }
-
-  function openChat(username) {
-    activeFriend = username;
-    document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
-    const item = document.getElementById(`item-${username}`);
-    if (item) item.classList.add('active');
-
-    document.getElementById('active-title').innerText = username;
-    document.getElementById('active-sub').innerText = '● Connected';
+  // CHAT LOGIC
+  function openChat(friendUsername) {
+    activeChatFriend = friendUsername;
+    document.getElementById('chat-target-header').innerText = `Chatting with @${friendUsername}`;
     document.getElementById('msg-input').disabled = false;
     document.getElementById('send-btn').disabled = false;
-    document.getElementById('call-btn').style.display = 'flex';
-    document.getElementById('msg-input').focus();
-
+    syncSidebar();
     loadMessages();
   }
 
   async function loadMessages() {
-    if (!activeFriend) return;
-    const stream = document.getElementById('stream');
-    stream.innerHTML = '<p style="text-align: center; color: #94a3b8;">Loading conversation...</p>';
+    if (!currentUser || !activeChatFriend) return;
 
-    const { data: msgs } = await client
+    const { data: messages, error } = await client
       .from('messages')
       .select('*')
-      .or(`and(sender.eq."${currentUser}",recipient.eq."${activeFriend}"),and(sender.eq."${activeFriend}",recipient.eq."${currentUser}")`)
-      .order('created_at', { ascending: true })
-      .limit(60);
+      .or(`and(sender.eq.${currentUser},receiver.eq.${activeChatFriend}),and(sender.eq.${activeChatFriend},receiver.eq.${currentUser})`)
+      .order('created_at', { ascending: true });
 
-    if (!msgs || msgs.length === 0) {
-      stream.innerHTML = `<div style="text-align: center; color: #94a3b8; margin-top: 100px;">Start your chat with <b>${escapeHtml(activeFriend)}</b>!</div>`;
+    const box = document.getElementById('messages-box');
+    if (error) {
+      box.innerHTML = `<div style="color:#ef4444; text-align:center;">Error loading chat: ${escapeHtml(error.message)}</div>`;
       return;
     }
 
-    stream.innerHTML = msgs.map(renderBubble).join('');
-    stream.scrollTop = stream.scrollHeight;
-  }
-
-  function renderBubble(m) {
-    const isSent = m.sender === currentUser;
-    const time = new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const editedTag = m.is_edited ? '<span style="font-size:0.65rem; opacity:0.7;">(edited)</span>' : '';
-
-    // Allow editing own messages, NO deleting
-    const editAction = isSent && !m.body.startsWith('[IMG]') 
-      ? `<button class="edit-btn" onclick="editDM(${m.id}, '${escapeQuotes(m.body)}')">Edit</button>` 
-      : '';
-
-    let contentHtml;
-    if (m.body.startsWith('[IMG]')) {
-      const src = m.body.replace('[IMG]', '');
-      contentHtml = `<img src="${src}" alt="Attached Image" />`;
-    } else {
-      contentHtml = `<div id="msg-text-${m.id}">${escapeHtml(m.body)}</div>`;
+    if (!messages || messages.length === 0) {
+      box.innerHTML = `<div style="text-align:center; color:#64748b; font-size:0.88rem; margin-top:auto; margin-bottom:auto;">Say hi to @${escapeHtml(activeChatFriend)}! 👋</div>`;
+      return;
     }
 
-    return `
-      <div class="bubble ${isSent ? 'sent' : 'received'}" id="bubble-${m.id}">
-        ${contentHtml}
-        <div class="bubble-meta">
-          ${editedTag}
-          <span>${time}</span>
-          ${editAction}
+    box.innerHTML = messages.map(m => {
+      const isMine = m.sender === currentUser;
+      const timeStr = new Date(m.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      return `
+        <div class="msg-bubble ${isMine ? 'msg-sent' : 'msg-recv'}">
+          <div>${escapeHtml(m.content)}</div>
+          <div class="msg-time">${timeStr}</div>
         </div>
-      </div>
-    `;
+      `;
+    }).join('');
+
+    box.scrollTop = box.scrollHeight;
   }
 
-  // 3. Edit DM Logic
-  async function editDM(id, currentText) {
-    const newText = prompt("Edit your message:", currentText);
-    if (!newText || newText.trim() === "" || newText.trim() === currentText) return;
+  async function sendMessage() {
+    const input = document.getElementById('msg-input');
+    const text = input.value.trim();
+    if (!text || !activeChatFriend || !currentUser) return;
 
-    const { error } = await client.from('messages').update({
-      body: newText.trim(),
-      is_edited: true
-    }).eq('id', id);
+    if (containsProfanity(text)) {
+      alert("KidCha Rule: Inappropriate words are not allowed in chat!");
+      return;
+    }
+
+    const { error } = await client.from('messages').insert([{
+      sender: currentUser,
+      receiver: activeChatFriend,
+      content: text
+    }]);
 
     if (error) {
-      alert("Could not update message: " + error.message);
-    } else {
-      loadMessages();
-    }
-  }
-
-  // 4. Image Upload & Attachment (Base64 compression or direct image URL)
-  function handleImageAttach(input) {
-    const file = input.files[0];
-    if (!file || !activeFriend) return;
-
-    if (file.size > 2.5 * 1024 * 1024) {
-      alert("Image is too large! Please select an image under 2.5MB.");
-      input.value = '';
+      alert("Failed to send message: " + error.message);
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      const base64Data = e.target.result;
-      await client.from('messages').insert([{
-        sender: currentUser,
-        recipient: activeFriend,
-        body: `[IMG]${base64Data}`
-      }]);
-      input.value = '';
-    };
-    reader.readAsDataURL(file);
-  }
-
-  async function sendDM() {
-    if (!activeFriend) return;
-    const input = document.getElementById('msg-input');
-    const body = input.value.trim();
-    if (!body) return;
-
     input.value = '';
-
-    await client.from('messages').insert([{
-      sender: currentUser,
-      recipient: activeFriend,
-      body: body
-    }]);
+    loadMessages();
   }
 
   function escapeHtml(str) {
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  function escapeQuotes(str) {
-    return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-  }
-
-  // Realtime Messages & Edits Listener
+  // Realtime subscription
   client
-    .channel('public:messages')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
-      const m = payload.new;
-      if (!m) return;
-      if ((m.sender === activeFriend && m.recipient === currentUser) || (m.sender === currentUser && m.recipient === activeFriend)) {
+    .channel('direct-messages')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
+      if (
+        (payload.new.sender === activeChatFriend && payload.new.receiver === currentUser) ||
+        (payload.new.sender === currentUser && payload.new.receiver === activeChatFriend)
+      ) {
         loadMessages();
       }
     })
     .subscribe();
 
-  // 5. WebRTC Voice Calls
-  signalingChannel = client.channel('voice-signaling', {
-    config: { broadcast: { self: false } }
-  });
+  syncSidebar();
+  setInterval(syncSidebar, 30000);
+  setInterval(pingPresence, 60000);
+  pingPresence();
 
-  signalingChannel
-    .on('broadcast', { event: 'signal' }, async ({ payload }) => {
-      if (payload.to !== currentUser) return;
-
-      if (payload.type === 'offer') {
-        pendingOffer = payload;
-        document.getElementById('incoming-caller').innerText = `${payload.from} Calling...`;
-        document.getElementById('incoming-modal').style.display = 'flex';
-      } else if (payload.type === 'answer') {
-        if (peerConnection) {
-          await peerConnection.setRemoteDescription(new RTCSessionDescription(payload.sdp));
-          document.getElementById('call-status-label').innerText = `🎙️ In call with ${activeFriend}`;
-        }
-      } else if (payload.type === 'candidate') {
-        if (peerConnection && peerConnection.remoteDescription) {
-          await peerConnection.addIceCandidate(new RTCIceCandidate(payload.candidate));
-        }
-      } else if (payload.type === 'hangup') {
-        cleanupVoiceCall();
-      }
-    })
-    .subscribe();
-
-  function sendSignal(type, extra = {}) {
-    signalingChannel.send({
-      type: 'broadcast',
-      event: 'signal',
-      payload: { to: activeFriend, from: currentUser, type, ...extra }
-    });
+  if (activeChatFriend) {
+    openChat(activeChatFriend);
   }
-
-  async function startVoiceCall() {
-    if (!activeFriend) return;
-    try {
-      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    } catch (e) {
-      alert("Microphone permission required.");
-      return;
-    }
-
-    setupPeerConnection();
-    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-
-    sendSignal('offer', { sdp: offer });
-    document.getElementById('call-bar').style.display = 'flex';
-    document.getElementById('call-status-label').innerText = `Calling ${activeFriend}...`;
-  }
-
-  async function acceptIncomingCall() {
-    document.getElementById('incoming-modal').style.display = 'none';
-    if (!pendingOffer) return;
-
-    activeFriend = pendingOffer.from;
-    openChat(activeFriend);
-
-    try {
-      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-    } catch (e) {
-      alert("Microphone permission required.");
-      sendSignal('hangup');
-      return;
-    }
-
-    setupPeerConnection();
-    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-    await peerConnection.setRemoteDescription(new RTCSessionDescription(pendingOffer.sdp));
-    const answer = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answer);
-
-    sendSignal('answer', { sdp: answer });
-
-    document.getElementById('call-bar').style.display = 'flex';
-    document.getElementById('call-status-label').innerText = `🎙️ In call with ${activeFriend}`;
-    pendingOffer = null;
-  }
-
-  function rejectIncomingCall() {
-    document.getElementById('incoming-modal').style.display = 'none';
-    if (pendingOffer) {
-      sendSignal('hangup');
-      pendingOffer = null;
-    }
-  }
-
-  function setupPeerConnection() {
-    peerConnection = new RTCPeerConnection(rtcConfig);
-
-    peerConnection.onicecandidate = (event) => {
-      if (event.candidate) {
-        sendSignal('candidate', { candidate: event.candidate });
-      }
-    };
-
-    peerConnection.ontrack = (event) => {
-      const audio = document.getElementById('remote-audio');
-      audio.srcObject = event.streams[0];
-    };
-  }
-
-  function endVoiceCall() {
-    sendSignal('hangup');
-    cleanupVoiceCall();
-  }
-
-  function cleanupVoiceCall() {
-    if (peerConnection) {
-      peerConnection.close();
-      peerConnection = null;
-    }
-    if (localStream) {
-      localStream.getTracks().forEach(t => t.stop());
-      localStream = null;
-    }
-    document.getElementById('call-bar').style.display = 'none';
-  }
-
-  loadSidebar();
 </script>
 </body>
-</html></pre>
-        </body>
-    </html>
+</html>
