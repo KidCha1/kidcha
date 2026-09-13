@@ -42,6 +42,7 @@
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
+      cursor: pointer;
     }
     .sb-username {
       font-weight: 800;
@@ -191,7 +192,7 @@
       font-size: 0.78rem;
       font-weight: 800;
       color: #0f172a;
-      text-decoration: none;
+      cursor: pointer;
     }
     .sb-friend-row:hover { background: #ffffff; }
     .sb-status-dot {
@@ -259,6 +260,53 @@
       padding: 1.25rem;
       margin-bottom: 1.25rem;
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    /* EASTER EGG ARCADE */
+    .arcade-card {
+      background: #0f172a;
+      border: 2px solid #38bdf8;
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      display: none;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.25);
+    }
+    .arcade-title {
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: #38bdf8;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .arcade-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-arcade {
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #38bdf8;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .btn-arcade:hover { background: #38bdf8; color: #0f172a; }
+    #arcade-canvas {
+      background: #000;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      display: none;
+      margin: 0 auto;
+      max-width: 100%;
     }
 
     input, textarea {
@@ -349,6 +397,12 @@
       justify-content: space-between;
       align-items: center;
     }
+    .thread-author-link {
+      color: #1e293b;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .thread-author-link:hover { text-decoration: underline; color: #2563eb; }
     .thread-title {
       font-size: 1.15rem;
       font-weight: 800;
@@ -434,7 +488,7 @@
 <body>
 
 <div class="k5-sidebar">
-  <div class="sb-user-card">
+  <div class="sb-user-card" onclick="goToProfile(currentUser)">
     <div class="sb-pfp" id="sb-pfp">🦊</div>
     <div class="sb-username" id="sb-user">Guest</div>
   </div>
@@ -470,6 +524,20 @@
         <span id="fav-icon">☆</span> <span id="fav-text">Favorite</span>
       </button>
     </div>
+  </div>
+
+  <!-- GAMING BOARD SECRET ARCADE EASTER EGG -->
+  <div class="arcade-card" id="arcade-egg">
+    <div class="arcade-title">🕹️ Secret KidCha Arcade Unlocked!</div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px;">Unblocked browser mini-games right on /gm/!</p>
+    <div class="arcade-buttons">
+      <button type="button" class="btn-arcade" onclick="startFlyingPig()">🐷 Play Flying Pig</button>
+      <button type="button" class="btn-arcade" onclick="startAstiDash()">🏃 Play Asti Dash</button>
+      <button type="button" class="btn-arcade" onclick="startAsteroids()">🚀 Play Asteroids</button>
+      <button type="button" class="btn-arcade" style="border-color:#ef4444; color:#ef4444;" onclick="closeArcade()">✕ Close</button>
+    </div>
+    <canvas id="arcade-canvas" width="560" height="260"></canvas>
+    <div id="arcade-instruction" style="font-size: 0.72rem; color: #64748b; margin-top: 6px;"></div>
   </div>
 
   <div class="card">
@@ -531,7 +599,6 @@
     'pizza': '🍕', 'bolt': '⚡'
   };
 
-  // Allows any URL board (?b=whatever)
   const urlParams = new URLSearchParams(window.location.search);
   const rawBoard = urlParams.get('b') || 'rec';
   const currentBoard = rawBoard.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 24) || 'rec';
@@ -544,6 +611,18 @@
   let isCurrentBoardFavorited = false;
   let newThreadImageBase64 = null;
   let newThreadGifUrl = null;
+
+  function toProfileUrl(rawName) {
+    if (!rawName) return 'profile.html';
+    const clean = rawName.startsWith('[MOD] ')
+      ? `${rawName.replace('[MOD] ', '')}_mod`
+      : rawName;
+    return `profile.html?u=${encodeURIComponent(clean)}`;
+  }
+
+  function goToProfile(rawName) {
+    window.location.href = toProfileUrl(rawName);
+  }
 
   function updateClock() {
     const now = new Date();
@@ -575,7 +654,6 @@
     const favList = favs || [];
     isCurrentBoardFavorited = favList.some(f => f.board === currentBoard);
 
-    // Update Favorite Button State
     const favBtn = document.getElementById('fav-btn');
     const favIcon = document.getElementById('fav-icon');
     const favText = document.getElementById('fav-text');
@@ -590,7 +668,6 @@
       favText.innerText = 'Favorite';
     }
 
-    // Render in Sidebar
     const container = document.getElementById('sb-favorites-list');
     if (favList.length === 0) {
       container.innerHTML = '<span style="font-size:0.68rem; color:#94a3b8;">No favorites</span>';
@@ -616,6 +693,420 @@
     syncFavorites();
   }
 
+  // --- EASTER EGG ARCADE ON /gm/ ---
+  let arcadeLoop = null;
+
+  function checkArcadeEasterEgg() {
+    if (currentBoard === 'gm' || currentBoard === 'gaming') {
+      document.getElementById('arcade-egg').style.display = 'block';
+    }
+  }
+
+  function closeArcade() {
+    if (arcadeLoop) cancelAnimationFrame(arcadeLoop);
+    arcadeLoop = null;
+    const cvs = document.getElementById('arcade-canvas');
+    cvs.style.display = 'none';
+    cvs.onclick = null;
+    window.onkeydown = null;
+    window.onkeyup = null;
+    document.getElementById('arcade-instruction').innerText = '';
+  }
+
+  // 1. Mini-Game: Flying Pig (Flappy Bird style)
+  function startFlyingPig() {
+    closeArcade();
+    const cvs = document.getElementById('arcade-canvas');
+    cvs.style.display = 'block';
+    const ctx = cvs.getContext('2d');
+    document.getElementById('arcade-instruction').innerText = 'Press SPACE or Click to FLAP! Dodge the pipes!';
+
+    let pig = { x: 70, y: 120, r: 14, vy: 0 };
+    let pipes = [];
+    let frame = 0;
+    let score = 0;
+    let gameOver = false;
+
+    function flap() {
+      if (!gameOver) {
+        pig.vy = -6.2;
+      } else {
+        startFlyingPig();
+      }
+    }
+
+    cvs.onclick = flap;
+    window.onkeydown = (e) => {
+      if (e.code === 'Space' && cvs.style.display === 'block') {
+        e.preventDefault();
+        flap();
+      }
+    };
+
+    function loop() {
+      frame++;
+      // Sky blue gradient
+      let grad = ctx.createLinearGradient(0, 0, 0, cvs.height);
+      grad.addColorStop(0, "#38bdf8");
+      grad.addColorStop(1, "#bae6fd");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+      if (!gameOver) {
+        pig.vy += 0.35; // Gravity
+        pig.y += pig.vy;
+
+        // Ground / ceiling collision
+        if (pig.y + pig.r >= cvs.height - 18 || pig.y - pig.r <= 0) {
+          gameOver = true;
+        }
+
+        // Spawn pipes
+        if (frame % 95 === 0) {
+          const gap = 88;
+          const topHeight = Math.floor(Math.random() * (cvs.height - gap - 70)) + 30;
+          pipes.push({
+            x: cvs.width,
+            top: topHeight,
+            bottom: topHeight + gap,
+            w: 42,
+            passed: false
+          });
+        }
+      }
+
+      // Draw & move pipes
+      ctx.fillStyle = "#22c55e";
+      ctx.strokeStyle = "#15803d";
+      ctx.lineWidth = 2;
+
+      for (let i = pipes.length - 1; i >= 0; i--) {
+        let p = pipes[i];
+        if (!gameOver) p.x -= 2.4;
+
+        // Top pipe
+        ctx.fillRect(p.x, 0, p.w, p.top);
+        ctx.strokeRect(p.x, 0, p.w, p.top);
+
+        // Bottom pipe
+        ctx.fillRect(p.x, p.bottom, p.w, cvs.height - p.bottom);
+        ctx.strokeRect(p.x, p.bottom, p.w, cvs.height - p.bottom);
+
+        // Collision check
+        if (
+          pig.x + pig.r > p.x &&
+          pig.x - pig.r < p.x + p.w &&
+          (pig.y - pig.r < p.top || pig.y + pig.r > p.bottom)
+        ) {
+          gameOver = true;
+        }
+
+        // Score update
+        if (!p.passed && p.x + p.w < pig.x) {
+          p.passed = true;
+          score++;
+        }
+
+        if (p.x < -60) pipes.splice(i, 1);
+      }
+
+      // Ground floor
+      ctx.fillStyle = "#84cc16";
+      ctx.fillRect(0, cvs.height - 18, cvs.width, 18);
+      ctx.fillStyle = "#4d7c0f";
+      ctx.fillRect(0, cvs.height - 18, cvs.width, 3);
+
+      // Draw Pig (Body)
+      ctx.save();
+      ctx.translate(pig.x, pig.y);
+      ctx.rotate(Math.min(Math.PI / 4, Math.max(-Math.PI / 4, pig.vy * 0.08)));
+
+      // Pink body
+      ctx.fillStyle = "#f472b6";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, pig.r + 3, pig.r, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#db2777";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Pig ear
+      ctx.fillStyle = "#db2777";
+      ctx.beginPath();
+      ctx.moveTo(-4, -pig.r + 2);
+      ctx.lineTo(2, -pig.r - 5);
+      ctx.lineTo(6, -pig.r + 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Wing (flaps up/down based on velocity)
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      const wingFlap = pig.vy < 0 ? -10 : 4;
+      ctx.ellipse(-4, wingFlap, 6, 4, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // Snout
+      ctx.fillStyle = "#ec4899";
+      ctx.beginPath();
+      ctx.ellipse(pig.r, 2, 5, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eye
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath();
+      ctx.arc(6, -4, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+
+      // Score Display
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 18px sans-serif";
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 3;
+      ctx.strokeText(`Pipes: ${score}`, 16, 30);
+      ctx.fillText(`Pipes: ${score}`, 16, 30);
+
+      if (gameOver) {
+        ctx.fillStyle = "#ef4444";
+        ctx.font = "bold 22px sans-serif";
+        ctx.fillText("OINK! Click or Space to Try Again", 110, 130);
+      }
+
+      arcadeLoop = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  // 2. Mini-Game: Asti Dash (Jump Runner)
+  function startAstiDash() {
+    closeArcade();
+    const cvs = document.getElementById('arcade-canvas');
+    cvs.style.display = 'block';
+    const ctx = cvs.getContext('2d');
+    document.getElementById('arcade-instruction').innerText = 'Press SPACE or Click the canvas to JUMP over spikes!';
+
+    let player = { x: 50, y: 200, w: 26, h: 26, vy: 0, grounded: true };
+    let obstacles = [];
+    let frame = 0;
+    let score = 0;
+    let gameOver = false;
+
+    function jump() {
+      if (player.grounded) {
+        player.vy = -12;
+        player.grounded = false;
+      } else if (gameOver) {
+        startAstiDash();
+      }
+    }
+
+    cvs.onclick = jump;
+    window.onkeydown = (e) => {
+      if (e.code === 'Space' && cvs.style.display === 'block') {
+        e.preventDefault();
+        jump();
+      }
+    };
+
+    function loop() {
+      frame++;
+      ctx.fillStyle = "#090d16";
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+      // Floor line
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, 226);
+      ctx.lineTo(cvs.width, 226);
+      ctx.stroke();
+
+      if (!gameOver) {
+        player.vy += 0.65;
+        player.y += player.vy;
+
+        if (player.y >= 200) {
+          player.y = 200;
+          player.vy = 0;
+          player.grounded = true;
+        }
+
+        if (frame % 85 === 0) {
+          obstacles.push({ x: cvs.width, y: 204, w: 22, h: 22 });
+        }
+
+        score++;
+      }
+
+      // Draw Player Cube
+      ctx.fillStyle = "#f59e0b";
+      ctx.fillRect(player.x, player.y, player.w, player.h);
+      ctx.strokeStyle = "#ffffff";
+      ctx.strokeRect(player.x, player.y, player.w, player.h);
+
+      // Spikes
+      ctx.fillStyle = "#ef4444";
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        let obs = obstacles[i];
+        if (!gameOver) obs.x -= 4.2;
+
+        ctx.beginPath();
+        ctx.moveTo(obs.x, obs.y + obs.h);
+        ctx.lineTo(obs.x + obs.w / 2, obs.y);
+        ctx.lineTo(obs.x + obs.w, obs.y + obs.h);
+        ctx.closePath();
+        ctx.fill();
+
+        if (
+          player.x < obs.x + obs.w &&
+          player.x + player.w > obs.x &&
+          player.y < obs.y + obs.h &&
+          player.y + player.h > obs.y
+        ) {
+          gameOver = true;
+        }
+
+        if (obs.x < -30) obstacles.splice(i, 1);
+      }
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillText(`Score: ${Math.floor(score / 5)}`, 16, 26);
+
+      if (gameOver) {
+        ctx.fillStyle = "#ef4444";
+        ctx.font = "bold 20px sans-serif";
+        ctx.fillText("CRASH! Click or Space to Restart", 130, 110);
+      }
+
+      arcadeLoop = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  // 3. Mini-Game: Asteroids Shooter
+  function startAsteroids() {
+    closeArcade();
+    const cvs = document.getElementById('arcade-canvas');
+    cvs.style.display = 'block';
+    const ctx = cvs.getContext('2d');
+    document.getElementById('arcade-instruction').innerText = 'ARROWS = Turn/Thrust | SPACE = Shoot asteroids!';
+
+    let ship = { x: cvs.width / 2, y: cvs.height / 2, angle: 0, vx: 0, vy: 0 };
+    let bullets = [];
+    let asteroids = [];
+    let keys = {};
+    let score = 0;
+
+    for (let i = 0; i < 4; i++) {
+      asteroids.push({
+        x: Math.random() * cvs.width,
+        y: Math.random() * cvs.height,
+        r: 16 + Math.random() * 10,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2
+      });
+    }
+
+    window.onkeydown = (e) => {
+      keys[e.code] = true;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        bullets.push({
+          x: ship.x,
+          y: ship.y,
+          vx: Math.cos(ship.angle) * 6,
+          vy: Math.sin(ship.angle) * 6,
+          life: 45
+        });
+      }
+    };
+    window.onkeyup = (e) => { keys[e.code] = false; };
+
+    function loop() {
+      ctx.fillStyle = "#020617";
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+      if (keys['ArrowLeft']) ship.angle -= 0.08;
+      if (keys['ArrowRight']) ship.angle += 0.08;
+      if (keys['ArrowUp']) {
+        ship.vx += Math.cos(ship.angle) * 0.15;
+        ship.vy += Math.sin(ship.angle) * 0.15;
+      }
+
+      ship.vx *= 0.98;
+      ship.vy *= 0.98;
+      ship.x = (ship.x + ship.vx + cvs.width) % cvs.width;
+      ship.y = (ship.y + ship.vy + cvs.height) % cvs.height;
+
+      // Draw Ship
+      ctx.save();
+      ctx.translate(ship.x, ship.y);
+      ctx.rotate(ship.angle);
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(12, 0);
+      ctx.lineTo(-10, -7);
+      ctx.lineTo(-6, 0);
+      ctx.lineTo(-10, 7);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+
+      // Bullets
+      ctx.fillStyle = "#facc15";
+      for (let b = bullets.length - 1; b >= 0; b--) {
+        let blt = bullets[b];
+        blt.x = (blt.x + blt.vx + cvs.width) % cvs.width;
+        blt.y = (blt.y + blt.vy + cvs.height) % cvs.height;
+        blt.life--;
+        ctx.fillRect(blt.x - 2, blt.y - 2, 4, 4);
+
+        for (let a = asteroids.length - 1; a >= 0; a--) {
+          let ast = asteroids[a];
+          let dist = Math.hypot(blt.x - ast.x, blt.y - ast.y);
+          if (dist < ast.r) {
+            score += 10;
+            asteroids.splice(a, 1);
+            bullets.splice(b, 1);
+            asteroids.push({
+              x: Math.random() < 0.5 ? 0 : cvs.width,
+              y: Math.random() * cvs.height,
+              r: 16 + Math.random() * 10,
+              vx: (Math.random() - 0.5) * 2,
+              vy: (Math.random() - 0.5) * 2
+            });
+            break;
+          }
+        }
+        if (blt.life <= 0) bullets.splice(b, 1);
+      }
+
+      // Draw Asteroids
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 2;
+      asteroids.forEach(ast => {
+        ast.x = (ast.x + ast.vx + cvs.width) % cvs.width;
+        ast.y = (ast.y + ast.vy + cvs.height) % cvs.height;
+        ctx.beginPath();
+        ctx.arc(ast.x, ast.y, ast.r, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 14px sans-serif";
+      ctx.fillText(`Asteroids Destroyed: ${score / 10}`, 16, 26);
+
+      arcadeLoop = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  // --- THREAD ATTACHMENTS & GIFS ---
   function handleBoardImage(input) {
     const file = input.files[0];
     if (!file) return;
@@ -665,9 +1156,7 @@
     const tray = document.getElementById('board-gif-tray');
     const isOpening = tray.style.display !== 'flex';
     tray.style.display = isOpening ? 'flex' : 'none';
-    if (isOpening) {
-      loadBoardGifs("funny cartoon");
-    }
+    if (isOpening) loadBoardGifs("funny cartoon");
   }
 
   function searchBoardGifs() {
@@ -739,10 +1228,10 @@
       const lastSeen = a.last_seen ? new Date(a.last_seen).getTime() : 0;
       const isOnline = (now - lastSeen) < (3 * 60 * 1000);
       return `
-        <a class="sb-friend-row" href="chat.html?to=${escapeHtml(a.username)}">
+        <div class="sb-friend-row" onclick="goToProfile('${escapeHtml(a.username)}')">
           <span>${escapeHtml(a.username)}</span>
           <span class="sb-status-dot ${isOnline ? 'online' : 'offline'}"></span>
-        </a>
+        </div>
       `;
     }).join('');
 
@@ -796,7 +1285,7 @@
         .map(r => `
           <div class="reply-card">
             <div class="reply-header">
-              <strong>${escapeHtml(r.author)}</strong>
+              <a href="${toProfileUrl(r.author)}" class="thread-author-link">${escapeHtml(r.author)}</a>
               <div style="display:flex; align-items:center; gap:6px;">
                 <span>${new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 ${isMod ? `<button onclick="modDeleteReply(${r.id})" style="background:#ef4444; color:white; border:none; border-radius:4px; padding:2px 6px; font-size:0.65rem; cursor:pointer;">🗑️</button>` : ''}
@@ -809,7 +1298,7 @@
       return `
         <div class="card thread-card" id="thread-${t.id}">
           <div class="thread-meta">
-            <span>Posted by <b>${escapeHtml(t.author)}</b></span>
+            <span>Posted by <a href="${toProfileUrl(t.author)}" class="thread-author-link">${escapeHtml(t.author)}</a></span>
             <span>${dateStr}</span>
           </div>
           <div class="thread-title">${escapeHtml(t.title)}</div>
@@ -956,7 +1445,6 @@
     return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  // Real-time channel listeners
   client
     .channel('board-realtime')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'threads' }, () => loadThreads())
@@ -965,6 +1453,7 @@
 
   syncSidebar();
   syncFavorites();
+  checkArcadeEasterEgg();
   setInterval(syncSidebar, 30000);
   setInterval(pingPresence, 60000);
   pingPresence();
